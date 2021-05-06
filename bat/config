@@ -1,0 +1,18 @@
+# Set the theme to "TwoDark"
+--theme="TwoDark"
+
+# Show line numbers, Git modifications and file header (but no grid)
+# Possible values: *auto*, full, plain, changes, header, grid, numbers
+--style="full"
+
+# Use italic text on the terminal (not supported on all terminals)
+--italic-text=always
+
+# Colors
+--color=always
+
+# Always page
+--paging=always
+
+# Handle colors correctly; Don't quit if less than one screen
+--pager="less -R"
