@@ -11,6 +11,7 @@ opts+=(chase_links)
 #opts+=(always_to_end)
 opts+=(complete_in_word)
 opts+=(glob_complete)
+opts+=(menu_complete)
 # }}}
 
 # Expansion + Globbing {{{
