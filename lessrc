@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+
+### -- Defines the options associated with any use of less -- {{{
+OPTS=()
+
+# Case insensitive search, unless contains uppercase in search pattern
+OPTS+=("--ignore-case")
+# Folds any series of consecutive empty lines into one
+OPTS+=("--squeeze-blank-lines")
+# Forward searches begin 30% down from the top of the current screen
+OPTS+=("--jump-target=.3")
+
+# ~~~ Remove all formatting {{{
+# Don't show any highlighting of searches
+OPTS+=("--HILITE-SEARCH")
+# Don't display line numbers
+OPTS+=("--line-numbers")
+
+# }}}
+
+# ~~~ Disable colors {{{
+# Output ANSI (color) escape sequences as raw escaped literals
+OPTS+=("--RAW-CONTROL-CHARS")
+# Don't mess with termcap on startup/termdown
+OPTS+=("--no-init")
+
+# }}}
+
+# }}}
+
+### -- The prompt, displayed as a status bar -- {{{
+
+# The separator between each piece of information in the prompt
+SEP=" \:])>> "
+
+
+# Check whether the input has a name (is a file and not a pipe)
+P_NAME="%T\:  ?f%f:Standard Input."
+
+# Display current file index, if there is more than one file
+P_FILES="?m(File %i of %m)"
+
+# Checks whether we've read the whole file
+# Doesn't terminate the question mark, in order to consume some following information
+# (May be halted with a period)
+P_EOF="?e(END)"
+
+# Display the line numbers that the current window's view spans
+# (First line in window) - (Last line in window)
+P_LINES="?lt?lb(Lines %lt ~ %lb)"
+# Check if total number of lines is known
+P_LINES+="?L of %L total."
+
+# Display start and stop byte offset shown on the window
+P_BYTES="(Bytes %bt B ~ %bb B)"
+# Check if total number of bytes is known
+P_BYTES+="?B of %B total."
+
+# Display the percent scrolled into the file thus far
+P_PERCENT="?Pt?Pb[ %Pt ~ %Pb \% ]"
+
+LESS_PROMPT="$P_NAME $SEP $P_FILES $SEP .$P_EOF:$P_LINES $SEP ..$P_BYTES $SEP $P_PERCENT $SEP"
+
+# }}}
+
+LESS="${OPTS[*]} --prompt $LESS_PROMPT"
+export LESS
+
+# vim:foldmethod=marker
