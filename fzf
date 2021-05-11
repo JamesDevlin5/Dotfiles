@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+OPTS=''
+
+# Input prompt
+OPTS+="--prompt='-+]  ' "
+# Current Line
+OPTS+="--pointer='~>' "
+# Multi Select
+OPTS+="--marker='-+' "
+
+# Display
+# ANSI Colors
+OPTS+="--ansi "
+
+FZF_DEFAULT_OPTS="$OPTS"
+export FZF_DEFAULT_OPTS
+
