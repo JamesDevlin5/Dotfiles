@@ -3,3 +3,9 @@
 	url = https://github.com/anishathalye/dotbot
     #url = git@github.com:anishathalye/dotbot
 	ignore = dirty
+
+[submodule "bin"]
+	path = bin
+	url = https://github.com/JamesDevlin5/Scripts
+    #url = git@github.com:JamesDevlin5/Scripts
+    ignore = dirty
