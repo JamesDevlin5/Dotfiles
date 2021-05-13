@@ -29,12 +29,13 @@ opts+=(share_history)
 # }}}
 
 # I/O {{{
-opts+=(correct_all)
+opts+=(correct)
 opts+=(path_dirs)
 # }}}
 
 # Zle {{{
 opts+=(vi)
+opts+=(ignoreeof)
 # }}}
 
 for OPTION in ${opts}
