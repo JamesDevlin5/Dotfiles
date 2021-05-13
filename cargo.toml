@@ -1,0 +1,6 @@
+[build]
+rustdocflags = [
+    "--document-private-items",
+    "--default-theme=dark",
+    "--open",
+]
