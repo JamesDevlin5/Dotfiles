@@ -19,6 +19,7 @@ opts+=(no_case_glob)
 opts+=(no_case_match)
 opts+=(glob_star_short)
 opts+=(mark_dirs)
+opts+=(aliases)
 # }}}
 
 # History {{{
