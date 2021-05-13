@@ -11,8 +11,10 @@ OPTS+=("--squeeze-blank-lines")
 OPTS+=("--jump-target=.3")
 
 # ~~~ Remove all formatting {{{
-# Don't show any highlighting of searches
-OPTS+=("--HILITE-SEARCH")
+# Less highlighting of searches
+OPTS+=("--hilite-search")
+# Sidebar status
+OPTS+=("--status-column")
 # Don't display line numbers
 OPTS+=("--line-numbers")
 
