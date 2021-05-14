@@ -1,0 +1,52 @@
+[alias]
+    a    = add
+    b    = branch
+    c    = commit
+    cm   = commit
+    co   = checkout
+    cob  = checkout -b
+    d    = diff --patch-with-stat
+    f    = fetch
+    l    = log
+    p    = pull
+    pu   = push
+    r    = remote
+	s    = status
+    ss   = status --short
+    mv   = mv -
+
+    ec    = config --global --edit
+    sb    = show-branch
+    amend = commit --amend
+    ap    = add --patch
+    rv    = remote -v
+	root  = rev-parse --show-toplevel
+
+    unstage = reset HEAD --
+    undo    = reset HEAD~1 --mixed
+
+    last = log -1 HEAD --stat
+    lg   = log --graph
+    lo   = log --oneline
+
+    # Show the log of the recent hour, day, week, month, year
+    log-hour  = log --since=1-hour-ago
+    log-day   = log --since=1-day-ago
+    log-week  = log --since=1-week-ago
+    log-month = log --since=1-month-ago
+    log-year  = log --since=1-year-ago
+
+    # Show the log of my own recent hour, day, week, month, year
+    log-my-hour  = log --author $(git config user.email) --since=1-hour-ago
+    log-my-day   = log --author $(git config user.email) --since=1-day-ago
+    log-my-week  = log --author $(git config user.email) --since=1-week-ago
+    log-my-month = log --author $(git config user.email) --since=1-month-ago
+    log-my-year  = log --author $(git config user.email) --since=1-year-ago
+
+    # Get a gitignore template file
+	ignore = "!gi() { curl -sL -o .gitignore https://gitignore.io/api/$@ ;}; gi"
+
+    # Compress + Output
+    tar   = ! "tar() { git archive --format tar --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; tar"
+    targz = ! "targz() { git archive --format tar.gz --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; targz"
+    zip   = ! "zip() { git archive --format zip --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; zip"

@@ -1,0 +1,16 @@
+[diff]
+	tool = bat
+    guitool = vscode
+    wsErrorHighlight = new,context
+    abbrev = 8
+    renames = true
+    renameLimit = 6
+[difftool]
+    prompt = true
+[difftool "vscode"]
+    cmd = code --wait --diff $LOCAL $REMOTE
+[merge]
+	tool = vscode
+    conflictStyle = diff3
+[mergetool "vscode"]
+	cmd = code --wait $MERGED
