@@ -9,7 +9,7 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}'
 zstyle ':completion:*' menu select
 
 # Colorize missteps
-#zstyle ':completion:*:warnings' format "%F{214}%d%f"
+zstyle ':completion:*:warnings' format "%F{214}%d%f"
 
 # activate approximate completion, but only after regular completion (_complete)
 zstyle ':completion:::::' completer _complete _approximate _expand _correct
@@ -79,8 +79,9 @@ zplug "lib/directories", from:oh-my-zsh
 # VCS
 zplug "plugins/git", from:oh-my-zsh
 # Fuzzy Git
-zplug "bigH/git-fuzzy", as:command, use:"bin/git-fuzzy"
+# zplug "bigH/git-fuzzy", as:command, use:"bin/git-fuzzy"
 # https://git.jpatrick.io/james/dotfiles/src/commit/ab918ab3b5a640f4a0b686cf6cb297c0dbe35524/zsh/zplug
+# Directory Jumping
 zplug "agkozak/zsh-z"
 
 # Syntax highlighting for commands, load last
