@@ -1,0 +1,51 @@
+# Setup
+- create:
+    - ~/.config
+    - ~/dotfiles
+    - ~/bin
+    - ~/workspace
+
+- shell:
+    #- [chsh -s $(which zsh), Making `zsh` the default shell...]
+    - [git submodule update --init --recursive, Installing submodules...]
+
+
+# Remove dead symlinks
+- clean:
+    ~/:
+    ~/.config:
+      recursive: true
+    ~/.config/mypy:
+      force: true
+
+
+# Install config
+- defaults:
+    link:
+        create: true
+        relink: true
+
+- link:
+    # Configs
+    ~/.config/alacritty/alacritty.yml: alacritty.yml
+    ~/.config/bat/config: bat.conf
+    ~/.config/git: git
+    ~/.config/mypy/config: mypy.conf
+    ~/.config/nvim: nvim
+    ~/.config/shell: shell
+    ~/.config/zfunc: zfunc
+    ~/.config/zsh: zsh
+    # Profiles
+    ~/.lessrc:
+    ~/.zshrc:
+    ~/.tmux.conf:
+    ~/.cargo/config.toml: cargo.toml
+    # Colors
+    ~/.dircolors:
+
+# Mypy plugins
+- shell:
+    -
+      command: curl -sL -o "$HOME/.config/mypy/#1.py" "https://raw.githubusercontent.com/python/mypy/master/mypy/plugins/{functools,enums,dataclasses}.py"
+      description: "Downloading plugins for MyPy Python linter..."
+
