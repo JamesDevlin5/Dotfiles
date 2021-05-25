@@ -9,6 +9,7 @@
     prompt = true
 [difftool "vscode"]
     cmd = code --wait --diff $LOCAL $REMOTE
+    prompt = false
 [merge]
 	tool = vscode
     conflictStyle = diff3
