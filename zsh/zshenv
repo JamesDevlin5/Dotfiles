@@ -1,0 +1,13 @@
+
+typeset -U path
+typeset -U fpath
+typeset -U manpath
+typeset -U cdpath
+
+[[ $fpath = *${HOME}/.zfunc* ]] || fpath=(${HOME}/.zfunc $fpath)
+
+# TODO: Bind zls colors to dircolors string output
+# TODO: Change dircolors to hold a string, not a bash cmd
+#ZLS_COLORS=$(dircolors ~/.dircolors)
+#export ZLS_COLORS
+

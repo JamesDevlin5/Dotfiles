@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+alias ftree='find "$1" | make-tree'
+alias gtree='git ls-files | make-tree'
+alias ztree='zipinfo -1 "$1"'
+

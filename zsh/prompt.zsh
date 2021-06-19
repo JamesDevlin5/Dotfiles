@@ -34,14 +34,14 @@ function PR_DIR() {
         last=${last[2,-1]} # take substring
     fi
 
-    echo "${BLUE}${truncated}${RED}${last}${RESET}"
+    echo "%F{BLUE}${truncated}%F{RED}${last}%f"
 }
 
 # An exclamation point if the previous command did not complete successfully
 function PR_ERROR() {
     local LAST_EXIT_CODE=$?
     if [[ $LAST_EXIT_CODE -ne 0 ]]; then
-        echo "${BOLD_RED}$LAST_EXIT_CODE${RESET} "
+        echo "%F{RED}${LAST_EXIT_CODE}%f "
     fi
 }
 
@@ -53,7 +53,7 @@ PR_ARROW_CHAR="ᗌ"
 
 # The arrow in red (for root) or violet (for regular user)
 function PR_ARROW() {
-    echo "%(!.${RED}.${MAGENTA})${PR_ARROW_CHAR}${RESET}"
+    echo "%(!.%F{RED}.%F{MAGENTA})${PR_ARROW_CHAR}%f"
 }
 
 # Set custom rhs prompt
@@ -61,7 +61,7 @@ function PR_ARROW() {
 RPR_SHOW_USER=true # Set to false to disable user in rhs prompt
 function RPR_USER() {
     if [[ "${RPR_SHOW_USER}" == "true" ]]; then
-        echo "%(!.${BOLD_RED}.${BOLD_MAGENTA})%n${RESET}"
+        echo "%(!.%F{RED}.%F{MAGENTA})%n%f"
     fi
 }
 
@@ -71,36 +71,6 @@ function machine_name() {
     else
         hostname
     fi
-}
-
-# Host in a deterministically chosen color
-RPR_SHOW_HOST=false # Set to false to disable host in rhs prompt
-function RPR_HOST() {
-    if [[ "${RPR_SHOW_HOST}" == "true" ]]; then
-        local colors
-        colors=(CYAN GREEN YELLOW RED MAGENTA)
-        local index=$(python <<EOF
-import hashlib
-hash = int(hashlib.sha1('$(machine_name)'.encode('utf8')).hexdigest(), 16)
-index = hash % ${#colors} + 1
-print(index)
-EOF
-        )
-        local color=$colors[index]
-        #echo "${$color}$(machine_name)${RESET}"
-    fi
-}
-
-# ' at ' in orange outputted only if both user and host enabled
-function RPR_AT() {
-    if [[ "${RPR_SHOW_USER}" == "true" ]] && [[ "${RPR_SHOW_HOST}" == "true" ]]; then
-        echo "${BLUE} at ${RESET}"
-    fi
-}
-
-# Build the rhs prompt
-function RPR_INFO() {
-    echo "$(RPR_USER)$(RPR_AT)$(RPR_HOST)"
 }
 
 # Set RHS prompt for git repositories

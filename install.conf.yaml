@@ -4,6 +4,7 @@
     - ~/dotfiles
     - ~/bin
     - ~/workspace
+    - ~/.local/share/pandoc
 
 - shell:
     #- [chsh -s $(which zsh), Making `zsh` the default shell...]
@@ -28,6 +29,7 @@
 - link:
     # Configs
     ~/.config/alacritty/alacritty.yml: alacritty.yml
+    ~/.config/bash: bash
     ~/.config/bat/config: bat.conf
     ~/.config/git: git
     ~/.config/mypy/config: mypy.conf
@@ -36,10 +38,13 @@
     ~/.config/zfunc: zfunc
     ~/.config/zsh: zsh
     # Profiles
+    ~/.inputrc:
     ~/.lessrc:
     ~/.zshrc:
+    ~/.bashrc: bash/bashrc
     ~/.tmux.conf:
     ~/.cargo/config.toml: cargo.toml
+    ~/.local/share/pandoc/defaults/base.yaml: pandoc.conf
     # Colors
     ~/.dircolors:
 

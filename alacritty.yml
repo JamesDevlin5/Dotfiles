@@ -27,8 +27,8 @@ window:
   # Blank space added around the window in pixels. This padding is not scaled by
   # DPI and the specified value is always added at both opposing sides.
   padding:
-    x: 0
-    y: 0
+    x: 4
+    y: 3
 
   # Spread additional padding evenly around the terminal content.
   dynamic_padding: false
@@ -40,7 +40,7 @@ window:
   # - none: neither borders nor title bar
   # - transparent: title bar, transparent background and title bar buttons
   # - buttonless: title bar, transparent background, but no title bar buttons
-  decorations: full
+  decorations: full #buttonless
 
   # Startup Mode (changes require restart)
   #
@@ -56,18 +56,18 @@ window:
 scrolling:
   # maximum number of lines in the scrollback buffer. Specifying '0' will
   # disable scrolling.
-  history: 300
+  history: 500
 
   # Number of lines the viewport will move for every line scrolled when
   # scrollback is enabled (history > 0).
-  multiplier: 3
+  multiplier: 10
 
 # Font configuration (changes require restart)
 font:
   # The normal (roman) font face to use.
   normal:
     family: "Iosevka Nerd Font"
-    style: Light
+    style: Regular
 
   # The bold font face
   bold:
@@ -101,59 +101,12 @@ font:
     x: 0
     y: 0
 
-  # Thin stroke font rendering (macOS only)
-  #
-  # Thin strokes are suitable for retina displays, but for non-retina you
-  # probably want this set to false.
-  #
-  # macOS >= 10.14.x:
-  #
-  # If the font quality on non-retina display looks bad then set
-  # `use_thin_strokes` to `true` and enable font smoothing by running the
-  # following command:
-  #   `defaults write -g CGFontRenderingFontSmoothingDisabled -bool NO`
-  #
-  # This is a global setting and will require a log out or restart to take
-  # effect.
-  # use_thin_strokes: true
-
-# When true, bold text is drawn using the bright variant of colors.
-draw_bold_text_with_bright_colors: true
-
 # Use custom cursor colors. If true, display the cursor in the cursor.foreground
 # and cursor.background colors, otherwise invert the colors of the cursor.
 custom_cursor_colors: true
 
 # Colors
 schemes:
-  # Tomorrow Night Bright
-  # primary:
-  #   background: '0x000000'
-  #   foreground: '0xeaeaea'
-  #
-  # cursor:
-  #   text: '0x000000'
-  #   cursor: '0xffffff'
-  #
-  # normal:
-  #   black:   '0x000000'
-  #   red:     '0xd54e53'
-  #   green:   '0xb9ca4a'
-  #   yellow:  '0xe6c547'
-  #   blue:    '0x7aa6da'
-  #   magenta: '0xc397d8'
-  #   cyan:    '0x70c0ba'
-  #   white:   '0xffffff'
-  #
-  # bright:
-  #   black:   '0x666666'
-  #   red:     '0xff3334'
-  #   green:   '0x9ec400'
-  #   yellow:  '0xe7c547'
-  #   blue:    '0x7aa6da'
-  #   magenta: '0xb77ee0'
-  #   cyan:    '0x54ced6'
-  #   white:   '0xffffff'
 
   ayu_dark: &ayu
     # Default colors
@@ -187,12 +140,29 @@ schemes:
     primary:
       background: '#282c34'
       foreground: '#abb2bf'
+
+      dim_foreground: '#dbdbdb'
+      bright_foreground: '#d9d9d9'
+      dim_background: '#202020'
+      bright_background: '#3a3a3a'
+
     cursor:
       text:       CellBackground
       cursor:     '#528bff' # syntax-cursor-color
+
+    vi_mode_cursor:
+      text: '#2e3440'
+      cursor: '#d8dee9'
     selection:
       text:       CellForeground
       background: '#3e4451' # syntax-selection-color
+    search:
+      matches:
+        foreground: CellBackground
+        background: '#abd3de'
+      bar:
+        background: '#434c5e'
+        foreground: '#d8dee9'
     normal:
       black:      '#5c6370' # mono-3
       red:        '#e06c75' # red 1
@@ -202,6 +172,34 @@ schemes:
       magenta:    '#c678dd'
       cyan:       '#56b6c2'
       white:      '#828997' # mono-2
+    
+    bright:
+      black: '#636363'
+      red: '#bc5653'
+      green: '#b4c28a'
+      yellow: '#ebc17a'
+      blue: '#7eaac7'
+      magenta: '#aa6292'
+      cyan: '#d3dde8'
+      white: '#f7f7f7'
+
+    dim:
+      black: '#232323'
+      red: '#74423f'
+      green: '#9ed880'
+      yellow: '#8b7653'
+      blue: '#556b79'
+      magenta: '#6e4962'
+      cyan: '#5c8482'
+      white: '#828282'
+
+    indexed_colors:
+      - {index: 16, color: '#232323'}
+      - {index: 17, color: '#d65d0e'}
+      - {index: 18, color: '#000000'}
+      - {index: 19, color: '#d5c4a1'}
+      - {index: 20, color: '#665c54'}
+      - {index: 21, color: '#3c3836'}
 
   snazzy: &snazzy
     primary:
@@ -274,8 +272,8 @@ schemes:
   # indexed_colors: []
 
 #colors: *ayu
-#colors: *one
-colors: *snazzy
+colors: *one
+#colors: *snazzy
 #colors: *tender
 
 # Visual Bell
@@ -303,10 +301,10 @@ colors: *snazzy
 bell:
   animation: EaseOutExpo
   color: '0xDCF5DD'
-  duration: 40
+  duration: 30
 
 # Background opacity
-background_opacity: 1.0
+background_opacity: 1
 
 # Key bindings
 #
@@ -539,7 +537,7 @@ cursor:
   # dynamic_title: false
 
 # Live config reload (changes require restart)
-# live_config_reload: false
+live_config_reload: false
 
 # Shell
 #

@@ -24,7 +24,7 @@ OPTS+=("--line-numbers")
 # Output ANSI (color) escape sequences as raw escaped literals
 OPTS+=("--RAW-CONTROL-CHARS")
 # Don't mess with termcap on startup/termdown
-OPTS+=("--no-init")
+#OPTS+=("--no-init")
 
 # }}}
 

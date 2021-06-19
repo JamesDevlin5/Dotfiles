@@ -1,23 +1,38 @@
 # ----------# ZSH Config #----------
 # ----------+============+----------
 
+# -- Modules {{{
+
+autoload -Uz compinit && compinit
+
+# }}}
+
 # Completion {{{
 # Ambiguous case matching and -/_ interchangability
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}'
 
-# Menu driven
-zstyle ':completion:*' menu select
+# Menu selection
+zstyle 'completion:*' menu select=9
+
+zstyle 'completion:*' select-scroll 0
 
 # Colorize missteps
-zstyle ':completion:*:warnings' format "%F{214}%d%f"
+zstyle ':completion:*:warnings' format "No matches found for: %{%F{214}%}%d%{%f%}"
 
 # activate approximate completion, but only after regular completion (_complete)
-zstyle ':completion:::::' completer _complete _approximate _expand _correct
+zstyle ':completion:::::' completer _complete _correct _expand _approximate _expand_alias
 
 # limit to 3 errors
-#zstyle ':completion:*:approximate:*' max-errors 3
-# or to have a better heuristic, by allowing one error per 3 character typed
-zstyle ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX+$#SUFFIX)/3 )) numeric )'
+zstyle ':completion:*:approximate:*' max-errors 3 numeric
+
+# Dont expand ~ to /.../.../
+zstyle ':completion::expand:*' keep_prefix yes
+
+# Formatting completion
+zstyle ':completion:*:descriptions' format 'Completing %d'
+
+# Colorize
+zstyle ':completion:*' list-colors ''
 
 # Hosts
 hosts=($([ -r .ssh/known_hosts ] && cat .ssh/known_hosts | cut -d ' ' -f 1 | tr ',' '\n' | sort -u))
@@ -27,12 +42,41 @@ zstyle ':completion:*' hosts $hosts
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zfunc $fpath)
 
-autoload -Uz compinit
-compinit
+# CD
+# filter bad values
+zstyle ':completion:*:-command-:*' tag-order '!parameters reserved-words'
 
 # }}}
 
-eval "$(gdircolors $HOME/.dircolors)"
+#eval "$(gdircolors $HOME/.dircolors)"
+
+jdoc () {
+    javadoc -d ~/html -sourcepath "$1" -subpackages java -exclude
+}
+
+zmodload zsh/complist
+zmodload zsh/nearcolor
+zmodload zsh/zle
+zmodload zsh/zleparameter
+
+autoload -Uz vcs_info && vcs_info
+autoload -U colors && colors
+for COLOR in RED GREEN YELLOW BLUE MAGENTA CYAN BLACK WHITE; do
+    eval $COLOR='%{$fg_no_bold[${(L)COLOR}]%}'  #wrap colours between %{ %} to avoid weird gaps in autocomplete
+    eval BOLD_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
+done
+eval RESET='$reset_color'
+
+
+alias shlint='shellcheck --enable=all --severity=style'
+
+# Enter interactive mode after executing a python script
+alias ppy='python3 -i'
+
+# Print large text
+alias fig='figlet -f banner3 -c -w100'
+
+alias wh='whence -mv'
 
 # Variables {{{
 # Preferred editor for local and remote sessions
@@ -49,10 +93,14 @@ export HISTSIZE=800
 
 export PATH="$HOME/bin:/usr/local/sbin:$PATH"
 
-source "$HOME/.lessrc"
+#source "$HOME/.lessrc"
+#source "$HOME/.zsh/prompt.zsh"
+#source "$HOME/.zsh/alias.zsh"
+source "$HOME/.config/zsh/alias.zsh"
+source "$HOME/.config/zsh/options.zsh"
+source "$HOME/.config/zsh/rp.zsh"
 source "$HOME/.config/shell/alias.sh"
-source "$HOME/.zsh/prompt.zsh"
-source "$HOME/.zsh/alias.zsh"
+source "$HOME/.config/shell/env.sh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
@@ -61,6 +109,9 @@ source "$HOME/.zsh/alias.zsh"
 export PATH="/Users/james/.zsh/plugins/git-fuzzy/bin:$PATH:/Users/james/Library/Python/3.9/bin"
 
 # }}}
+
+# Keybindings
+bindkey "^n" accept-and-menu-complete
 
 # ZPLUG PLUGINS {{{
 if [[ ! -d ~/.zplug ]]; then
@@ -78,8 +129,6 @@ zplug "lib/clipboard", from:oh-my-zsh
 zplug "lib/directories", from:oh-my-zsh
 # VCS
 zplug "plugins/git", from:oh-my-zsh
-# Fuzzy Git
-# zplug "bigH/git-fuzzy", as:command, use:"bin/git-fuzzy"
 # https://git.jpatrick.io/james/dotfiles/src/commit/ab918ab3b5a640f4a0b686cf6cb297c0dbe35524/zsh/zplug
 # Directory Jumping
 zplug "agkozak/zsh-z"

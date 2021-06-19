@@ -1,0 +1,12 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =3
+let g:netrw_dirhist_3='/Users/james/workspace/gitree-rs'
+let g:netrw_dirhist_2='/Users/james/workspace/gitree-rs/src'
+let g:netrw_dirhist_1='/Users/james/Applications'
+let g:netrw_dirhist_0='/Users/james/.config/zsh'
+let g:netrw_dirhist_9='/Users/james/.config'
+let g:netrw_dirhist_8='/Users/james'
+let g:netrw_dirhist_7='/Users/james/dotfiles'
+let g:netrw_dirhist_6='/Users/james/dotfiles/zsh'
+let g:netrw_dirhist_5='/Users/james/dotfiles'
+let g:netrw_dirhist_4='/Users/james/dotfiles/shell'

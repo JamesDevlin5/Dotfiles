@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+# Ensure we're in an interactive shell
+if [ -z "$PS1" ]; then return; fi
+
+# History
+shopt -s histappend histreedit histverify
+export HISTCONTROL=ignoreboth:erasedups
+export HISTSIZE=15000
+export HISTFILESIZE=20000
+export HISTFILE="$HOME/.bash_history"
+export HISTTIMEFORMAT=" (  %b %d  -  %H:%M  )  ->  "
+
+# Remote hostname completion
+export HOSTFILE="$HOME/.ssh/known_hosts"
+
+# Will print `Hello World` just before each prompt
+# PROMPT_COMMAND=( "echo 'Hello World'" )
+
+shopt -s cdspell dotglob extglob gnu_errfmt huponexit no_empty_cmd_completion nocaseglob nocasematch shift_verbose xpg_echo
+
+# Jobs that fail in background report back immediately
+set -o notify
+
+# Better keybindings
+set -o vi
+
+# Don't exit immediately on EOF (default is 10 consecutive)
+set -o ignoreeof
+
+# Colorize
+dcolors=~/.dircolors
+if [[ -r $dcolors ]]; then
+    eval "$(gdircolors $dcolors)"
+fi
+
+# Source util files
+for i in ~/.config/bash/[0-9]*; do
+    . "$i"
+done
+
+. $HOME/.config/shell/alias.sh
+. $HOME/.config/shell/env.sh
+
+
+alias ls=exa
+
+#[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+

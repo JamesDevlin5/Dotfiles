@@ -1,47 +1,41 @@
 #!/usr/bin/env zsh
 
-opts=()
-
 # Changing Locations {{{
-opts+=(auto_cd)
-opts+=(chase_links)
+setopt auto_cd
+setopt chase_links
 # }}}
 
 # Completion {{{
-#opts+=(always_to_end)
-opts+=(complete_in_word)
-opts+=(glob_complete)
-opts+=(menu_complete)
+setopt always_to_end
+setopt complete_in_word
+setopt glob_complete
+setopt auto_menu
 # }}}
 
 # Expansion + Globbing {{{
-opts+=(no_case_glob)
-opts+=(no_case_match)
-opts+=(glob_star_short)
-opts+=(mark_dirs)
-opts+=(aliases)
+setopt no_case_glob
+setopt no_case_match
+setopt glob_star_short
+setopt mark_dirs
+setopt aliases
 # }}}
 
 # History {{{
-opts+=(hist_ignore_all_dups)
-opts+=(hist_reduce_blanks)
-opts+=(inc_append_history)
-opts+=(share_history)
+setopt hist_ignore_all_dups
+setopt hist_reduce_blanks
+setopt inc_append_history
+setopt extended_history
 # }}}
 
 # I/O {{{
-opts+=(correct)
-opts+=(path_dirs)
+setopt correct
+setopt path_dirs
 # }}}
 
 # Zle {{{
-opts+=(vi)
-opts+=(ignoreeof)
+setopt vi
+setopt ignore_eof
+setopt no_beep
 # }}}
-
-for OPTION in ${opts}
-do
-    setopt "$OPTION"
-done
 
 # vim:foldmethod=marker

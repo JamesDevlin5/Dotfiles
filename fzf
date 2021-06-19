@@ -1,18 +1,45 @@
 #!/usr/bin/env bash
 
-OPTS=''
+export FZF_DEFAULT_OPTS="--ansi"
+export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git --preview "bat {}"'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-# Input prompt
-OPTS+="--prompt='-+]  ' "
-# Current Line
-OPTS+="--pointer='~>' "
-# Multi Select
-OPTS+="--marker='-+' "
+# Completion
+export FZF_COMPLETION_OPTS='--border --info=inline'
 
-# Display
-# ANSI Colors
-OPTS+="--ansi "
+# Use fd instead of the default find command
+# for listing path candidates
+_fzf_compgen_path() {
+    fd --hidden --follow --exclude ".git" . "$1"
+}
 
-FZF_DEFAULT_OPTS="$OPTS"
-export FZF_DEFAULT_OPTS
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+    fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+
+# Enable fuzzy searching other commands
+# usage: _fzf_setup_completion path|dir|var|alias|host COMMANDS...
+_fzf_setup_completion path git
+_fzf_setup_completion dir tree
+
+# Press F1 to open the file with bat without leaving fzf
+# Press CTRL-Y to copy the line to clipboard and aborts fzf
+fzf --bind 'f1:execute(bat --line-range :300 {}),ctrl-y:execute-silent(echo {} | pbcopy)+abort'
+
+# Interactive ripgrep integration
+rg_fzf() {
+    INITIAL_QUERY=""
+    RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+    fzf "$RG_PREFIX '$INITIAL_QUERY' " \
+        fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+        --ansi --disabled --query "$INITIAL_QUERY" \
+        --height=50% --layout=reverse
+}
+
+bord {
+    fzf --height 40% --layout reverse --info inline --border \
+        --preview 'file {}' --preview-window up,1,border-horizontal \
+        --color 'fg:#bbccdd,fg+:#ddeeff,bg:#334455,preview-bg:#223344,border:#778899'
+}
 

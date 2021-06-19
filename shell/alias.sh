@@ -1,8 +1,7 @@
-#!/usr/bin/env sh
 
 # Colors
 alias ls='ls --color=always'
-alias grep='grep --color=always'
+alias grep='grep --color=auto'
 # alias tree='tree -F -C --dirsfirst -I ".git|.idea|venv|*.iml"'
 alias tree='exa --tree --group-directories-first -F -I ".git|.idea|.venv|*.iml|*.vscode|target"'
 
@@ -10,10 +9,10 @@ alias python='python3'
 alias pip='pip3'
 
 # `ls`
-alias ls='ls -F -G'
-alias la='ls -a'
-alias ll='ls -l'
 alias l='ls'
+alias ls='ls -F -G'
+alias ll='ls -l'
+alias la='ls -a'
 alias l.='ls -d .*'
 
 # Navigating the FS
@@ -27,23 +26,21 @@ alias ~='cd ~'
 alias cdg='cd $(git root)'
 
 # extra info
-alias mkdir='mkdir -pv'
-alias mv='mv -v'
-alias cp='cp -v'
-alias ln='ln -v'
+alias mkdir='mkdir -p -v --'
+alias mv='mv -v --'
+alias cp='cp -v --'
+alias ln='ln -v --'
 
 # shortcuts
 alias vi='vim'
 alias c='clear'
 alias view='$PAGER'
 alias e='$EDITOR'
-
-alias todo='nvim ~/todo.md'
-alias fzf='fzf --preview "bat --color=always --style=numbers --line-range=:500 {}"'
+alias g='git'
 
 # Create a directory and cd into it
 mcd() {
-    mkdir "${1}" && cd "${1}" || exit
+    mkdir "${1}" && cd "${1}"
 }
 
 # Online cheatsheet
@@ -96,6 +93,9 @@ copyfile() {
 # Mirror stdout to stderr, useful for seeing data going through a pipe
 alias peek='tee >(cat 1>&2)'
 
+alias d='dirs -v'
+
 # Maintenance
-alias update='nvim +update +q ; rustup update ; brew update ; brew upgrade ; brew upgrade --cask ; update_pip ; ~/.mypyls/bin/pip install -U "https://github.com/matangover/mypyls/archive/master.zip#egg=mypyls[default-mypy]"'
+alias update_go='go get -u ...'
+alias update='nvim +update +q ; rustup update ; brew update ; brew upgrade ; brew upgrade --cask ; update_pip ; ~/.mypyls/bin/pip install -U "https://github.com/matangover/mypyls/archive/master.zip#egg=mypyls[default-mypy]" ; update_go '
 alias clean='brew cleanup ; brew doctor'

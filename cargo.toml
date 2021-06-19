@@ -1,5 +1,10 @@
+[alias]
+r = "run"
+rr = "run --release"
+
 [build]
 rustdocflags = [
     "--document-private-items",
     "--default-theme=dark",
 ]
+incremental=true
