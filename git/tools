@@ -1,5 +1,5 @@
 [diff]
-	tool = bat
+    tool = delta
     guitool = vscode
     wsErrorHighlight = new,context
     abbrev = 8
@@ -7,8 +7,20 @@
     renameLimit = 6
 [difftool]
     prompt = true
+[delta]
+    # plus-style = "syntax #72c270"
+    # minus-style = "syntax #ad6163"
+    line-numbers = true
+    side-by-side = true
+    # Navigate by diff (with `n` and `N`)
+    navigate = true
+    zero-style = dim syntax
+    hyperlinks = true
+    paging = always
+    pager = less
 [difftool "vscode"]
     cmd = code --wait --diff $LOCAL $REMOTE
+    prompt = false
 [merge]
 	tool = vscode
     conflictStyle = diff3
