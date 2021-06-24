@@ -3,6 +3,7 @@
 # Changing Locations {{{
 setopt auto_cd
 setopt chase_links
+setopt auto_remove_slash
 # }}}
 
 # Completion {{{
