@@ -48,7 +48,7 @@ zstyle ':completion:*:-command-:*' tag-order '!parameters reserved-words'
 
 # }}}
 
-#eval "$(gdircolors $HOME/.dircolors)"
+eval "$(dircolors $HOME/.dircolors)"
 
 jdoc () {
     javadoc -d ~/html -sourcepath "$1" -subpackages java -exclude

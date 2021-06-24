@@ -1,52 +1,75 @@
-" Show file path
-autocmd BufEnter * lcd %:p:h
+if exists("g:custom_commands_loaded")
+    finish
+endif
 
+let g:custom_commands_enabled = 1
 
-" Open file at the same position it was closed
-autocmd BufReadPost *
-            \ if line("'\'") > 0 && line("'\'") <= line("$") |
-            \ exe "normal! g`\"" |
-            \ endif
-
-
-" Start terminal in insert
-autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
-
-" save read-only files
-command -nargs=0 Sudow w !sudo tee % >/dev/null
-
-" highlight current line, but only in active window
-augroup CursorLineOnlyInActiveWindow
+augroup customCommands
     autocmd!
-    autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
-    autocmd WinLeave * setlocal nocursorline
+
+    " Display file path
+    "autocmd BufAdd * lcd %:p:h
+    
+    " Return to last edit position when opening files
+    autocmd BufReadPost *
+                \ if line("'\'") > 0 && line("'\'") <= line("$") |
+                \ silent! execute "normal! g`\"" |
+                \ endif
+    
+    autocmd BufWritePre * call AddEOF()
+
+    " Highlight matches only in current buffer
+    "autocmd CmdlineEnter /,\? :setlocal hlsearch
+    "autocmd CmdlineLeave /,\? :setlocal nohlsearch
 augroup END
 
-" Autoformat
-"autocmd BufWritePre *.py 0,$!yapf
-"autocmd FileType python nnoremap <leader>y :0,$!yapf<Cr><C-o>
-" Doesn't work on error
-
-" Spell check for markdown
-autocmd FileType markdown setlocal spell
-
-" Automatically wrap at 72 characters and spell check git commit messages
-autocmd FileType gitcommit setlocal textwidth=72
-autocmd FileType gitcommit setlocal spell
-
-
-autocmd FileType python nnoremap <buffer> <leader>r :w<Esc>:FloatermNew python3 %<CR>
-
-nnoremap update :PlugUpdate<CR>
-
-
-" Conceal text, replace with pretty glyphs
-function! ToggleConcealLevel()
-    if &conceallevel == 0
-        setlocal conceallevel=2
-    else
-        setlocal conceallevel=0
+function AddEOF()
+    if getline("$") !~ '^$\| vim:.*'
+        let l:fname = "[ ". expand("%:p:~") ." ]"
+        if ! append(line("$"), "")
+            echohl WarningMsg | echom l:fname .": Added EOL" | echohl None
+        else
+            echohl ErrorMsg | echom l:fname . ":Unable to add EOL" | echohl None
+        endif
     endif
 endfunction
 
-nnoremap <silent> <C-c><C-y> :call ToggleConcealLevel()<CR>
+augroup vimStartup
+    autocmd!
+    "autocmd VimEnter * if expand("%") == "" | :Explore . | endif
+augroup END
+
+augroup highlightYankedText
+    autocmd!
+    autocmd TextYankPost * silent! lua vim.highlight.on_yank {timeout=600}
+augroup END
+
+" Bind utility functions defined in children to namespace
+command Scratch call fn#Scratch()
+command Stat call fn#StatusToggle()
+command Groot call fn#Groot()
+command Todo call fn#Todo()
+command AppMline call fn#AppendModeline()
+
+nnoremap <Leader>ml :AppMline<CR>
+
+let g:template_dir = expand("~/.config/nvim/templates") . '/'
+" Skeleton files
+augroup templates
+    autocmd!
+    autocmd BufNewFile *.sh     execute "0r " . g:template_dir . 'skel.sh'
+    autocmd BufNewFile *.bash   execute "0r " . g:template_dir . 'skel.bash'
+    autocmd BufNewFile *.py     execute "0r " . g:template_dir . 'skel.py'
+augroup END
+
+" Plugins
+"command PlugUpdate execute "!git -C ~/.local/share/nvim/site/pack submodule update --init --recommend-shallow"
+"command PlugView execute 'vnew|0r !exa --tree --list-dirs --level 3 ~/.local/share/nvim/site/pack'
+command MakeHelp execute ":helptags ~/.local/share/nvim/site/pack/*/*/*/doc/"
+
+command AddFoldMarker execute "normal! i" . split(&foldmarker, ',')[0] . "\<Esc>"
+command AddEndFoldMarker execute "normal! i" . split(&foldmarker, ',')[1] . "\<Esc>"
+
+command Time !date --rfc-email
+
+" vim: set ts=4 sw=4 tw=100 et :

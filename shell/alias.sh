@@ -1,6 +1,5 @@
 
 # Colors
-alias ls='ls --color=always'
 alias grep='grep --color=auto'
 # alias tree='tree -F -C --dirsfirst -I ".git|.idea|venv|*.iml"'
 alias tree='exa --tree --group-directories-first -F -I ".git|.idea|.venv|*.iml|*.vscode|target"'
@@ -8,11 +7,18 @@ alias tree='exa --tree --group-directories-first -F -I ".git|.idea|.venv|*.iml|*
 alias python='python3'
 alias pip='pip3'
 
+TIME_FMT_OLD="[ %a %_H:%M  >>>> %_9B %2d (%C) ]"
+TIME_FMT_NEW="[ %a %_I:%M %P || %_9b %_2d      ]"
+printf -v TIME_FMT "+\"%s\n%s\"" ${TIME_FMT_OLD} ${TIME_FMT_NEW}
+
 # `ls`
+alias ls="ls --ignore-backups --classify --group-directories-first -v --human-readable \
+	--dereference-command-line --time-style=${TIME_FMT} --color=auto"
+alias lc='ls --context'
+# --- ??? ^^
 alias l='ls'
-alias ls='ls -F -G'
 alias ll='ls -l'
-alias la='ls -a'
+alias la='ls -A'
 alias l.='ls -d .*'
 
 # Navigating the FS
@@ -37,6 +43,11 @@ alias c='clear'
 alias view='$PAGER'
 alias e='$EDITOR'
 alias g='git'
+
+# My Ip Address Info
+myip() {
+	hostname -I | cut -f1 -d' '
+}
 
 # Create a directory and cd into it
 mcd() {
@@ -99,3 +110,4 @@ alias d='dirs -v'
 alias update_go='go get -u ...'
 alias update='nvim +update +q ; rustup update ; brew update ; brew upgrade ; brew upgrade --cask ; update_pip ; ~/.mypyls/bin/pip install -U "https://github.com/matangover/mypyls/archive/master.zip#egg=mypyls[default-mypy]" ; update_go '
 alias clean='brew cleanup ; brew doctor'
+

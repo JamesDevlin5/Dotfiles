@@ -1,190 +1,141 @@
-" Remap Leader
-let mapleader=';'
+" Leader
+let mapleader=" "
+nnoremap <Space> <Nop>
 
-" >>>>>>>>>>>>>>>     General
-"
+" Down
+nnoremap <Down> 10jzz
+"nnoremap <Down> <C-E>
+"nunmap <S-Down>
 
-" Personal Info
-inoreabbrev @@ Devlin.ja@northeastern.edu
-
+" Up
+nnoremap <Up> 10kzz
+"nnoremap <Up> <C-Y>
+"nunmap <S-Up>
 
 " Writing
-cnoreabbrev W w!
-cnoreabbrev WQ wq!
-cnoreabbrev Wq wq!
-nnoremap <Leader>w :w<CR>
-
-inoremap <C-d> <Esc>dd
+cnoreabbrev W :write!
+nnoremap <Leader>w :write<CR>
+inoremap <C-S> <C-O>:write<CR>
+nnoremap <C-S> :write<CR>
 
 " Quitting
 cnoreabbrev Q q!
-cnoreabbrev QA qa!
-cnoreabbrev Qa qa!
-nnoremap <Leader>q :q<CR>
+cnoreabbrev WQ wq!
+cnoreabbrev Wq wq!
+cnoreabbrev wQ wq!
+inoremap <C-Q> <Esc>:q<CR>
+nnoremap <Leader>q :bdelete<CR>
+vnoremap <C-Q> <Esc>
+nnoremap <Leader>x :close<CR>
 
-" Escaping
+" Copy & Paste
+nnoremap p gp
+nnoremap P gP
+
+" Ease of access
 inoremap jj <Esc>
+nnoremap H ^
+nnoremap L $
+"nnoremap Q qq
+nnoremap <silent> Y y$
+inoremap <C-W> <Nop>
 
-" Moving
-nnoremap <k8> k
-nnoremap <k2> j
-nnoremap <k4> h
-nnoremap <k6> l
+nnoremap <Leader>k :call fn#JumpOccurrence()<CR>
+"nnoremap <Leader>p :call fn#JumpPrompt()<CR>
 
-" Visual Shifting
+
+" Buffers
+"nnoremap <C-N> :bnext<CR>
+"nnoremap <C-P> :bprev<CR>
+" Tabs
+"nnoremap <C-S-N> :tabnext<CR>
+"nnoremap <C-S-P> :tabprev<CR>
+" Windows
+nnoremap <Leader>o <C-W>o
+
+" Quickfix
+nnoremap ]q :cnext<cr>zz
+nnoremap [q :cprev<cr>zz
+nnoremap ]l :lnext<cr>zz
+nnoremap [l :lprev<cr>zz
+" Buffers
+nnoremap ]b :bnext<cr>
+nnoremap [b :bprev<cr>
+" Tabs
+nnoremap ]t :tabn<cr>
+nnoremap [t :tabp<cr>
+" Windows
+nnoremap ]w <C-W>w
+nnoremap [w <C-W>W
+
+" Visual shifting
 vnoremap < <gv
 vnoremap > >gv
 
-" Copy to EOL
-nnoremap Y y$
+" Config shortcuts
+cnoreabbrev ec e $MYVIMRC
+cnoreabbrev ecd execute "edit " . fnamemodify($MYVIMRC, ":h")
+cnoreabbrev sc source $MYVIMRC
+"cnoreabbrev plug $HOME/.local/share/nvim/site/
 
-" Copy to system clipboard
-vnoremap <C-c> "+y
-" Paste from system clipboard
-inoremap <C-v> <Esc>"+p
+cnoreabbrev H vertical botright help
 
-" Move to the end of yanked text after yank and paste
-nnoremap p p`]
-vnoremap y y`]
-
-""  " Terminal
-nnoremap <silent> <Leader>tt :terminal<CR>
-nnoremap <silent> <Leader>tv :vnew<CR>:terminal<CR>
-nnoremap <silent> <Leader>th :new<CR>:terminal<CR>
-""  tnoremap <C-x> <C-\><C-n><C-w>q
-
-""  " Edit/Source This Config File
-nnoremap <silent> <Leader>ec :e $VIMRC<CR>
-nnoremap <silent> <Leader>sc :source $VIMRC<CR>
-
-" Highlighting
-nnoremap <Leader><Space> :nohlsearch<CR>
-
-" Quoting
-nnoremap <Leader>" viw<Esc>a"<Esc>bi"<Esc>lel
-
-" Where am i
-nnoremap <Leader>p :echom expand('%:p')<CR>
-
-" Automatically closing brackets
-inoremap {<CR> {<CR>}<ESC>O
-
-" >>>>>>>>>>>>>>>     Switching Buffers
-"
-
-" Switch between current and last buffer
-nnoremap <silent> <Leader>bb <C-^>
-
-" Go to next buffer
-nnoremap <silent> <Leader>bn :bn<CR>
-
-" Go to previous buffer
-nnoremap <silent> <Leader>bp :bp<CR>
-
-" Close buffer
-nnoremap <silent> <Leader>bd :bd<CR>
-
-" Kill buffer
-nnoremap <silent> <Leader>bk :bd!<CR>
-
-" List buffers
-nnoremap <silent> <Leader>bl :ls<CR>
-
-" List and select buffer
-nnoremap <silent> <Leader>bg :ls<CR>:buffer<Space>
-
-" Horizontal split with new buffer
-nnoremap <silent> <leader>bh :new<CR>
-
-" Vertical split with new buffer
-nnoremap <silent> <Leader>bv :vnew<CR>
-
-
-
-" >>>>>>>>>>>>>>>     Switching Windows
-"
-
-" Selecting windows
-nnoremap <Leader>h <C-w>h
-nnoremap <Leader>j <C-w>j
-nnoremap <Leader>k <C-w>k
-nnoremap <Leader>l <C-w>l
-
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
-
-" Close window
-nnoremap <Leader>c :close<CR>
+" Mouse scrolling
+map <ScrollWheelUp> <C-Y>
+map <S-ScrollWheelUp> <C-U>
+map <ScrollWheelDown> <C-E>
+map <S-ScrollWheelDown> <C-D>
 
 " Terminal
-tnoremap <Esc> <C-\><C-n>
-tnoremap <A-h> <C-\><C-n><C-w>h
-tnoremap <A-j> <C-\><C-n><C-w>j
-tnoremap <A-k> <C-\><C-n><C-w>k
-tnoremap <A-l> <C-\><C-n><C-w>l
+cnoreabbrev tt terminal
+tnoremap <Esc> <C-\><C-N>
+tmap <C-X> <Esc><C-W>q
 
-" Resizing
-nnoremap <C-H> :vertical resize -5<CR>
-nnoremap <C-J> resize +5<CR>
-nnoremap <C-K> resize -5<CR>
-nnoremap <C-L> :vertical resize +5<CR>
+" Aesthetics
+nnoremap <silent> <Leader>i :nohlsearch<CR>
+nnoremap <silent> <Leader>p :echom expand('%:p:~')<CR>
 
-" Magic
-nnoremap ? ?\v
-nnoremap / /\v
-cnoremap %s/ %sm/
+" Insertion shortcuts
+inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
+nnoremap ! :!
 
-" cd vim into the directory of the buffer
-nnoremap <Leader>cd :cd %:p:h<CR>
+"cnoremap plua lua print(vim.inspect(  ))<Left><Left><Left>
+nnoremap <Leader>sf :call SourceFile(expand("%"))<CR>
 
-" Allow switching to buffer #<n> by typing <n>e
-function! s:bufSwitch(count)
-    if count >=# 1
-        return ":\<C-U>" . count . "b\<CR>"
-    endif
-    return 'e'
-endfunction
-nnoremap <expr> e <SID>bufSwitch(v:count)
+" Ctrl+Backspace deletes previous word
+"inoremap <C-Bs> <C-\><C-O>dB
 
-" Next/Prev Buffer
-nnoremap <C-N> :bnext<CR>
-nnoremap <C-P> :bprev<CR>
+" Display info
+"nnoremap <silent> <Leader>` :marks<CR>
+"nnoremap <silent> <Leader>r :registers<CR>
+"nnoremap <silent> <Leader>a :args<CR>
+"nnoremap <silent> <Leader>t :tabs<CR>
+"nnoremap <silent> <Leader>f :files<CR>
+"nnoremap <silent> <Leader>b :buffers<CR>
+"nnoremap <silent> <Leader>j :jumps<CR>
+"nnoremap <silent> <Leader>g :tags<CR>
+"nnoremap <silent> <Leader>h :history<CR>
 
-" Move to beginning/end of line
-nnoremap H ^
-nnoremap L $
+" Popup menu
+"   -- Enter key selects highlighted completion
+inoremap <silent> <expr> <CR> pumvisible() ? "\<C-Y>" : "\<C-G>u\<CR>"
+inoremap <silent> <expr> <Esc> pumvisible() ? "\<C-E>" : "\<Esc>"
 
-" Q key macros
-"nnoremap Q @q
+"   -- Quickfix List ( `qf' )
+nnoremap <Leader>cn :cnext<CR>
+nnoremap <Leader>cp :cprev<CR>
+nnoremap <Leader>co :copen<CR>
 
-" FZF
-nnoremap <leader>f :FZF<CR>
+"   -- Location List ( `ll' )
+nnoremap <Leader>ln :lnext<CR>
+nnoremap <Leader>lp :lprev<CR>
+nnoremap <Leader>lo :lopen<CR>
 
-" Undo tree
-"nnoremap <leader>u :MundoToggle<CR>
+"   -- File Explorer
+nnoremap <Leader>E :Explore .<CR>
+"nnoremap <silent> <expr> <Leader>e bufexists(bufnr('/netrw" :Vexplore<CR>
 
-
-""   >>>>>>>>>>>>>>>     Switching Tabs
-"" "
-"" nnoremap tt :tabnew<CR>
-"" nnoremap <C-t> :tabnew<CR>
-"" nnoremap <C-n> :tabn<CR>
-"" nnoremap <C-N> :tabp<CR>
-"" inoremap <C-t> <Esc>:tabnew<CR>
-"" nnoremap tc :tabclose<CR>
-
-au FileType rust nnoremap gd <Plug>(rust-def)
-au FileType rust nnoremap gs <Plug>(rust-def-split)
-au FileType rust nnoremap gx <Plug>(rust-def-vertical)
-au FileType rust nnoremap gt <Plug>(rust-def-tab)
-au FileType rust nnoremap <leader>gd <Plug>(rust-doc)
-
-" Floating Window
-nnoremap <leader>t :FloatermToggle<CR>
-
-
-" Open File in VS Code
-nnoremap <leader>ov :exe ':silent !code %'<CR>:redraw!<CR>
+" ---   Extras
+" Fuzzy finder
+nnoremap <silent> <Leader>f :FZF<CR>
 
