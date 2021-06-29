@@ -40,7 +40,7 @@
     # Profiles
     ~/.inputrc:
     ~/.lessrc:
-    ~/.zshrc:
+    ~/.zshrc: zsh/zshrc
     ~/.bashrc: bash/bashrc
     ~/.tmux.conf:
     ~/.cargo/config.toml: cargo.toml
