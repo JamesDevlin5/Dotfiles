@@ -74,7 +74,7 @@ vnoremap > >gv
 
 " Config shortcuts
 cnoreabbrev ec e $MYVIMRC
-cnoreabbrev ecd execute "edit " . fnamemodify($MYVIMRC, ":h")
+"cnoreabbrev ecd execute "edit " . fnamemodify($MYVIMRC, ":h")
 cnoreabbrev sc source $MYVIMRC
 "cnoreabbrev plug $HOME/.local/share/nvim/site/
 
@@ -132,7 +132,8 @@ nnoremap <Leader>lp :lprev<CR>
 nnoremap <Leader>lo :lopen<CR>
 
 "   -- File Explorer
-nnoremap <Leader>E :Explore .<CR>
+"nnoremap <Leader>E :Explore .<CR>
+nnoremap <Leader>e :NvimTreeToggle<CR>
 "nnoremap <silent> <expr> <Leader>e bufexists(bufnr('/netrw" :Vexplore<CR>
 
 " ---   Extras
