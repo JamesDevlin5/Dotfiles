@@ -1,10 +1,12 @@
 [alias]
-r = "run"
-rr = "run --release"
+br = "build --release"
 
 [build]
 rustdocflags = [
     "--document-private-items",
     "--default-theme=dark",
+    "--sort-modules-by-appearance",
+    "--enable-index-page",
 ]
 incremental=true
+

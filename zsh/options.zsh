@@ -7,7 +7,7 @@ setopt auto_remove_slash
 # }}}
 
 # Completion {{{
-setopt always_to_end
+#setopt always_to_end
 setopt complete_in_word
 setopt glob_complete
 setopt auto_menu
@@ -23,6 +23,7 @@ setopt aliases
 
 # History {{{
 setopt hist_ignore_all_dups
+setopt hist_ignore_space
 setopt hist_reduce_blanks
 setopt inc_append_history
 setopt extended_history

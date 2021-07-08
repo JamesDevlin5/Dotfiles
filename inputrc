@@ -28,32 +28,16 @@ set visible-stats on
 "\C-e": edit-and-execute-command
 
 # Tab menu-completion
-TAB: menu-complete
+"\t": menu-complete
 # And S-Tab for backwards
 "\e[Z": menu-complete-backward
+"\C-l": clear-screen
 
 set editing-mode vi
 
-$if mode=vi
-
 # Pipe cursor in insert mode
-set vi-ins-mode-string \1\e[6 q\2
+set vi-ins-mode-string "\033\[6 q"
 # Block cursor in command mode
-set vi-cmd-mode-string \1\e[2 q\2
+set vi-cmd-mode-string "\033\[2 q"
 
-set keymap vi-command
-Control-l: clear-screen
-
-"\e[A": history-search-backward
-"\e[B": history-search-forward
-j: history-search-forward
-k: history-search-backward
-
-set keymap vi-insert
-Control-l: clear-screen 
-
-"\e[A": history-search-backward
-"\e[B": history-search-forward
-
-$endif
 

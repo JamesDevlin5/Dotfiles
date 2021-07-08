@@ -4,6 +4,9 @@ typeset -U fpath
 typeset -U manpath
 typeset -U cdpath
 
+. ~/.config/shell/shellrc
+. ~/.config/shell/alias.sh
+
 [[ $fpath = *${HOME}/.zfunc* ]] || fpath=(${HOME}/.zfunc $fpath)
 
 # TODO: Bind zls colors to dircolors string output

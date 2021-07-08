@@ -1,6 +1,8 @@
 # Setup
 - create:
     - ~/.config
+    - ~/.local/share
+    - ~/.cache
     - ~/dotfiles
     - ~/bin
     - ~/workspace
@@ -39,14 +41,18 @@
     ~/.config/zsh: zsh
     # Profiles
     ~/.inputrc:
-    ~/.lessrc:
+      #~/.lessrc:
     ~/.zshrc: zsh/zshrc
     ~/.bashrc: bash/bashrc
-    ~/.tmux.conf:
+      #~/.tmux.conf:
     ~/.cargo/config.toml: cargo.toml
     ~/.local/share/pandoc/defaults/base.yaml: pandoc.conf
     # Colors
     ~/.dircolors:
+    ~/.config/user-dirs.dirs: user-dirs.dirs
+    ~/.config/starship/config.toml: starship/config.toml
+    ~/.config/zellij/zellij.yaml: zellij/config.yaml
+    ~/.config/luarocks/config-5.3.lua: luarocks/config-5.3.lua
 
 # Mypy plugins
 - shell:

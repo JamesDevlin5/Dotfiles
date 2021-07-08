@@ -7,9 +7,11 @@ alias tree='exa --tree --group-directories-first -F -I ".git|.idea|.venv|*.iml|*
 alias python='python3'
 alias pip='pip3'
 
-TIME_FMT_OLD="[ %a %_H:%M  >>>> %_9B %2d (%C) ]"
-TIME_FMT_NEW="[ %a %_I:%M %P || %_9b %_2d      ]"
-printf -v TIME_FMT "+\"%s\n%s\"" ${TIME_FMT_OLD} ${TIME_FMT_NEW}
+#alias luai='lua -i -e "_PROMPT=' lua> '"
+
+#TIME_FMT_OLD="[ %a %_H:%M  >>>> %_9B %2d (%C) ]"
+#TIME_FMT_NEW="[ %a %_I:%M %P || %_9b %_2d      ]"
+#printf -v TIME_FMT "+\"%s\n%s\"" ${TIME_FMT_OLD} ${TIME_FMT_NEW}
 
 # `ls`
 alias ls="ls --ignore-backups --classify --group-directories-first -v --human-readable \
@@ -20,6 +22,10 @@ alias l='ls'
 alias ll='ls -l'
 alias la='ls -A'
 alias l.='ls -d .*'
+
+alias lg='ls | rg'
+alias lag='la | rg'
+alias envg='env | rg'
 
 # Navigating the FS
 alias ..='cd ..'

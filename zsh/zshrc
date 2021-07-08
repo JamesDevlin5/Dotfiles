@@ -50,8 +50,8 @@ zstyle ':completion:*:-command-:*' tag-order '!parameters reserved-words'
 
 eval "$(dircolors $HOME/.dircolors)"
 
-jdoc () {
-    javadoc -d ~/html -sourcepath "$1" -subpackages java -exclude
+jdoc() {
+  javadoc -d ~/html -sourcepath "$1" -subpackages java -exclude
 }
 
 zmodload zsh/complist
@@ -61,12 +61,6 @@ zmodload zsh/zleparameter
 
 autoload -Uz vcs_info && vcs_info
 autoload -U colors && colors
-for COLOR in RED GREEN YELLOW BLUE MAGENTA CYAN BLACK WHITE; do
-    eval $COLOR='%{$fg_no_bold[${(L)COLOR}]%}'  #wrap colours between %{ %} to avoid weird gaps in autocomplete
-    eval BOLD_$COLOR='%{$fg_bold[${(L)COLOR}]%}'
-done
-eval RESET='$reset_color'
-
 
 alias shlint='shellcheck --enable=all --severity=style'
 
@@ -80,30 +74,25 @@ alias wh='whence -mv'
 
 # Variables {{{
 # Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR='nvim'
-fi
+#if [[ -n $SSH_CONNECTION ]]; then
+#  export EDITOR='vim'
+#else
+#  export EDITOR='nvim'
+#fi
 
 export CORRECT_IGNORE=_*
 
-export HISTFILE="~/.zsh_history"
-export HISTSIZE=800
+#export HISTFILE="~/.zsh_history"
+export HISTSIZE=49999
 
 export PATH="$HOME/bin:/usr/local/sbin:$PATH"
 
-#source "$HOME/.lessrc"
-#source "$HOME/.zsh/prompt.zsh"
-#source "$HOME/.zsh/alias.zsh"
 source "$HOME/.config/zsh/alias.zsh"
 source "$HOME/.config/zsh/options.zsh"
-source "$HOME/.config/zsh/rp.zsh"
 source "$HOME/.config/shell/alias.sh"
-source "$HOME/.config/shell/env.sh"
+source "$HOME/.config/shell/shellrc"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
+eval "$(starship init zsh)"
 
 # Git Fuzzy
 export PATH="/Users/james/.zsh/plugins/git-fuzzy/bin:$PATH:/Users/james/Library/Python/3.9/bin"
@@ -141,3 +130,5 @@ zplug load
 # }}}
 
 # vim:foldmethod=marker
+
+source /home/james/.config/broot/launcher/bash/br

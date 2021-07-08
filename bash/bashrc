@@ -14,6 +14,16 @@ export HISTTIMEFORMAT=" (  %b %d  -  %H:%M  )  ->  "
 # Remote hostname completion
 export HOSTFILE="$HOME/.ssh/known_hosts"
 
+# enable bash completion in interactive shells
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+
 # Will print `Hello World` just before each prompt
 # PROMPT_COMMAND=( "echo 'Hello World'" )
 
@@ -31,7 +41,7 @@ set -o ignoreeof
 # Colorize
 dcolors=~/.dircolors
 if [[ -r $dcolors ]]; then
-    eval "$(gdircolors $dcolors)"
+    eval "$(dircolors $dcolors)"
 fi
 
 # Source util files
@@ -40,10 +50,11 @@ for i in ~/.config/bash/[0-9]*; do
 done
 
 . $HOME/.config/shell/alias.sh
-. $HOME/.config/shell/env.sh
+. $HOME/.config/shell/shellrc
 
-
-alias ls=exa
+eval "$(starship init bash)"
 
 #[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+
+source /home/james/.config/broot/launcher/bash/br
