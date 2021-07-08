@@ -6,13 +6,8 @@ if [ -z "$PS1" ]; then return; fi
 # History
 shopt -s histappend histreedit histverify
 export HISTCONTROL=ignoreboth:erasedups
-export HISTSIZE=15000
 export HISTFILESIZE=20000
-export HISTFILE="$HOME/.bash_history"
 export HISTTIMEFORMAT=" (  %b %d  -  %H:%M  )  ->  "
-
-# Remote hostname completion
-export HOSTFILE="$HOME/.ssh/known_hosts"
 
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
@@ -38,19 +33,9 @@ set -o vi
 # Don't exit immediately on EOF (default is 10 consecutive)
 set -o ignoreeof
 
-# Colorize
-dcolors=~/.dircolors
-if [[ -r $dcolors ]]; then
-    eval "$(dircolors $dcolors)"
-fi
-
-# Source util files
-for i in ~/.config/bash/[0-9]*; do
-    . "$i"
-done
-
-. $HOME/.config/shell/alias.sh
-. $HOME/.config/shell/shellrc
+# TODO:
+. $HOME/dotfiles/shell/setup_env.bash
+. $HOME/dotfiles/shell/setup_alias.bash
 
 eval "$(starship init bash)"
 
@@ -58,3 +43,4 @@ eval "$(starship init bash)"
 
 
 source /home/james/.config/broot/launcher/bash/br
+

@@ -1,23 +1,17 @@
+#!/usr/bin/env bash
 
-# Colors
-alias grep='grep --color=auto'
-# alias tree='tree -F -C --dirsfirst -I ".git|.idea|venv|*.iml"'
 alias tree='exa --tree --group-directories-first -F -I ".git|.idea|.venv|*.iml|*.vscode|target"'
 
 alias python='python3'
 alias pip='pip3'
+# Enter interactive mode after executing a python script
+alias ppy='python3 -i'
 
-#alias luai='lua -i -e "_PROMPT=' lua> '"
+alias shlint='shellcheck --enable=all --severity=style'
 
-#TIME_FMT_OLD="[ %a %_H:%M  >>>> %_9B %2d (%C) ]"
-#TIME_FMT_NEW="[ %a %_I:%M %P || %_9b %_2d      ]"
-#printf -v TIME_FMT "+\"%s\n%s\"" ${TIME_FMT_OLD} ${TIME_FMT_NEW}
-
-# `ls`
-alias ls="ls --ignore-backups --classify --group-directories-first -v --human-readable \
-	--dereference-command-line --time-style=${TIME_FMT} --color=auto"
+alias ls='ls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
 alias lc='ls --context'
-# --- ??? ^^
+
 alias l='ls'
 alias ll='ls -l'
 alias la='ls -A'
@@ -46,9 +40,10 @@ alias ln='ln -v --'
 # shortcuts
 alias vi='vim'
 alias c='clear'
-alias view='$PAGER'
-alias e='$EDITOR'
+alias view="$PAGER"
+alias e="$EDITOR"
 alias g='git'
+
 
 # My Ip Address Info
 myip() {
@@ -61,7 +56,7 @@ mcd() {
 }
 
 # Online cheatsheet
-function cheat(){
+cheat(){
     curl "cheat.sh/$1"
 }
 
@@ -112,8 +107,11 @@ alias peek='tee >(cat 1>&2)'
 
 alias d='dirs -v'
 
+# Print large text
+alias fig='figlet -f banner3 -c -w100'
+
+alias wh='whence -mv'
+
 # Maintenance
-alias update_go='go get -u ...'
-alias update='nvim +update +q ; rustup update ; brew update ; brew upgrade ; brew upgrade --cask ; update_pip ; ~/.mypyls/bin/pip install -U "https://github.com/matangover/mypyls/archive/master.zip#egg=mypyls[default-mypy]" ; update_go '
-alias clean='brew cleanup ; brew doctor'
+alias update='nvim +PlugUpdate +q; rustup update;'
 

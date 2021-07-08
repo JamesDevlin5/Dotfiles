@@ -48,7 +48,7 @@
     ~/.cargo/config.toml: cargo.toml
     ~/.local/share/pandoc/defaults/base.yaml: pandoc.conf
     # Colors
-    ~/.dircolors:
+    ~/.config/dircolors: dircolors
     ~/.config/user-dirs.dirs: user-dirs.dirs
     ~/.config/starship/config.toml: starship/config.toml
     ~/.config/zellij/zellij.yaml: zellij/config.yaml

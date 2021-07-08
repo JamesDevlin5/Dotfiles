@@ -48,8 +48,6 @@ zstyle ':completion:*:-command-:*' tag-order '!parameters reserved-words'
 
 # }}}
 
-eval "$(dircolors $HOME/.dircolors)"
-
 jdoc() {
   javadoc -d ~/html -sourcepath "$1" -subpackages java -exclude
 }
@@ -62,16 +60,6 @@ zmodload zsh/zleparameter
 autoload -Uz vcs_info && vcs_info
 autoload -U colors && colors
 
-alias shlint='shellcheck --enable=all --severity=style'
-
-# Enter interactive mode after executing a python script
-alias ppy='python3 -i'
-
-# Print large text
-alias fig='figlet -f banner3 -c -w100'
-
-alias wh='whence -mv'
-
 # Variables {{{
 # Preferred editor for local and remote sessions
 #if [[ -n $SSH_CONNECTION ]]; then
@@ -80,17 +68,12 @@ alias wh='whence -mv'
 #  export EDITOR='nvim'
 #fi
 
-export CORRECT_IGNORE=_*
-
-#export HISTFILE="~/.zsh_history"
-export HISTSIZE=49999
-
 export PATH="$HOME/bin:/usr/local/sbin:$PATH"
 
-source "$HOME/.config/zsh/alias.zsh"
-source "$HOME/.config/zsh/options.zsh"
-source "$HOME/.config/shell/alias.sh"
-source "$HOME/.config/shell/shellrc"
+. "$HOME/.config/zsh/alias.zsh"
+. "$HOME/.config/zsh/options.zsh"
+. /home/james/dotfiles/shell/setup_env.bash
+. /home/james/dotfiles/shell/setup_alias.bash
 
 eval "$(starship init zsh)"
 
@@ -132,3 +115,4 @@ zplug load
 # vim:foldmethod=marker
 
 source /home/james/.config/broot/launcher/bash/br
+
