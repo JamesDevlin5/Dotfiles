@@ -50,8 +50,8 @@
     # Colors
     ~/.config/dircolors: dircolors
     ~/.config/user-dirs.dirs: user-dirs.dirs
-    ~/.config/starship/config.toml: starship/config.toml
-    ~/.config/zellij/zellij.yaml: zellij/config.yaml
+    ~/.config/starship/config.toml: starship.toml
+    ~/.config/zellij/config.yaml: zellij/config.yaml
     ~/.config/luarocks/config-5.3.lua: luarocks/config-5.3.lua
 
 # Mypy plugins

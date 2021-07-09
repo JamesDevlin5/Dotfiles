@@ -244,7 +244,7 @@ keybinds:
 themes:
   edge_dark:
     fg: [44, 46, 52]
-    bg: [197, 205,]
+    bg: [197, 205, 200]
     black: [62, 66, 73]
     red: [236, 114, 121]
     green:  [160, 201, 128]
@@ -255,6 +255,5 @@ themes:
     white: [197, 205, 217]
     orange: [219, 160, 88]
 
-theme: edge_dark
 
 

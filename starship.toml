@@ -1,0 +1,418 @@
+# https://starship.rs/config
+# Warning: This config does not include keys that have an unset value
+# format = '$all'
+scan_timeout = 30
+command_timeout = 500
+add_newline = true
+
+# Prompt Format
+format = """
+$shell\
+$hostname\
+$shlvl\
+$time\
+$memory_usage\
+$battery\
+$vcsh\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$docker_context\
+$cmake\
+$python\
+$rust\
+$lua\
+$custom\
+$cmd_duration\
+$line_break\
+$directory\
+$jobs\
+$status\
+$username\
+$character"""
+
+[battery]
+format = '[$symbol$percentage]($style) '
+full_symbol = "  "
+charging_symbol = "  "
+discharging_symbol = "ﴊ "
+unknown_symbol = " "
+empty_symbol = "  "
+disabled = false
+
+[[battery.display]]
+threshold = 10
+style = "bold red"
+
+[[battery.display]]
+threshold = 30
+style = "bold yellow"
+
+[[battery.display]]
+threshold = 50
+style = "dimmed yellow"
+
+[[battery.display]]
+threshold = 80
+style = "green"
+
+[character]
+format = '$symbol '
+success_symbol = '[➜ ](dimmed green)'
+error_symbol = '[✖ ](red)'
+vicmd_symbol = '[ⅵ ](bold white)'
+disabled = false
+
+[cmake]
+format = 'via [$symbol($version )]($style)'
+version_format = 'v${raw}'
+symbol = '△ '
+style = 'bold blue'
+disabled = true
+detect_extensions = []
+detect_files = [
+    'CMakeLists.txt',
+    'CMakeCache.txt',
+]
+detect_folders = []
+
+[cmd_duration]
+# Wait 45-minutes before reporting
+min_time = 2700000
+format = '[🕘 $duration]($style) '
+style = 'yellow'
+show_milliseconds = false
+disabled = false
+show_notifications = false
+min_time_to_notify = 45000
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+fish_style_pwd_dir_length = 0
+use_logical_path = true
+format = '([$read_only]($read_only_style))[ $path ]($style)  '
+style = 'fg:#1597ed'
+disabled = false
+read_only = '🔒'
+read_only_style = 'fg:#848722'
+truncation_symbol = '  /'
+home_symbol = ' ﮟ '
+
+[directory.substitutions]
+"/home/james/dotfiles" = '   >'
+"/home/james/workspace" = '  >'
+
+[docker_context]
+symbol = '🐳 '
+style = 'blue bold'
+format = 'via [$symbol$context]($style) '
+only_with_files = true
+disabled = false
+detect_extensions = []
+detect_files = [
+    'docker-compose.yml',
+    'docker-compose.yaml',
+    'Dockerfile',
+]
+detect_folders = []
+
+[env_var]
+symbol = ''
+style = 'black bold dimmed'
+format = 'with [$env_value]($style) '
+disabled = true
+
+[erlang]
+format = 'via [$symbol($version )]($style)'
+version_format = 'v${raw}'
+symbol = ' '
+style = 'bold red'
+disabled = true
+detect_extensions = []
+detect_files = [
+    'rebar.config',
+    'erlang.mk',
+]
+detect_folders = []
+
+[gcloud]
+format = 'on [$symbol$account(@$domain)(\($region\))]($style) '
+symbol = '☁️  '
+style = 'bold blue'
+disabled = true
+
+[gcloud.region_aliases]
+
+[git_branch]
+format = 'on [$symbol$branch]($style)(:[$remote](pink)) '
+symbol = ' '
+style = 'italic purple'
+truncation_length = 9223372036854775807
+truncation_symbol = '…'
+only_attached = false
+always_show_remote = true
+disabled = false
+
+[git_commit]
+commit_hash_length = 7
+format = '[\($hash$tag\)]($style) '
+style = 'underline green'
+only_detached = false
+disabled = false
+tag_symbol = '笠 '
+tag_disabled = false
+
+[git_state]
+rebase = 'REBASING'
+merge = 'MERGING'
+revert = 'REVERTING'
+cherry_pick = 'CHERRY-PICKING'
+bisect = 'BISECTING'
+am = 'AM'
+am_or_rebase = 'AM/REBASE'
+style = 'bold yellow'
+format = '\([$state( $progress_current/$progress_total)]($style)\) '
+disabled = false
+
+[git_status]
+format = '([\[$all_status$ahead_behind\]]($style) )'
+style = 'fg:#00a7cc'
+stashed = ' '
+ahead = 'ﲓ ${count}'
+behind = 'ﲐ ${count}'
+diverged = '([+${ahead_count} ahead](fg:#b4e34d))   ([-${behind_count} behind](fg:#9728ad))'
+conflicted = ' '
+deleted = ' '
+renamed = ' '
+modified = ' '
+staged = ' '
+untracked = ' '
+disabled = false
+
+[golang]
+format = 'via [$symbol($version )]($style)'
+version_format = 'v${raw}'
+symbol = '🐹 '
+style = 'bold cyan'
+disabled = true
+detect_extensions = ['go']
+detect_files = [
+    'go.mod',
+    'go.sum',
+    'glide.yaml',
+    'Gopkg.yml',
+    'Gopkg.lock',
+    '.go-version',
+]
+detect_folders = ['Godeps']
+
+[hostname]
+ssh_only = true
+trim_at = '.'
+format = '[$hostname]($style) in '
+style = 'green dimmed'
+disabled = false
+
+[java]
+disabled = true
+format = 'via [$symbol($version )]($style)'
+version_format = 'v${raw}'
+style = 'red'
+symbol = ' '
+detect_extensions = [
+    'java',
+    'class',
+    'jar',
+    'gradle',
+    'clj',
+    'cljc',
+]
+detect_files = [
+    'pom.xml',
+    'build.gradle.kts',
+    'build.sbt',
+    '.java-version',
+    'deps.edn',
+    'project.clj',
+    'build.boot',
+]
+detect_folders = []
+
+[jobs]
+threshold = 1
+format = '[$symbol([ $number jobs](fg:#fcba03))]($style) '
+symbol = '  '
+style = 'fg:#cc6600'
+disabled = false
+
+[julia]
+format = 'via [$symbol($version )]($style)'
+version_format = 'v${raw}'
+symbol = 'ஃ '
+style = 'bold purple'
+disabled = true
+detect_extensions = ['jl']
+detect_files = [
+    'Project.toml',
+    'Manifest.toml',
+]
+detect_folders = []
+
+[kotlin]
+format = 'via [$symbol($version )]($style)'
+version_format = 'v${raw}'
+symbol = '🅺 '
+style = 'bold blue'
+kotlin_binary = 'kotlin'
+disabled = true
+detect_extensions = [
+    'kt',
+    'kts',
+]
+detect_files = []
+detect_folders = []
+
+[kubernetes]
+symbol = '☸ '
+format = '[$symbol$context( \($namespace\))]($style) in '
+style = 'cyan bold'
+disabled = true
+
+[kubernetes.context_aliases]
+
+[line_break]
+disabled = false
+
+[lua]
+format = '[$symbol[($version )](bold white)]($style)'
+version_format = 'v${raw}'
+symbol = ' Lua'
+style = 'italic light blue'
+lua_binary = 'lua'
+disabled = false
+detect_extensions = ['lua']
+detect_files = ['.lua-version']
+detect_folders = ['lua']
+
+[memory_usage]
+threshold = 10
+format = '[$ram( [\($ram_pct\)](fg:#2dd4eb) )]($style)[\] ](fg:#dbdbdb)'
+style = 'fg:#eb6f09'
+disabled = false
+
+[nodejs]
+format = 'via [$symbol($version )]($style)'
+version_format = 'v${raw}'
+symbol = ' '
+style = 'bold green'
+disabled = true
+not_capable_style = 'bold red'
+detect_extensions = [
+    'js',
+    'mjs',
+    'cjs',
+    'ts',
+]
+detect_files = [
+    'package.json',
+    '.node-version',
+    '.nvmrc',
+]
+detect_folders = ['node_modules']
+
+[package]
+format = 'is [$symbol$version]($style) '
+symbol = '📦 '
+style = '208 bold'
+display_private = false
+disabled = true
+
+[python]
+pyenv_version_name = false
+pyenv_prefix = 'pyenv '
+python_binary = [
+    'python',
+    'python3',
+    'python2',
+]
+format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+version_format = 'v${raw}'
+style = 'yellow bold'
+symbol = ' '
+disabled = false
+detect_extensions = ['py']
+detect_files = [
+    'requirements.txt',
+    '.python-version',
+    'pyproject.toml',
+    'Pipfile',
+    'tox.ini',
+    'setup.py',
+    '__init__.py',
+]
+detect_folders = []
+
+[rust]
+format = ' [$symbol($version )]($style)'
+version_format = 'v${raw}'
+symbol = ' '
+style = 'red'
+disabled = false
+detect_extensions = ['rs']
+detect_files = ['Cargo.toml']
+detect_folders = []
+
+[shell]
+format = '[     ](fg:#58ad39)[$indicator](fg:#3eaed6) '
+bash_indicator = 'bsh'
+fish_indicator = 'fsh'
+zsh_indicator = 'zsh'
+powershell_indicator = 'psh'
+ion_indicator = 'ion'
+elvish_indicator = 'esh'
+tcsh_indicator = 'tsh'
+unknown_indicator = ' ? '
+disabled = false
+
+[shlvl]
+threshold = 3
+format = '[$symbol$shlvl]($style) '
+symbol = '↕️  '
+repeat = false
+style = 'dimmed yellow'
+disabled = false
+
+[singularity]
+disabled = true
+
+[status]
+format = '[$symbol$status]($style) '
+symbol = '✖'
+not_executable_symbol = '🚫'
+not_found_symbol = '🔍'
+sigint_symbol = '🧱'
+signal_symbol = '⚡'
+style = 'bold red'
+map_symbol = false
+recognize_signal_code = true
+disabled = true
+
+[time]
+format = '[   [$time](fg:#ff470f underline)   ]($style) '
+style = 'fg:#d143a6'
+use_12hr = true
+disabled = false
+utc_time_offset = 'local'
+#time_range = '10:30:00-20:15:00'
+
+[username]
+format = '[   ](fg:#50baa3)[$user]($style) '
+style_root = 'red bold'
+style_user = 'fg:#ff9a0d'
+disabled = false
+show_always = true
+
+[custom]
+

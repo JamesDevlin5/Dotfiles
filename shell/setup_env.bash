@@ -49,9 +49,10 @@ declare -x DOTFILES_HOME="${HOME}/dotfiles"
 #declare -x LUA_ROCKS_DIR=""
 #declare -x CARGO_HOME="${XDG_CACHE_HOME}/cargo"
 #declare -x CARGO_INSTALL_ROOT="${XDG_DATA_HOME}/cargo"
-#declare -x STARSHIP_CONFIG="${XDG_CONFIG_HOME}/starship/config.toml"
-#declare -x STARSHIP_CACHE="${XDG_CACHE_HOME}/starship"
-#declare -x PURE_POWER_MODE="modern"
+declare -x STARSHIP_CONFIG="${XDG_CONFIG_HOME}/starship/config.toml"
+declare -x STARSHIP_CACHE="${XDG_CACHE_HOME}/starship"
+#declare -x ZELLIJ_CONFIG_DIR="${XDG_CONFIG_HOME}/zellij"
+declare -x ZELLIJ_CONFIG_FILE="${XDG_CONFIG_HOME}/zellij/config.yaml"
 
 # Path {{{1
 #declare -x PATH="${HOME}/bin:${CARGO_INSTALL_ROOT}/bin:${PATH}"

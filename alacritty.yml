@@ -82,23 +82,23 @@ scrolling:
 font:
   # The normal (roman) font face to use.
   normal:
-    family: "Iosevka Nerd Font"
-    style: Light
+    family: "VictorMono Nerd Font"
+    style: "Regular"
 
   # The bold font face
   bold:
-    family: "Iosevka Nerd Font"
-    style: Regular
+    family: "VictorMono Nerd Font"
+    style: "SemiBold"
 
   # The italic font face
   italic:
-    family: "Iosevka Nerd Font"
+    family: "VictorMono Nerd Font"
     style: "Light Italic"
 
   # The bold and itablic font face
   bold_italic:
-    family: "Iosevka Nerd Font"
-    style: "Italic"
+    family: "VictorMono Nerd Font"
+    style: "Medium Oblique"
 
 
   # Point size of the font
