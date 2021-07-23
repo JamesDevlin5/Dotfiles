@@ -1,0 +1,44 @@
+
+# No external command found
+command_not_found_handler () {
+	# Executed in a sub-shell
+	printf "Command not found: %s" "$0" >/dev/stderr
+	return 127
+}
+
+# Named Directories (Begin with '~Dir/...')
+
+#modload zsh/complist
+autoload -U compinit; compinit
+
+autoload -U colors; colors
+typeset -x CLICOLOR=1
+
+bindkey "^A" beginning-of-line
+bindkey "^E" end-of-line
+bindkey "^R" history-incremental-search-backward
+bindkey "^P" history-search-backward
+bindkey "^Y" accept-and-hold
+bindkey "^N" insert-last-word
+bindkey "^Q" push-line-or-edit
+
+compdef '_files -g "*.py"' python
+
+# Context String
+# :completion:function:completer:command:argument:tag
+
+zstyle ':completion:*' verbose yes
+
+zmodload zsh/complist
+
+#bindkey -M menuselect 'h' 
+
+autoload -Uz functions/man
+
+# Global Aliases
+alias -g G='| rg'
+alias -g P='| $PAGER'
+alias -g TF='| tail -f'
+alias -g DN='| /dev/null'
+alias -g _='| /dev/null'
+
