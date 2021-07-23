@@ -2,43 +2,38 @@
 # No external command found
 command_not_found_handler () {
 	# Executed in a sub-shell
-	printf "Command not found: %s" "$0" >/dev/stderr
+	print -P "%F{#e88a38}%BCommand not found:%b%f %U$0%u"
 	return 127
 }
 
 # Named Directories (Begin with '~Dir/...')
 
-#modload zsh/complist
+zmodload zsh/complist
 autoload -U compinit; compinit
-
 autoload -U colors; colors
 typeset -x CLICOLOR=1
 
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v edit-command-line
+
 bindkey "^A" beginning-of-line
-bindkey "^E" end-of-line
+#bindkey "^E" end-of-line
 bindkey "^R" history-incremental-search-backward
 bindkey "^P" history-search-backward
 bindkey "^Y" accept-and-hold
 bindkey "^N" insert-last-word
 bindkey "^Q" push-line-or-edit
 
-compdef '_files -g "*.py"' python
+bindkey '^ ' autosuggest-accept
 
-# Context String
-# :completion:function:completer:command:argument:tag
-
-zstyle ':completion:*' verbose yes
-
-zmodload zsh/complist
-
-#bindkey -M menuselect 'h' 
+#compdef '_files -g "*.py"' python
 
 autoload -Uz functions/man
 
-# Global Aliases
-alias -g G='| rg'
-alias -g P='| $PAGER'
-alias -g TF='| tail -f'
-alias -g DN='| /dev/null'
-alias -g _='| /dev/null'
-
+# use exa for ls
+#alias ls='exa -al --icons --color=always --group-directories-first'
+#alias la='exa -a --icons --color=always --group-directories-first'
+#alias ll='exa -l --icons --color=always --group-directories-first'
+#alias lt='exa -aT --icons --color=always --group-directories-first'
+#alias titan='sudo salt-call state.apply'

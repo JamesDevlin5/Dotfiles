@@ -1,0 +1,19 @@
+format = """\
+  $character\
+  $directory\
+  $git_branch\
+"""
+
+[git_branch]
+symbol = " "
+style = "purple"
+format = "on [$symbol$branch]($style) > "
+
+[directory]
+style = "italic cyan"
+format = "[$path]($style) "
+
+[character]
+success_symbol = "[ ](green)"
+error_symbol = "[ ](yellow)"
+vicmd_symbol = "[ ](green)"
