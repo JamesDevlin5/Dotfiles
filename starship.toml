@@ -1,20 +1,24 @@
 # https://starship.rs/config
 # Warning: This config does not include keys that have an unset value
 # format = '$all'
-scan_timeout = 30
+scan_timeout = 60
 command_timeout = 500
 add_newline = true
 
 # Prompt Format
+# {\ [ ](fg:#dfdfdf)
 format = """
-$shell\
+$memory_usage\
+$time\
 $hostname\
 $shlvl\
-$time\
-$memory_usage\
 $battery\
-$vcsh\
+$custom\
+$directory\
 $git_branch\
+$cmd_duration\
+$line_break\
+$vcsh\
 $git_commit\
 $git_state\
 $git_status\
@@ -23,13 +27,10 @@ $cmake\
 $python\
 $rust\
 $lua\
-$custom\
-$cmd_duration\
-$line_break\
-$directory\
 $jobs\
 $status\
 $username\
+$shell\
 $character"""
 
 [battery]
@@ -80,7 +81,7 @@ detect_folders = []
 [cmd_duration]
 # Wait 45-minutes before reporting
 min_time = 2700000
-format = '[🕘 $duration]($style) '
+format = '([\( 🕘 $duration \)]($style) )'
 style = 'yellow'
 show_milliseconds = false
 disabled = false
@@ -88,21 +89,19 @@ show_notifications = false
 min_time_to_notify = 45000
 
 [directory]
-truncation_length = 3
+truncation_length = 4
 truncate_to_repo = true
 fish_style_pwd_dir_length = 0
 use_logical_path = true
-format = '([$read_only]($read_only_style))[ $path ]($style)  '
-style = 'fg:#1597ed'
+format = '([   ](fg:#877c56)[ $path ]($style)[$read_only]($read_only_style))'
+style = 'fg:#1597ed underline'
 disabled = false
-read_only = '🔒'
-read_only_style = 'fg:#848722'
-truncation_symbol = '  /'
-home_symbol = ' ﮟ '
+read_only = '   '
+read_only_style = 'fg:#876922'
+truncation_symbol = '  / '
 
 [directory.substitutions]
-"/home/james/dotfiles" = '   >'
-"/home/james/workspace" = '  >'
+"/home/james" = '[ ﮟ ](fg:#0b5c63)'
 
 [docker_context]
 symbol = '🐳 '
@@ -146,9 +145,9 @@ disabled = true
 [gcloud.region_aliases]
 
 [git_branch]
-format = 'on [$symbol$branch]($style)(:[$remote](pink)) '
-symbol = ' '
-style = 'italic purple'
+format = '[  on $symbol $branch(:[$remote](fg:#d16970 dimmed))]($style) '
+symbol = ' '
+style = 'light italic fg:#994aa1'
 truncation_length = 9223372036854775807
 truncation_symbol = '…'
 only_attached = false
@@ -157,11 +156,11 @@ disabled = false
 
 [git_commit]
 commit_hash_length = 7
-format = '[\($hash$tag\)]($style) '
-style = 'underline green'
+format = '[$hash]($style)[$tag_symbol](fg:#bdb83e) '
+style = 'underline light green'
 only_detached = false
 disabled = false
-tag_symbol = '笠 '
+tag_symbol = '  '
 tag_disabled = false
 
 [git_state]
@@ -177,18 +176,18 @@ format = '\([$state( $progress_current/$progress_total)]($style)\) '
 disabled = false
 
 [git_status]
-format = '([\[$all_status$ahead_behind\]]($style) )'
-style = 'fg:#00a7cc'
-stashed = ' '
-ahead = 'ﲓ ${count}'
-behind = 'ﲐ ${count}'
-diverged = '([+${ahead_count} ahead](fg:#b4e34d))   ([-${behind_count} behind](fg:#9728ad))'
-conflicted = ' '
-deleted = ' '
-renamed = ' '
-modified = ' '
-staged = ' '
-untracked = ' '
+format = '([{ [ ](fg:#dfdfdf)( - [$ahead_behind](""))( - [$all_status]("")) }](fg:grey))'
+# TODO: Add Counts
+stashed = '[   ](fg:#705431)'
+ahead = '[   \(+$count\) ](fg:#3f8a43)'
+behind = '[   \(-$count\) ](fg:#94478a)'
+diverged = '[ ﲴ  \( [ﲓ  +[$ahead_count](bold fg:#4bb4d6)](fg:#49899e) | [ﲐ  -[$behind_count](bold fg:#ba3fbf)](fg:#7f3482) \)](fg:#bf9b3f)'
+conflicted = '[   ](fg:#adaa5e)'
+deleted = '[  ](fg:#a37e7e)'
+renamed = '[ 謹 ](fg:#949169)'
+modified = '[  ](yellow)'
+staged = '[ ﭜ ](green)'
+untracked = '[ ﬒ ](fg:#616161)'
 disabled = false
 
 [golang]
@@ -286,10 +285,10 @@ disabled = true
 disabled = false
 
 [lua]
-format = '[$symbol[($version )](bold white)]($style)'
+format = '[$symbol ~ [($version )](bold white)]($style)'
 version_format = 'v${raw}'
 symbol = ' Lua'
-style = 'italic light blue'
+style = 'italic blue'
 lua_binary = 'lua'
 disabled = false
 detect_extensions = ['lua']
@@ -298,9 +297,11 @@ detect_folders = ['lua']
 
 [memory_usage]
 threshold = 10
-format = '[$ram( [\($ram_pct\)](fg:#2dd4eb) )]($style)[\] ](fg:#dbdbdb)'
+format = '[\[[ $ram ](fg:#eb6f09)([\($ram_pct\) ](fg:#2dd4eb))\] ](fg:#dbdbdb)'
 style = 'fg:#eb6f09'
 disabled = false
+
+# [[memory.display]]
 
 [nodejs]
 format = 'via [$symbol($version )]($style)'
@@ -340,7 +341,7 @@ python_binary = [
 format = 'via [${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
 version_format = 'v${raw}'
 style = 'yellow bold'
-symbol = ' '
+symbol = '   '
 disabled = false
 detect_extensions = ['py']
 detect_files = [
@@ -365,15 +366,15 @@ detect_files = ['Cargo.toml']
 detect_folders = []
 
 [shell]
-format = '[     ](fg:#58ad39)[$indicator](fg:#3eaed6) '
-bash_indicator = 'bsh'
-fish_indicator = 'fsh'
-zsh_indicator = 'zsh'
-powershell_indicator = 'psh'
-ion_indicator = 'ion'
-elvish_indicator = 'esh'
-tcsh_indicator = 'tsh'
-unknown_indicator = ' ? '
+format = '[$indicator](fg:#3eaed6)[  ](fg:#58ad39) '
+bash_indicator = 'bash'
+fish_indicator = 'fish'
+zsh_indicator = 'zsh '
+powershell_indicator = 'psh '
+ion_indicator = 'ion '
+elvish_indicator = 'esh '
+tcsh_indicator = 'tsh '
+unknown_indicator = ' ?? '
 disabled = false
 
 [shlvl]
@@ -400,7 +401,7 @@ recognize_signal_code = true
 disabled = true
 
 [time]
-format = '[   [$time](fg:#ff470f underline)   ]($style) '
+format = '[ [$time](fg:#ff470f underline)  ]($style) '
 style = 'fg:#d143a6'
 use_12hr = true
 disabled = false
@@ -409,10 +410,18 @@ utc_time_offset = 'local'
 
 [username]
 format = '[   ](fg:#50baa3)[$user]($style) '
-style_root = 'red bold'
-style_user = 'fg:#ff9a0d'
+style_root = 'red bold underline'
+style_user = 'fg:#ff9a0d underline'
 disabled = false
 show_always = true
 
 [custom]
+
+
+[custom.sudo]
+description = "Displays a visual indication that the user's sudo credentials are still cached"
+command = "echo -n '!'"
+format = "[$symbol$output]($style) "
+style = "bold fg:bright-red"
+when = "sudo -vn &>/dev/null"
 

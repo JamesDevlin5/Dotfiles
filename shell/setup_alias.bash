@@ -7,6 +7,9 @@ alias pip='pip3'
 # Enter interactive mode after executing a python script
 alias ppy='python3 -i'
 
+#alias li='lua -i -e "_PROMPT"=" lua:-> "'
+alias lua-fmt='lua-format --in-place'
+
 alias shlint='shellcheck --enable=all --severity=style'
 
 alias ls='ls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
@@ -27,22 +30,39 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ~='cd ~'
+alias cd='j'
 
 # cd to git root directory
 alias cdg='cd $(git root)'
 
 # extra info
-alias mkdir='mkdir -p -v --'
-alias mv='mv -v --'
-alias cp='cp -v --'
-alias ln='ln -v --'
+alias mkdir='mkdir --parents --verbose --'
+alias rmdir='rmdir --verbose'
+alias mv='mv --verbose --interactive --'
+alias cp='cp --verbose --interactive'
+alias ln='ln --verbose --interactive'
+alias rm='rm --verbose --interactive=once'
+alias rsync='rsync --verbose --mkpath --copy-unsafe-links --stats --progress'
+alias chmod='chmod --changes'
+alias chown='chown --changes'
+
 
 # shortcuts
-alias vi='vim'
-alias c='clear'
+alias vi='nvim'
+alias vim='nvim'
+#alias c='clear'
 alias view="$PAGER"
 alias e="$EDITOR"
 alias g='git'
+
+alias ':q'='LOLOLOL!!!!!'
+
+alias c='zoxide'
+alias p='pueue'
+alias sedit='sheldon edit'
+
+# Creates a new Maven (Java) project
+alias makemvn='mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false'
 
 
 # My Ip Address Info

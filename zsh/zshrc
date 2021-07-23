@@ -1,26 +1,63 @@
 # ----------# ZSH Config #----------
 # ----------+============+----------
 
+
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh --cmd j --hook prompt)"
+source ~/dotfiles/zsh/p2.zsh
+eval "$(sheldon source)"
+
 # -- Modules {{{
 
-autoload -Uz compinit && compinit
+zmodload -i zsh/stat
+zmodload zsh/compctl
+zmodload zsh/complist
+zmodload zsh/computil
+zmodload zsh/zle
+zmodload zsh/zleparameter
+zmodload zsh/parameter
+zmodload zsh/regex
+
+
+autoload -Uz vcs_info && vcs_info
+autoload -Uz colors && colors
+disable stat
+autoload -Uz compinit promptinit
+compinit
+promptinit
+
+
+export PATH="$HOME/bin:/usr/local/sbin:$PATH"
+
+. "$HOME/.config/zsh/alias.zsh"
+. "$HOME/.config/zsh/options.zsh"
+. /home/james/dotfiles/shell/setup_env.bash
+. /home/james/dotfiles/shell/setup_alias.bash
+source /home/james/.config/broot/launcher/bash/br
 
 # }}}
 
 # Completion {{{
+
+# :completion:function:completer:command:argument:tag
+
 # Ambiguous case matching and -/_ interchangability
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}'
 
 # Menu selection
-zstyle 'completion:*' menu select=9
+zstyle 'completion:*' menu select=3
 
-zstyle 'completion:*' select-scroll 0
+zstyle 'completion:*' select-scroll 1
 
 # Colorize missteps
-zstyle ':completion:*:warnings' format "No matches found for: %{%F{214}%}%d%{%f%}"
+zstyle ':completion:*:warnings' format 'No matches found for: %d ...'
+zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}! - %d (errors: %e) - !%f'
+
+# And information
+zstyle ':completion:*:messages' format ' %F{cyan} -- %d -- %f'
 
 # activate approximate completion, but only after regular completion (_complete)
-zstyle ':completion:::::' completer _complete _correct _expand _approximate _expand_alias
+#zstyle ':completion:::::' completer _extensions _complete _correct _approximate
 
 # limit to 3 errors
 zstyle ':completion:*:approximate:*' max-errors 3 numeric
@@ -28,15 +65,29 @@ zstyle ':completion:*:approximate:*' max-errors 3 numeric
 # Dont expand ~ to /.../.../
 zstyle ':completion::expand:*' keep_prefix yes
 
+# Cache completion
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/.zcompcache"
+
 # Formatting completion
-zstyle ':completion:*:descriptions' format 'Completing %d'
+zstyle ':completion:*:descriptions' format '%U%F{#EDB424}%d%f%u'
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s%p
+zstyle ':completion:*' menu yes select
+zstyle ':completion:*' file-list list=20 insert=10
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:*:-command-:*:*' group-order alias builtins functions commands
+zstyle ':completion:*' squeeze-slashes true
 
 # Colorize
-zstyle ':completion:*' list-colors ''
+zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}"
+
+zstyle 'completion:*' file-sort access follow
+zstyle ':completion:*:*:cp:*' file-sort modification
+zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
 
 # Hosts
-hosts=($([ -r .ssh/known_hosts ] && cat .ssh/known_hosts | cut -d ' ' -f 1 | tr ',' '\n' | sort -u))
-zstyle ':completion:*' hosts $hosts
+#hosts=($([ -r .ssh/known_hosts ] && cat .ssh/known_hosts | cut -d ' ' -f 1 | tr ',' '\n' | sort -u))
+#zstyle ':completion:*' hosts $hosts
 
 # Load git completion
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
@@ -48,17 +99,71 @@ zstyle ':completion:*:-command-:*' tag-order '!parameters reserved-words'
 
 # }}}
 
+READNULLCMD=bat
+DIRSTACKSIZE=16
+HISTSIZE=1500
+SAVEHIST=1500
+HISTFILE=~/.cache/zsh/history.log
+CORRECT_IGNORE="_*"
+
+Nvim=~/.config/nvim
+Dots=~/dotfiles
+: ~Nvim ~Dots
+
+alias lnhelp='echo "ln -s existing-file-name name-of-link"'
+alias dirs='dirs -v'
+
+fpath=( ~/dotfiles/zsh/zbin "${fpath[@]}" )
+autoload -Uz cx
+autoload -Uz cursor_mode
+
+bindkey -M menuselect 'h' vi-backward-char
+bindkey -M menuselect 'k' vi-up-line-or-history
+bindkey -M menuselect 'l' vi-forward-char
+bindkey -M menuselect 'j' vi-down-line-or-history
+
+
 jdoc() {
   javadoc -d ~/html -sourcepath "$1" -subpackages java -exclude
 }
 
-zmodload zsh/complist
-zmodload zsh/nearcolor
-zmodload zsh/zle
-zmodload zsh/zleparameter
+namedir() {
+  # Save PWD variable named after parameter
+  $1=$PWD
+  # `:` Command does nothing, but expands argument parameters
+  #   --> Must manually call `~DIRECTORY` for it to alias its name to $1
+  : ~$1
+}
 
-autoload -Uz vcs_info && vcs_info
-autoload -U colors && colors
+# Open current line in $EDITOR
+autoload -U edit-command-line
+zle -N edit-command-line
+bindkey '^e' edit-command-line
+
+autoload -U delete-to-char
+zle -N delete-to-char
+bindkey '^H' delete-to-char
+
+# Fallback, in case truecolor is not supported
+[[ "$COLORTERM" == (24bit|truecolor) || "${terminfo[colors]}" -eq '16777216' ]] || zmodload zsh/nearcolor
+
+#_fzf_compgen_path() {
+#  fd --hidden --follow --exclude ".git" . "$1"
+#}
+#
+#_fzf_compgen_dir() {
+#  fd --type d --hidden --follow --exclude ".git" . "$1"
+#}
+
+# RipGrep
+#INITIAL_QUERY=""
+#RG_PREFIX="rg --column --line-number --no-heading --color=always --smart-case "
+#FZF_DEFAULT_COMMAND="$RG_PREFIX '$INITIAL_QUERY'" \
+#  fzf --bind "change:reload:$RG_PREFIX {q} || true" \
+#      --ansi --disabled --query "$INITIAL_QUERY" \
+#      --height=50% --layout=reverse
+
+
 
 # Variables {{{
 # Preferred editor for local and remote sessions
@@ -68,51 +173,25 @@ autoload -U colors && colors
 #  export EDITOR='nvim'
 #fi
 
-export PATH="$HOME/bin:/usr/local/sbin:$PATH"
-
-. "$HOME/.config/zsh/alias.zsh"
-. "$HOME/.config/zsh/options.zsh"
-. /home/james/dotfiles/shell/setup_env.bash
-. /home/james/dotfiles/shell/setup_alias.bash
-
-eval "$(starship init zsh)"
-
 # Git Fuzzy
 export PATH="/Users/james/.zsh/plugins/git-fuzzy/bin:$PATH:/Users/james/Library/Python/3.9/bin"
+
+# Discard duplicate entries in $PATH and $path
+typeset -U PATH path
+export PATH
 
 # }}}
 
 # Keybindings
 bindkey "^n" accept-and-menu-complete
 
-# ZPLUG PLUGINS {{{
-if [[ ! -d ~/.zplug ]]; then
-  git clone https://github.com/b4b4r07/zplug ~/.zplug
-fi
-source ~/.zplug/init.zsh
+bindkey -M menuselect "^[[Z" reverse-menu-complete
+bindkey -M menuselect "^M" accept-line
+bindkey -M menuselect "^[" send-break
 
-# Better keybindings
-zplug "jeffreytse/zsh-vi-mode"
-# Load completion library for those sweet [tab] squares
-zplug "lib/completion", from:oh-my-zsh
-# System clipboard
-zplug "lib/clipboard", from:oh-my-zsh
-# Navigation
-zplug "lib/directories", from:oh-my-zsh
-# VCS
-zplug "plugins/git", from:oh-my-zsh
-# https://git.jpatrick.io/james/dotfiles/src/commit/ab918ab3b5a640f4a0b686cf6cb297c0dbe35524/zsh/zplug
-# Directory Jumping
-zplug "agkozak/zsh-z"
+bindkey -M menuselect '^l' clear-screen
+bindkey -M menuselect '^i' vi-insert
 
-# Syntax highlighting for commands, load last
-zplug "zsh-users/zsh-syntax-highlighting", from:github, defer:3
-
-zplug load
-
-# }}}
+bindkey "^R" history-incremental-pattern-search-backward
 
 # vim:foldmethod=marker
-
-source /home/james/.config/broot/launcher/bash/br
-

@@ -1,3 +1,51 @@
+
+import:
+  - ./colors/*.yaml
+
+colors:
+  # Default colors
+  primary:
+    background: '0x232627'
+    foreground: '0xfcfcfc'
+
+    dim_foreground: '0xeff0f1'
+    bright_foreground: '0xffffff'
+    dim_background: '0x31363b'
+    bright_background: '0x000000'
+
+  # Normal colors
+  normal:
+    black: '0x232627'
+    red: '0xed1515'
+    green: '0x11d116'
+    yellow: '0xf67400'
+    blue: '0x1d99f3'
+    magenta: '0x9b59b6'
+    cyan: '0x1abc9c'
+    white: '0xfcfcfc'
+
+  # Bright colors
+  bright:
+    black: '0x7f8c8d'
+    red: '0xc0392b'
+    green: '0x1cdc9a'
+    yellow: '0xfdbc4b'
+    blue: '0x3daee9'
+    magenta: '0x8e44ad'
+    cyan: '0x16a085'
+    white: '0xffffff'
+
+  # Dim colors
+  dim:
+    black: '0x31363b'
+    red: '0x783228'
+    green: '0x17a262'
+    yellow: '0xb65619'
+    blue: '0x1b668f'
+    magenta: '0x614a73'
+    cyan: '0x186c60'
+    white: '0x63686d'
+
 # Configuration for Alacritty, the GPU enhanced terminal emulator
 # https://github.com/alacritty/alacritty/blob/master/alacritty.yml
 
@@ -92,13 +140,13 @@ font:
 
   # The italic font face
   italic:
-    family: "VictorMono Nerd Font"
-    style: "Light Italic"
+    family: "Hack Nerd Font"
+    style: "Regular Italic"
 
   # The bold and itablic font face
   bold_italic:
-    family: "VictorMono Nerd Font"
-    style: "Medium Oblique"
+    family: "Hack Nerd Font"
+    style: "Bold Italic"
 
 
   # Point size of the font
@@ -124,284 +172,6 @@ custom_cursor_colors: true
 # Colors
 schemes:
 
-  ayu_dark: &ayu
-    # Default colors
-    primary:
-      background: '#0A0E14'
-      foreground: '#B3B1AD'
-    
-    # Normal colors
-    normal:
-      black: '#01060E'
-      red: '#EA6C73'
-      green: '#91B362'
-      yellow: '#F9AF4F'
-      blue: '#53BDFA'
-      magenta: '#FAE994'
-      cyan: '#90E1C6'
-      white: '#C7C7C7'
-    
-    # Bright colors
-    bright:
-      black: '#686868'
-      red: '#F07178'
-      green: '#C2D94C'
-      yellow: '#FFB454'
-      blue: '#59C2FF'
-      magenta: '#FFEE99'
-      cyan: '#95E6CB'
-      white: '#FFFFFF'
-
-  one_dark: &one
-    primary:
-      background: '#282c34'
-      foreground: '#abb2bf'
-
-      dim_foreground: '#dbdbdb'
-      bright_foreground: '#d9d9d9'
-      dim_background: '#202020'
-      bright_background: '#3a3a3a'
-
-    cursor:
-      text:       CellBackground
-      cursor:     '#528bff' # syntax-cursor-color
-
-    vi_mode_cursor:
-      text: '#2e3440'
-      cursor: '#d8dee9'
-    selection:
-      text:       CellForeground
-      background: '#3e4451' # syntax-selection-color
-    search:
-      matches:
-        foreground: CellBackground
-        background: '#abd3de'
-      bar:
-        background: '#434c5e'
-        foreground: '#d8dee9'
-
-    hints:
-      start:
-        foreground: "#"
-        background: "#"
-      end:
-        foreground: "#"
-        background: "#"
-
-    normal:
-      black:      '#5c6370' # mono-3
-      red:        '#e06c75' # red 1
-      green:      '#98c379'
-      yellow:     '#e5c07b' # orange 2
-      blue:       '#61afef'
-      magenta:    '#c678dd'
-      cyan:       '#56b6c2'
-      white:      '#828997' # mono-2
-    
-    bright:
-      black: '#636363'
-      red: '#bc5653'
-      green: '#b4c28a'
-      yellow: '#ebc17a'
-      blue: '#7eaac7'
-      magenta: '#aa6292'
-      cyan: '#d3dde8'
-      white: '#f7f7f7'
-
-    dim:
-      black: '#232323'
-      red: '#74423f'
-      green: '#9ed880'
-      yellow: '#8b7653'
-      blue: '#556b79'
-      magenta: '#6e4962'
-      cyan: '#5c8482'
-      white: '#828282'
-
-    indexed_colors:
-      - {index: 16, color: '#232323'}
-      - {index: 17, color: '#d65d0e'}
-      - {index: 18, color: '#000000'}
-      - {index: 19, color: '#d5c4a1'}
-      - {index: 20, color: '#665c54'}
-      - {index: 21, color: '#3c3836'}
-
-  snazzy: &snazzy
-    primary:
-      background: '#282a36'
-      foreground: '#eff0eb'
-
-    cursor:
-      cursor: '#97979b'
-
-    selection:
-      text:       '#282a36'
-      background: '#feffff'
-
-    normal:
-      black:   '#282a36'
-      red:     '#ff5c57'
-      green:   '#5af78e'
-      yellow:  '#f3f99d'
-      blue:    '#57c7ff'
-      magenta: '#ff6ac1'
-      cyan:    '#9aedfe'
-      white:   '#f1f1f0'
-
-    bright:
-      black:   '#686868'
-      red:     '#ff5c57'
-      green:   '#5af78e'
-      yellow:  '#f3f99d'
-      blue:    '#57c7ff'
-      magenta: '#ff6ac1'
-      cyan:    '#9aedfe'
-      white:   '#eff0eb'
-
-  tender: &tender
-    # Default colors
-    primary:
-      background: '0x282828'
-      foreground: '0xeeeeee'
-
-    # Normal colors
-    normal:
-      black:   '0x282828'
-      red:     '0xf43753'
-      green:   '0xc9d05c'
-      yellow:  '0xffc24b'
-      blue:    '0xb3deef'
-      magenta: '0xd3b987'
-      cyan:    '0x73cef4'
-      white:   '0xeeeeee'
-
-    # Bright colors
-    bright:
-      black:   '0x4c4c4c'
-      red:     '0xf43753'
-      green:   '0xc9d05c'
-      yellow:  '0xffc24b'
-      blue:    '0xb3deef'
-      magenta: '0xd3b987'
-      cyan:    '0x73cef4'
-      white:   '0xfeffff'
-
-  ### Edge (Dark Default variant)
-  edge_dark_default:  &edge_dark_default
-    primary:
-      background: "0x2c2e34"
-      foreground: "0xc5cdd9"
-  
-    normal:
-      black: "0x3e4249"
-      red: "0xec7279"
-      green: "0xa0c980"
-      yellow: "0xdeb974"
-      blue: "0x6cb6eb"
-      magenta: "0xd38aea"
-      cyan: "0x5dbbc1"
-      white: "0xc5cdd9"
-  
-    bright:
-      black: "0x3e4249"
-      red: "0xec7279"
-      green: "0xa0c980"
-      yellow: "0xdeb974"
-      blue: "0x6cb6eb"
-      magenta: "0xd38aea"
-      cyan: "0x5dbbc1"
-      white: "0xc5cdd9"
-
-  ### Edge (Dark Aura variant)
-  edge_dark_aura:  &edge_dark_aura
-    primary:
-      background: "#2b2d37"
-      foreground: "#c5cdd9"
-
-    cursor:
-      text: CellBackground
-      cursor: CellForeground
-  
-    vi_mode_cursor:
-      text: "#b2c79f"
-      cursor: "#2f455e"
-
-    search:
-      matches:
-        foreground: "#5871EA"
-        background: "#778084"
-
-      focused_match:
-        foreground: "#5871EA"
-        background: "#C8AD4C"
-
-      bar:
-        foreground: "#5871EA"
-        background: "#2b2d37"
-
-    hints:
-      start:
-        foreground: "#2A5CAC"
-        background: "#E4E7C5"
-
-      end:
-        foreground: "#C6E4BC"
-        background: CellBackground
-
-    line_indicator:
-      foreground: None
-      background: "#2D3E43"
-
-    selection:
-      text: CellBackground
-      background: CellForeground
-
-    normal:
-      black: "0x363a49"
-      red: "0xec7279"
-      green: "0xa0c980"
-      yellow: "0xdeb974"
-      blue: "0x6cb6eb"
-      magenta: "0xd38aea"
-      cyan: "0x5dbbc1"
-      white: "0xc5cdd9"
-  
-    bright:
-      black: "0x363a49"
-      red: "0xec7279"
-      green: "0xa0c980"
-      yellow: "0xdeb974"
-      blue: "0x6cb6eb"
-      magenta: "0xd38aea"
-      cyan: "0x5dbbc1"
-      white: "0xc5cdd9"
-
-  ### Edge (Dark Neon variant)
-  edge_dark_neon:  &edge_dark_neon
-    primary:
-      background: "0x2b2d3a"
-      foreground: "0xc5cdd9"
-  
-    normal:
-      black: "0x363a4e"
-      red: "0xec7279"
-      green: "0xa0c980"
-      yellow: "0xdeb974"
-      blue: "0x6cb6eb"
-      magenta: "0xd38aea"
-      cyan: "0x5dbbc1"
-      white: "0xc5cdd9"
-  
-    bright:
-      black: "0x363a4e"
-      red: "0xec7279"
-      green: "0xa0c980"
-      yellow: "0xdeb974"
-      blue: "0x6cb6eb"
-      magenta: "0xd38aea"
-      cyan: "0x5dbbc1"
-      white: "0xc5cdd9"
-
 
   # Indexed Colors
   #
@@ -412,14 +182,6 @@ schemes:
   #   `- { index: 16, color: '0xff00ff' }`
   #
   # indexed_colors: []
-
-#colors: *ayu
-#colors: *one
-#colors: *snazzy
-#colors: *tender
-#colors: *edge_dark_default
-colors: *edge_dark_aura
-#colors: *edge_dark_neon
 
 mouse:
   # Click settings
@@ -924,4 +686,5 @@ key_bindings:
   #   binding:
   #     key: U
   #     mods: Control|Shift
+
 # vim: nospell:foldmethod=indent

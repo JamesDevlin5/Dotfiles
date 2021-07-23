@@ -1,0 +1,8 @@
+local FIND_CMD='fd -t d -t f *'
+
+fd --type d --type f * | fzf --prompt 'All> ' \
+             --header 'CTRL-D: Directories / CTRL-F: Files / CTRL-G: ALL' \
+             --bind 'ctrl-d:change-prompt(Directories> )+reload(fd * --type d)' \
+             --bind 'ctrl-f:change-prompt(Files> )+reload(fd * --type f)' \
+             --bind 'ctrl-g:change-prompt(ALL> )+reload(fd * --type f --type d)'
+

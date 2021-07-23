@@ -7,44 +7,59 @@ set colored-stats on
 set completion-ignore-case on
 set completion-map-case on
 set completion-prefix-display-length 10
+set completion-query-items 50
 set mark-directories on
 set mark-symlinked-directories on
 set menu-complete-display-prefix on
-set print-completions-horizontally on
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
 set show-mode-in-prompt on
 set skip-completed-text on
 set visible-stats on
 
+set editing-mode vi
+
+# Non-Printable Characters: "\1...\2"
+# Cursor Escape Sequences:
+# - 0: Blinking Block
+# - 1: Blinking Block (default)
+# - 2: Steady Block
+# - 3: Blinking Underline
+# - 4: Steady Underline
+# - 5: Blinking Bar (xterm)
+# - 6: Steady Bar (xterm)
+
+# Pipe cursor in insert mode
+set vi-ins-mode-string "\1\e[5 q\e[34m\2 -I-"
+# Block cursor in command mode
+set vi-cmd-mode-string "\1\e[2 q\e[91m\2 +C+"
+
 # Reload this file
 "\C-x\C-r": re-read-init-file
 
 # Traverse history
-"\C-p": history-search-backward
-"\C-n": history-search-forward
+Control-n: history-search-forward
+Control-p: history-search-backward
 
 # Compose with EDITOR
-"\C-e": edit-and-execute-command
+Control-e: edit-and-execute-command
 
 # Tab menu-completion
 "\t": menu-complete
 # And S-Tab for backwards
 "\e[Z": menu-complete-backward
 
-set editing-mode vi
+# Clear
+Control-l: clear-screen
 
-$if mode=vi
-  #set keymap vi-command
-  # Keys for `vi-command' mode
-  set keymap vi-insert
-  # Keys for `vi-insert' mode
-  Control-l: clear-screen
-$endif
+#Control-H: beginning-of-line
+#:end-of-line
 
-# Pipe cursor in insert mode
-set vi-ins-mode-string "\033\[6 q"
-# Block cursor in command mode
-set vi-cmd-mode-string "\033\[2 q"
+set keymap vi-command
+# Keys for `vi-command' mode
 
+set keymap vi-insert
+# Keys for `vi-insert' mode
+# Switch to block cursor while awaiting function
+RETURN: "\e\n"
 

@@ -1,11 +1,15 @@
 # Setup
 - create:
     - ~/.config
-    - ~/.local/share
+    - ~/.config/alacritty/colors
     - ~/.cache
     - ~/dotfiles
     - ~/bin
     - ~/workspace
+    - ~/.local/share
+    - ~/.local/share/nvim
+    - ~/.local/share/zellij
+    - ~/.local/share/Trash
     - ~/.local/share/pandoc
 
 - shell:
@@ -30,8 +34,10 @@
 
 - link:
     # Configs
-    ~/.config/alacritty/alacritty.yml: alacritty.yml
+    ~/.config/alacritty/alacritty.yml: alacritty/config.yaml
+    ~/.config/alacritty/colors: alacritty/colors
     ~/.config/bash: bash
+    # ~/.local/share/bash-completion/completions
     ~/.config/bat/config: bat.conf
     ~/.config/git: git
     ~/.config/mypy/config: mypy.conf
@@ -40,7 +46,7 @@
     ~/.config/zfunc: zfunc
     ~/.config/zsh: zsh
     # Profiles
-    ~/.inputrc:
+    ~/.config/inputrc: inputrc
       #~/.lessrc:
     ~/.zshrc: zsh/zshrc
     ~/.bashrc: bash/bashrc

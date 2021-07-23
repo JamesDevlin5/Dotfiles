@@ -9,5 +9,7 @@ alias -g DN='/dev/null'
 alias -g _='/dev/null'
 # }}}
 
+# Dirs
+for idx ({1..9}) alias "$idx"="cd +${idx}"; unset idx
 
 # vim:foldmethod=marker

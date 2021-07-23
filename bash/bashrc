@@ -4,10 +4,11 @@
 if [ -z "$PS1" ]; then return; fi
 
 # History
-shopt -s histappend histreedit histverify
-export HISTCONTROL=ignoreboth:erasedups
+shopt -s histappend histreedit lithist
+export HISTCONTROL='ignoreboth:erasedups'
 export HISTFILESIZE=20000
-export HISTTIMEFORMAT=" (  %b %d  -  %H:%M  )  ->  "
+export HISTTIMEFORMAT="( %b %d - %H:%M ) -> "
+export PROMPT_DIRTRIM=3
 
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
@@ -22,7 +23,7 @@ fi
 # Will print `Hello World` just before each prompt
 # PROMPT_COMMAND=( "echo 'Hello World'" )
 
-shopt -s cdspell dotglob extglob gnu_errfmt huponexit no_empty_cmd_completion nocaseglob nocasematch shift_verbose xpg_echo
+shopt -s cdspell dotglob extglob globstar huponexit no_empty_cmd_completion nocaseglob progcomp_alias shift_verbose xpg_echo
 
 # Jobs that fail in background report back immediately
 set -o notify
@@ -37,7 +38,7 @@ set -o ignoreeof
 . $HOME/dotfiles/shell/setup_env.bash
 . $HOME/dotfiles/shell/setup_alias.bash
 
-eval "$(starship init bash)"
+#eval "$(starship init bash)"
 
 #[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 

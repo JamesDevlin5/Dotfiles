@@ -1,0 +1,4 @@
+
+dirs -v
+vared -p " > " -c DIR_SELECTION
+cd +$DIR_SELECTION
