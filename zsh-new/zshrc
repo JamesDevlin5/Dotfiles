@@ -25,8 +25,6 @@ bindkey "^Y" accept-and-hold
 bindkey "^N" insert-last-word
 bindkey "^Q" push-line-or-edit
 
-bindkey '^ ' autosuggest-accept
-
 #compdef '_files -g "*.py"' python
 
 autoload -Uz functions/man

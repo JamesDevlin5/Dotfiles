@@ -47,7 +47,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias .....='cd ../../../..'
 alias ~='cd ~'
-alias cd='j'
+#alias cd='j'
 
 # cd to git root directory
 alias cdg='cd $(git root)'
