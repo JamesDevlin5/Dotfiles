@@ -1,4 +1,5 @@
-#!/usr/bin/env zsh
+
+# ZSH Aliases
 
 # Global aliases {{{
 alias -g G='| rg'
@@ -9,14 +10,20 @@ alias -g DN='/dev/null'
 alias -g _='/dev/null'
 # }}}
 
-# Dirs
+# Dirs {{{ 
+alias d='dirs -v'
 #for idx ({1..9}) alias "$idx"="cd +${idx}"; unset idx;
+# }}}
 
-# Regular Aliases {{{
+# Regular Aliases {{{ 
 
-alias tree='exa --tree --classify --icons --list-dirs --group-directories-first -I ".git|.idea|.venv|*.iml|*.vscode|target" --git-ignore --sort extension'
+alias tree='exa --tree --classify --icons --list-dirs --group-directories-first -I ".git|.idea|.venv|*.iml|*.vscode|target" --git-ignore --sort extension --color-scale'
 alias trea='tree --all'
 alias trel='tree --long --header --git --no-user --no-time'
+# Just Dirs
+alias treed='tree --only-dirs'
+alias tread='trea --only-dirs'
+alias treld='trel --only-dirs'
 
 
 alias python='python3'
@@ -37,11 +44,15 @@ alias ll='ls -l'
 alias la='ls -A'
 alias l.='ls -d .*'
 
-alias lg='ls | rg'
-alias lag='la | rg'
+alias lgi='ls | rg'
+alias lagi='la | rg'
+alias lg='fd'
+#alias lag='fd --hidden --exec-batch rg {} $1;'
 alias envg='env | rg'
 
-# Navigating the FS
+# }}}
+
+# Navigating the FS {{{
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -52,7 +63,9 @@ alias ~='cd ~'
 # cd to git root directory
 alias cdg='cd $(git root)'
 
-# extra info
+# }}}
+
+# extra info {{{
 alias mkdir='mkdir --parents --verbose --'
 alias rmdir='rmdir --verbose'
 alias mv='mv --verbose --interactive --'
@@ -63,8 +76,10 @@ alias rsync='rsync --verbose --mkpath --copy-unsafe-links --stats --progress'
 alias chmod='chmod --changes'
 alias chown='chown --changes'
 
+alias wh='whence -mv'
+# }}}
 
-# shortcuts
+# shortcuts {{{
 alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
@@ -72,16 +87,29 @@ alias vim='nvim'
 alias view="$PAGER"
 alias e="$EDITOR"
 alias g='git'
-
-alias ':q'='echo LOLOLOL!!!!!'
-
 alias c='zoxide'
 alias p='pueue'
 alias sedit='sheldon edit'
+# }}}
+
+# Misc. {{{
+alias ':q'='echo LOLOLOL!!!!!'
 
 # Creates a new Maven (Java) project
 alias makemvn='mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false'
 
+# Mirror stdout to stderr, useful for seeing data going through a pipe
+alias peek='tee >(cat 1>&2)'
+
+# Print large text
+alias fig='figlet -f banner3 -c -w100'
+
+# Maintenance
+alias update='nvim +PlugUpdate +q; rustup update;'
+
+# }}}
+
+# Functions {{{
 
 # My Ip Address Info
 myip() {
@@ -139,19 +167,6 @@ copyfile() {
   local file_to_copy=$1
   cat $file_to_copy | pbcopy
 }
-
-# Mirror stdout to stderr, useful for seeing data going through a pipe
-alias peek='tee >(cat 1>&2)'
-
-alias d='dirs -v'
-
-# Print large text
-alias fig='figlet -f banner3 -c -w100'
-
-alias wh='whence -mv'
-
-# Maintenance
-alias update='nvim +PlugUpdate +q; rustup update;'
 
 # }}}
 

@@ -1,8 +1,10 @@
 
+# Options
+
 # Changing Directories {{{1
 setopt auto_cd
 
-# Dirstack {{{2
+# Dirstack {{{1
 setopt auto_pushd
 setopt pushd_ignore_dups
 
@@ -14,6 +16,7 @@ setopt auto_remove_slash
 setopt glob_complete
 setopt list_ambiguous
 setopt list_types
+setopt menu_complete
 
 # Expansion and globbing {{{1
 ## Glob transformations: **  ===  (*/)#  ===  Files in current directory or any subdirectories

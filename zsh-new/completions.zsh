@@ -1,17 +1,29 @@
 
+# Completions
 
 # :completion:<function>:<completer>:<command>:<argument>:<tag>
 
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' completer _complete _approximate
+zstyle ':completion:*' squeeze-slashes true
 # Cache Completion
 zstyle ':completion:*' use-cache on
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/.zcompcache"
 
 zstyle ':completion:*:*:cp:*' file-sort access follow
+#zstyle ':completion:*:nvim:*' file-list all
+zstyle ':completion:*:cd:*' tag-order dirstack local-directories
+#function _dirstack() {
+#  declare -A dirs
+#  dirs=$(dirs -v)
+#  if [[ 
+#zstyle ':completion:*:cd:*' dirstack _dirstack
+
+zstyle ':completion:*:*:-command-:*' group-order alias builtins functions commands
+zstyle ':completion:*' group-name ''
 
 # Menu
-#zstyle ':completion:*' menu select=9
+zstyle ':completion:*' menu select
 
 # Colors
 zstyle ':completion:*:descriptions' format '%F{green}-- %d --%f'
@@ -19,18 +31,12 @@ zstyle ':completion:*:corrections' format '%F{yellow}--! %d (errors: %e) !--%f'
 zstyle ':completion:*:messages' format '%F{purple}-- %d --%f'
 zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
 
-zstyle ':completion:*' group-name ''
 if [[ -n "$LS_COLORS" ]]; then
   zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 fi
 
+# Generic Completions (for `--help')
 compdef _gnu_generic bat fd
+#compdef '_files -g "*.py"' python
 
-bindkey -M menuselect 'h' vi-backward-char
-bindkey -M menuselect 'k' vi-up-line-or-history
-bindkey -M menuselect 'j' vi-down-line-or-history
-bindkey -M menuselect 'l' vi-forward-char
-bindkey -M menuselect 'n' complete-word
-bindkey -M menuselect ' ' accept-search
-bindkey -M menuselect '^i' vi-insert
-
+# vim:foldmethod=marker
