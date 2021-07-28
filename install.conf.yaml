@@ -60,6 +60,7 @@
     # Ensure Default Shell
     command: if [[ $SHELL != *zsh ]]; then sudo chsh -s $(which zsh); fi
     description: Making ZSH the Default Shell...
+    quiet: true
     stdin: true
     stderr: true
   -

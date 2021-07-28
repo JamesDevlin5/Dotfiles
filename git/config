@@ -21,6 +21,9 @@
   show = delta
 
 [delta]
+  line-numbers = true
+  side-by-side = true
+  colorMoved = default
   plus-style = "syntax #3b9e39"
   minus-style = "syntax #c45255"
   syntax-theme = gruvbox-dark

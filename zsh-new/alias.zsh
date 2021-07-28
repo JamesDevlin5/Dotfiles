@@ -4,7 +4,7 @@
 # Global aliases {{{
 alias -g G='| rg'
 alias -g P="| ${PAGER}"
-alias -g E="| ${EDITOR}"
+alias -g E="| ${EDITOR} --"
 alias -g TF='| tail -f'
 alias -g DN='/dev/null'
 alias -g _='/dev/null'
@@ -51,6 +51,7 @@ alias lg='fd'
 alias envg='env | rg'
 
 alias PWD='pwd -P'
+alias CD='cd $(PWD)'
 
 # }}}
 

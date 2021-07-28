@@ -29,7 +29,7 @@ zstyle ':completion:*' menu select
 zstyle ':completion:*:descriptions' format '%F{green}-- %d --%f'
 zstyle ':completion:*:corrections' format '%F{yellow}--! %d (errors: %e) !--%f'
 zstyle ':completion:*:messages' format '%F{purple}-- %d --%f'
-zstyle ':completion:*:warnings' format '%F{red}-- no matches found --%f'
+zstyle ':completion:*:warnings' format '%F{red}--{ no matches found }--%f'
 
 if [[ -n "$LS_COLORS" ]]; then
   zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
