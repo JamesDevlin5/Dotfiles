@@ -1,4 +1,6 @@
 
+# File-Globs Ignored by Git
+
 # Compiled source {{{
 *.class
 *.dll

@@ -1,20 +1,32 @@
 # This is Git's per-user configuration file.
 [user]
-	name  = James Devlin
-	email = devlin.ja@northeastern.edu
+  name  = James Devlin
+  email = devlin.ja@northeastern.edu
 [init]
-    defaultBranch = master
+  defaultBranch = master
 [color]
-    interactive = always
-[core]
-    precomposeUnicode = true
-	pager = bat
+  interactive = always
+#[core]
+#  pager = bat
 [push]
-    default = upstream
+  default = upstream
 [help]
-	autocorrect = 3
-	format = web
+  autocorrect = 3
+  format = web
+
+[pager]
+  diff = delta
+  log = delta
+  reflog = delta
+  show = delta
+
+[delta]
+  plus-style = "syntax #3b9e39"
+  minus-style = "syntax #c45255"
+  syntax-theme = gruvbox-dark
+
 
 [include]
-    path = alias
-    path = tools
+  path = alias
+#  path = tools
+

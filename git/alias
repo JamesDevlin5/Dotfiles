@@ -1,38 +1,39 @@
 [alias]
-    a    = add
-    ap    = add --patch
-    amend = commit --amend
-    b    = branch
-    c    = commit
-    cm   = commit
-    co   = checkout
-    cob  = checkout -b
-    d    = diff
-    f    = fetch
-    l    = log
-    p    = pull
-    pu   = push
-    r    = remote
-    rv    = remote -v
-    sb    = show-branch
-	s    = status
-    ss   = status --short
-    mv   = mv -
+  a    = add
+  ap    = add --patch
+  amend = commit --amend
+  b    = branch
+  c    = commit
+  cm   = commit
+  co   = checkout
+  cob  = checkout -b
+  d    = diff
+  f    = fetch
+  l    = log
+  p    = pull
+  pu   = push
+  r    = remote
+  rv    = remote -v
+  sb    = show-branch
+  s    = status
+  ss   = status --short
+  mv   = mv -
+  
+  ec    = config --global --edit
+  root  = rev-parse --show-toplevel
+  
+  unstage = reset HEAD --
+  undo    = reset HEAD~1 --mixed
+  
+  last = log -1 HEAD --stat
+  lg   = log --graph
+  lo   = log --oneline
+  
+  # Get a gitignore template file
+  ignore = "!gi() { curl -sL -o .gitignore https://gitignore.io/api/$@ ;}; gi"
+  
+  # Compress + Output
+  tar   = ! "tar() { git archive --format tar --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; tar"
+  targz = ! "targz() { git archive --format tar.gz --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; targz"
+  zip   = ! "zip() { git archive --format zip --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; zip"
 
-    ec    = config --global --edit
-	root  = rev-parse --show-toplevel
-
-    unstage = reset HEAD --
-    undo    = reset HEAD~1 --mixed
-
-    last = log -1 HEAD --stat
-    lg   = log --graph
-    lo   = log --oneline
-
-    # Get a gitignore template file
-	ignore = "!gi() { curl -sL -o .gitignore https://gitignore.io/api/$@ ;}; gi"
-
-    # Compress + Output
-    tar   = ! "tar() { git archive --format tar --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; tar"
-    targz = ! "targz() { git archive --format tar.gz --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; targz"
-    zip   = ! "zip() { git archive --format zip --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; zip"
