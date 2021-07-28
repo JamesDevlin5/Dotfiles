@@ -28,6 +28,8 @@ bindkey "^Q" push-line-or-edit
 #bindkey -s "jf" "\e"
 bindkey "^h" _complete_help
 
+bindkey "^u" kill-whole-line
+
 # Edit command line in $EDITOR
 bindkey '^e' edit-command-line
 bindkey -M vicmd v edit-command-line

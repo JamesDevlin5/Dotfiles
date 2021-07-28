@@ -36,7 +36,7 @@ alias lua-fmt='lua-format --in-place'
 
 alias shlint='shellcheck --enable=all --severity=style'
 
-alias ls='gls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
+alias ls='ls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
 alias lc='ls --context'
 
 alias l='ls'
@@ -69,9 +69,19 @@ alias cdg='cd $(git root)'
 # }}}
 
 # extra info {{{
-alias mkdir='mkdir --parents --verbose --'
+# First, work properly with zsh completion... {{{
+alias mkdir="nocorrect mkdir"
+alias touch="nocorrect touch"
+#typeset -a NOCORRECT_CMDS=( mkdir touch )
+#
+#for CMD in ${(k)NOCORRECT_CMDS}; do
+#  alias $CMD="nocorrect $CMD"
+#done
+
+# }}}
+alias mkdir='mkdir --parents --verbose'
 alias rmdir='rmdir --verbose'
-alias mv='mv --verbose --interactive --'
+alias mv='mv --verbose --interactive'
 alias cp='cp --verbose --interactive'
 alias ln='ln --verbose --interactive'
 alias rm='rm --verbose --interactive=once'
@@ -89,10 +99,14 @@ alias vim='nvim'
 #alias c='clear'
 alias view="$PAGER"
 alias e="$EDITOR"
-alias g='git'
+#alias g='git'
 alias c='zoxide'
 alias p='pueue'
 alias sedit='sheldon edit'
+
+alias cax='chmod u+x'
+alias cmx='chmod u-x'
+
 # }}}
 
 # Misc. {{{

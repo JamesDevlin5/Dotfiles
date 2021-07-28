@@ -1,9 +1,11 @@
 # No arguments: `git status`
 # With arguments: acts like `git`
-g() {
+function __g_command() {
   if [[ $# -gt 0 ]]; then
     git "$@"
   else
     git status
   fi
 }
+
+__g_command "$@"

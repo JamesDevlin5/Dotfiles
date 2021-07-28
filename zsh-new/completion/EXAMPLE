@@ -1,0 +1,10 @@
+#compdef cmd
+#local -a subcmds
+#subcmds=('c:description for c command' 'd:description for d command')
+#_describe 'command' subcmds
+
+local -a subcmds topics
+subcmds=('c:description for c command' 'd:description for d command')
+topics=('e:description for e help topic' 'f:description for f help topic')
+_describe 'command' subcmds -- topics
+

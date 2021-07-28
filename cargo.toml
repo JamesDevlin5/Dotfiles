@@ -1,5 +1,6 @@
 [alias]
 br = "build --release"
+in = "install --all-features --bins"
 
 [build]
 rustdocflags = [

@@ -1,36 +1,40 @@
 
+# XDG Dirs {{{
+typeset -x XDG_DESKTOP_DIR="$HOME/Desktop"
+typeset -x XDG_DOCUMENTS_DIR="$HOME/Documents"
+typeset -x XDG_DOWNLOAD_DIR="$HOME/Downloads"
+typeset -x XDG_MUSIC_DIR="$HOME/Music"
+typeset -x XDG_PICTURES_DIR="$HOME/Pictures"
+typeset -x XDG_PUBLICSHARE_DIR="$HOME/Public"
+typeset -x XDG_TEMPLATES_DIR="$HOME/Templates"
+typeset -x XDG_VIDEOS_DIR="$HOME/Videos"
+
+typeset -x XDG_CONFIG_HOME="$HOME/.config"
+typeset -x XDG_DATA_HOME="$HOME/.local/share"
+typeset -x XDG_CACHE_HOME="$HOME/.cache"
+
+typeset -x TRASH_HOME="${XDG_DATA_HOME}/.Trash"
+typeset -x WORKSPACE_HOME="${HOME}/workspace"
+typeset -x DOTFILES_HOME="${HOME}/dotfiles"
+
+#for name target in ${(kv)XDG_DIRS}; do
+#done
+# }}}
+
 # Basic {{{
 typeset -x EDITOR=nvim
 typeset -x BROWSER=firefox
 typeset -x PAGER=bat
 
-eval "$(luarocks path)"
-
-# Function definition search path
-#fpath=()
-
-path+=(~/bin ~/.cargo/bin) 
+if command -v luarocks &>/dev/null; then
+  eval "$(luarocks path)"
+fi
 
 # `time' command output format
 #typeset -x TIMEFMT="%J %U user %S system %P cpu %*E total"
 
-# Remove duplicates {{{
-typeset -U path
-typeset -U fpath
-typeset -U manpath
-typeset -U cdpath
-# }}}
-
-# }}}
-
-# Plugins {{{
-typeset -x ZELLIJ_CONFIG_DIR=$HOME/.config/zellij
-typeset -x STARSHIP_CONFIG=$HOME/.config/starship/config.toml
-typeset -x AUTOPAIR_INHIBIT_INIT=1
-# }}}
-
 # Pager {{{
-# Command called when redirection operators are given w/o a command name
+# Command called when redirection operators are given w/o a command rname
 # Default: `cat'
 typeset -x NULLCMD=bat
 # Like NULLCMD, only when the redirection is an input
@@ -40,6 +44,26 @@ typeset -x READNULLCMD=bat
 typeset -x MANPAGER="nvim -R -c 'set ft=man' --"
 
 #typeset -x LESS='--ignore-case --status-column --line-numbers --raw-control-chars --shift=0.15 --mouse --'
+
+# }}}
+
+# }}}
+
+# (F)Path {{{
+
+# Custom Functions {{{
+
+# Function definition search path
+fpath=( $ZDOTDIR/functions $fpath )
+
+path=( ~/bin $path ) 
+# }}}
+
+# Load Them {{{
+autoload -Uz cux
+autoload -Uz g
+# }}}
+
 # }}}
 
 # Filesystem {{{
@@ -72,16 +96,6 @@ typeset -x SAVEHIST=13000
 
 # }}}
 
-# FZF {{{
-
-#export FZF_DEFAULT_OPTS="--reverse --ansi --color=fg:15,hl:3,hl+:3,bg+:-1,fg+:-1,pointer:06,spinner:05,info:7,prompt:6"
-export FZF_DEFAULT_COMMAND='fd --follow --type file --color=always'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS="--ansi --height=40% --layout=reverse --info=inline --border --margin=2 --padding=2"
-export FZF_COMPLETION_TRIGGER='--'
-
-# }}}
-
 # Prompting {{{
 
 # PROMPT_EOL_MARK=%B%S%#%s%b
@@ -101,26 +115,79 @@ typeset -x SPROMPT="%Bzsh%b:
 
 # }}}
 
-# XDG Dirs {{{
-typeset -x XDG_DESKTOP_DIR="$HOME/Desktop"
-typeset -x XDG_DOCUMENTS_DIR="$HOME/Documents"
-typeset -x XDG_DOWNLOAD_DIR="$HOME/Downloads"
-typeset -x XDG_MUSIC_DIR="$HOME/Music"
-typeset -x XDG_PICTURES_DIR="$HOME/Pictures"
-typeset -x XDG_PUBLICSHARE_DIR="$HOME/Public"
-typeset -x XDG_TEMPLATES_DIR="$HOME/Templates"
-typeset -x XDG_VIDEOS_DIR="$HOME/Videos"
+# Program Configuration {{{
 
-typeset -x XDG_CONFIG_HOME="$HOME/.config"
-typeset -x XDG_DATA_HOME="$HOME/.local/share"
-typeset -x XDG_CACHE_HOME="$HOME/.cache"
+#typeset -x JAVA_HOME=""
 
-typeset -x TRASH_HOME="${XDG_DATA_HOME}/.Trash"
-typeset -x WORKSPACE_HOME="${HOME}/workspace"
-typeset -x DOTFILES_HOME="${HOME}/dotfiles"
+# ZelliJ Terminal Multiplexer
+typeset -x ZELLIJ_CONFIG_DIR=$HOME/.config/zellij
+typeset -x ZELLIJ_CONFIG_FILE=$ZELLIJ_CONFIG_DIR/config.yaml
 
-#for name target in ${(kv)XDG_DIRS}; do
-#done
+# Starship Prompt
+typeset -x STARSHIP_CONFIG=$HOME/.config/starship/config.toml
+typeset -x STARSHIP_CACHE=$XDG_CACHE_HOME/starship
+
+# Allow us to autoload pls
+typeset -x AUTOPAIR_INHIBIT_INIT=1
+
+# Zoxide (cd) {{{
+typeset -x _ZO_DATA_DIR=$XDG_DATA_HOME/zoxide
+# Print Fixed Path
+typeset -x _ZO_ECHO=1
+#typeset -x _ZO_EXCLUDE_DIRS="$HOME/.cache,"
+typeset -x _ZO_RESOLVE_SYMLINKS=1
+# }}}
+
+# Cargo {{{
+# Registry Index Cache
+typeset -x CARGO_HOME="$XDG_CACHE_HOME/cargo"
+# Generated Artifacts (Compiler Output)
+typeset -x CARGO_TARGET_DIR="$CARGO_HOME/out"
+# Cache Compiler Info
+typeset -x CARGO_CACHE_RUSTC_INFO=1
+# `Cargo install' Directory
+typeset -x CARGO_INSTALL_ROOT="$HOME/.cargo"
+#typeset -x CARGO_INSTALL_ROOT="$XDG_DATA_HOME/cargo"
+path=( $CARGO_INSTALL_ROOT $path )
+# Compensate for Internet Quality
+typeset -x CARGO_NET_RETRY=6
+# }}}
+
+# FZF {{{
+
+#export FZF_DEFAULT_OPTS="--reverse --ansi --color=fg:15,hl:3,hl+:3,bg+:-1,fg+:-1,pointer:06,spinner:05,info:7,prompt:6"
+export FZF_DEFAULT_COMMAND='fd --follow --type file --color=always'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS="--ansi --height=40% --layout=reverse --info=inline --border --margin=2 --padding=2"
+export FZF_COMPLETION_TRIGGER='--'
+
+# }}}
+
+# }}}
+
+# Named Directories {{{
+
+typeset -A NAMED_DIRS
+NAMED_DIRS=(
+  Z-Dots $ZDOTDIR
+  Conf $XDG_CONFIG_HOME
+  Data $XDG_DATA_HOME
+  Cache $XDG_CACHE_HOME
+  Trash $TRASH_HOME
+  Dots $DOTFILES_HOME
+)
+
+for NICKNAME DIRNAME in ${(kv)NAMED_DIRS}; do
+  hash -d $NICKNAME=$DIRNAME
+done
+
+# }}}
+
+# Remove duplicates {{{
+typeset -U path
+typeset -U fpath
+typeset -U manpath
+typeset -U cdpath
 # }}}
 
 # vim:foldmethod=marker
