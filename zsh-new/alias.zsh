@@ -36,7 +36,7 @@ alias lua-fmt='lua-format --in-place'
 
 alias shlint='shellcheck --enable=all --severity=style'
 
-alias ls='ls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
+alias ls='gls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
 alias lc='ls --context'
 
 alias l='ls'
