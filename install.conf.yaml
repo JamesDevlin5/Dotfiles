@@ -1,23 +1,22 @@
 # Install config
 - defaults:
-  link:
-    create: true
-    relink: true
+    link:
+      create: true
+      relink: true
 
 # Remove dead symlinks
 - clean:
-  ~/:
-  ~/.config:
-    recursive: true
-  ~/.config/mypy:
-    force: true
+    ~/:
+    ~/.config:
+      recursive: true
+    ~/.config/mypy:
+      force: true
 
 # Setup
 - create:
   - ~/.config
-  - ~/.config/alacritty/colors
+  - ~/.config/mypy
   - ~/.cache
-  - ~/dotfiles
   - ~/bin
   - ~/workspace
   - ~/.local/share
@@ -26,42 +25,57 @@
   - ~/.local/share/Trash
   - ~/.local/share/pandoc
 
-- shell:
-  #- [chsh -s $(which zsh), Making `zsh` the default shell...]
-  - [git submodule update --init --recursive, Installing submodules...]
+#- shell:
+#- [git submodule update --init --recursive, Installing submodules...]
 
 
 - link:
-  # Configs
-  ~/.config/alacritty/alacritty.yml: alacritty/config.yaml
-  ~/.config/alacritty/colors: alacritty/colors
-  ~/.config/bash: bash
-  # ~/.local/share/bash-completion/completions
-  ~/.config/bat/config: bat.conf
-  ~/.config/git: git
-  ~/.config/mypy/config: mypy.conf
-  ~/.config/nvim: nvim
-  ~/.config/shell: shell
-  ~/.config/zfunc: zfunc
-  ~/.config/zsh: zsh-new
-  ~/.zshenv: zsh-new/zshenv
-  # Profiles
-  ~/.config/inputrc: inputrc
-  #~/.lessrc:
-  ~/.bashrc: bash/bashrc
-  #~/.tmux.conf:
-  ~/.cargo/config.toml: cargo.toml
-  ~/.local/share/pandoc/defaults/base.yaml: pandoc.conf
-  # Colors
-  ~/.config/dircolors: dircolors
-  ~/.config/user-dirs.dirs: user-dirs.dirs
-  ~/.config/starship/config.toml: starship.toml
-  ~/.config/zellij/config.yaml: zellij/config.yaml
-  ~/.config/luarocks/config-5.3.lua: luarocks/config-5.3.lua
+    # Configs
+    ~/.config/alacritty/alacritty.yml: alacritty/config.yaml
+    ~/.config/alacritty/colors: alacritty/colors
+    ~/.config/bash: bash
+    ~/.config/bat/config: bat.conf
+    ~/.config/git: git
+    ~/.config/mypy/config: mypy.conf
+    ~/.config/nvim: nvim
+    ~/.config/shell: shell
+    ~/.config/zfunc: zfunc
+    ~/.config/zsh: zsh-new
+    ~/.zshenv: zsh-new/zshenv
+    # Profiles
+    ~/.config/inputrc: inputrc
+    #~/.lessrc:
+    ~/.bashrc: bash/bashrc
+    ~/.cargo/config.toml: cargo.toml
+    ~/.local/share/pandoc/defaults/base.yaml: pandoc.conf
+    # Colors
+    ~/.config/dircolors: dircolors
+    ~/.config/starship/config.toml: starship.toml
+    ~/.config/zellij/config.yaml: zellij/config.yaml
+    ~/.config/luarocks/config-5.3.lua: luarocks/config-5.3.lua
+    ~/.config/sheldon/plugins.toml: sheldon.toml
 
-  # Mypy plugins
 - shell:
   -
-  command: curl -sL -o "$HOME/.config/mypy/#1.py" "https://raw.githubusercontent.com/python/mypy/master/mypy/plugins/{functools,enums,dataclasses}.py"
-  description: "Downloading plugins for MyPy Python linter..."
+    # Ensure Default Shell
+    command: sudo chsh -s $(which zsh)
+    description: Making ZSH the Default Shell...
+  -
+    # Shell Plugin Manager
+    command: sheldon lock --update
+    description: Updating Sheldon Plugins...
+    stderr: true
+  -
+    # Mypy plugins
+    command: >
+      curl
+      --silent --show-error --location --create-dirs
+      --parallel --tcp-fastopen --retry 5 --retry-max-time 10 --retry-delay 0
+      --output-dir "$HOME/.config/mypy" --remote-name
+      --write-out "Downloaded %{filename_effective} -- (%{size_download} Bytes)\n"
+      --url "https://raw.githubusercontent.com/python/mypy/master/mypy/plugins/{functools,enums,dataclasses}.py"
+    description: Downloading plugins for MyPy Python linter...
+    quiet: true
+    stdout: true
+    stderr: true
 

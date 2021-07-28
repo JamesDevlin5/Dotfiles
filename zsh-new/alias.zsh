@@ -50,6 +50,8 @@ alias lg='fd'
 #alias lag='fd --hidden --exec-batch rg {} $1;'
 alias envg='env | rg'
 
+alias PWD='pwd -P'
+
 # }}}
 
 # Navigating the FS {{{
