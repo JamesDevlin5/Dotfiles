@@ -58,8 +58,10 @@
 - shell:
   -
     # Ensure Default Shell
-    command: sudo chsh -s $(which zsh)
+    command: if [[ $SHELL != *zsh ]]; then sudo chsh -s $(which zsh); fi
     description: Making ZSH the Default Shell...
+    stdin: true
+    stderr: true
   -
     # Shell Plugin Manager
     command: sheldon lock --update
