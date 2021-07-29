@@ -34,6 +34,8 @@
     ~/.config/alacritty/alacritty.yml: alacritty/config.yaml
     ~/.config/alacritty/colors: alacritty/colors
     ~/.config/bash: bash
+    ~/.bashrc: bash/bashrc
+    ~/.bash_logout: bash/logout.bash
     ~/.config/bat/config: bat.conf
     ~/.config/git: git
     ~/.config/mypy/config: mypy.conf
@@ -43,6 +45,7 @@
     ~/.zshenv: zsh-new/zshenv
     # Profiles
     ~/.config/inputrc: inputrc
+    ~/.Xmodmap: XModMap
     #~/.lessrc:
     ~/.bashrc: bash/bashrc
     ~/.cargo/config.toml: cargo.toml
@@ -51,6 +54,7 @@
     ~/.config/dircolors: dircolors
     ~/.config/starship/config.toml: starship.toml
     ~/.config/zellij/config.yaml: zellij/config.yaml
+    ~/.config/zellij/layouts: zellij/layouts
     ~/.config/luarocks/config-5.3.lua: luarocks/config-5.3.lua
     ~/.config/sheldon/plugins.toml: sheldon.toml
 

@@ -1,0 +1,16 @@
+
+# If the current command being composed in the buffer:
+# - Begins with the prefix "sudo "
+#   --> Then remove the prefix, such that the buffer is left in an identical state but
+#       with no call to sudo
+# - Does not begin with the prefix "sudo "
+#   --> Then prepend "sudo " to the current command being composed
+toggle_sudo() {
+  if [[ $BUFFER != "sudo "* ]]; then
+    BUFFER="sudo $BUFFER"; CURSOR+=5
+  else
+    BUFFER=$BUFFER[6,-1]
+  fi
+}
+
+# vim:ft=zsh

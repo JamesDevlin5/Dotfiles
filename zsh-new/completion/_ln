@@ -1,0 +1,6 @@
+#compdef ln
+
+_options _gnu_generic
+_arguments '1:The local file or directory SOURCE:_files' '2:The target location to CREATE the link:_files'
+
+# vim:ft=zsh

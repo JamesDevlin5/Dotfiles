@@ -21,6 +21,9 @@
   
   ec    = config --global --edit
   root  = rev-parse --show-toplevel
+
+  shallow = clone --depth 1 --shallow-submodules
+  short = clone --depth 1 --single-branch --shallow-submodules
   
   unstage = reset HEAD --
   undo    = reset HEAD~1 --mixed

@@ -17,6 +17,8 @@ set show-mode-in-prompt on
 set skip-completed-text on
 set visible-stats on
 
+set enable-bracketed-paste on
+
 set editing-mode vi
 
 # Non-Printable Characters: "\1...\2"
@@ -30,9 +32,9 @@ set editing-mode vi
 # - 6: Steady Bar (xterm)
 
 # Pipe cursor in insert mode
-set vi-ins-mode-string "\1\e[5 q\e[34m\2 -I-"
+set vi-ins-mode-string "\1\e[5 q\e[34m\2 -I-\e[0m"
 # Block cursor in command mode
-set vi-cmd-mode-string "\1\e[2 q\e[91m\2 +C+"
+set vi-cmd-mode-string "\1\e[2 q\e[91m\2 +C+\e[0m"
 
 # Reload this file
 "\C-x\C-r": re-read-init-file

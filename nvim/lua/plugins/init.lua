@@ -11,7 +11,7 @@ git clone https://github.com/wbthomason/packer.nvim\
   use{ "wbthomason/packer.nvim" }
 
   -- Color Schemes
-  use{ "lvim-tech/lvim-colorscheme" }
+  use{ "lvim-tech/lvim-colorscheme" } -- cmd="\<colorscheme\>.*"
 
   -- Tree Sitter
   use{
@@ -74,6 +74,9 @@ git clone https://github.com/wbthomason/packer.nvim\
   use{ "svermeulen/vim-yoink", disable = true }
   use{ "vimwiki/vimwiki", ft = { "markdown" } }
   use{ 'kevinhwang91/nvim-bqf'}
+
+  -- Fennel Support
+  use{'bakpakin/fennel.vim', ft = { "fennel", "lisp" } }
 
   -- Fuzzy
   use{

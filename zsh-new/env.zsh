@@ -54,7 +54,7 @@ typeset -x MANPAGER="nvim -R -c 'set ft=man' --"
 # Custom Functions {{{
 
 # Function definition search path
-fpath=( $ZDOTDIR/functions $fpath )
+fpath=( $ZDOTDIR/{functions,completion} $fpath )
 
 path=( ~/bin $path ) 
 # }}}
@@ -80,10 +80,10 @@ typeset -x DIRSTACKSIZE=16
 typeset -x FCEDIT="nvim -c 'set ft=zsh' --"
 
 # File suffixes ignored during completion
-#fignore=( o ~ )
+fignore=( o pyc ~ )
 
 # File to save history to
-typeset -x HISTFILE="$HOME/.zshhistory"
+typeset -x HISTFILE="$XDG_DATA_HOME/zsh/history.zsh"
 
 # Pattern(s) not saved to hist file
 typeset -x HISTORY_IGNORE='fc*'
@@ -130,6 +130,14 @@ typeset -x STARSHIP_CACHE=$XDG_CACHE_HOME/starship
 # Allow us to autoload pls
 typeset -x AUTOPAIR_INHIBIT_INIT=1
 
+typeset -x SCCACHE_DIR="$XDG_CACHE_HOME/sccache"
+#typeset -x SCCACHE_CACHE_SIZE="10G"
+
+# Sheldon (package manager) {{{
+typeset -x SHELDON_CONFIG_DIR=$XDG_CONFIG_HOME/sheldon
+typeset -x SHELDON_DATA_DIR=$XDG_DATA_HOME/sheldon
+# }}}
+
 # Zoxide (cd) {{{
 typeset -x _ZO_DATA_DIR=$XDG_DATA_HOME/zoxide
 # Print Fixed Path
@@ -140,9 +148,9 @@ typeset -x _ZO_RESOLVE_SYMLINKS=1
 
 # Cargo {{{
 # Registry Index Cache
-typeset -x CARGO_HOME="$XDG_CACHE_HOME/cargo"
+typeset -x CARGO_HOME="$XDG_DATA_HOME/cargo"
 # Generated Artifacts (Compiler Output)
-typeset -x CARGO_TARGET_DIR="$CARGO_HOME/out"
+#typeset -x CARGO_TARGET_DIR="$CARGO_HOME/out"
 # Cache Compiler Info
 typeset -x CARGO_CACHE_RUSTC_INFO=1
 # `Cargo install' Directory
@@ -151,6 +159,9 @@ typeset -x CARGO_INSTALL_ROOT="$HOME/.cargo"
 path=( $CARGO_INSTALL_ROOT $path )
 # Compensate for Internet Quality
 typeset -x CARGO_NET_RETRY=6
+
+# Use sccache
+typeset -x RUSTC_WRAPPER=$(whence sccache)
 # }}}
 
 # FZF {{{

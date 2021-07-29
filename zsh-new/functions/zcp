@@ -1,0 +1,6 @@
+
+zcp() {
+  zmv -C "$@"
+}
+
+# vim:ft=zsh

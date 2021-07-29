@@ -33,6 +33,7 @@ alias ppy='python3 -i'
 
 #alias li='lua -i -e "_PROMPT"=" lua:-> "'
 alias lua-fmt='lua-format --in-place'
+alias fmtfnl='fnlfmt --fix'
 
 alias shlint='shellcheck --enable=all --severity=style'
 
@@ -104,6 +105,8 @@ alias c='zoxide'
 alias p='pueue'
 alias sedit='sheldon edit'
 
+alias mdcat='mdcat --paginate --columns $(( COLUMNS-15 ))'
+
 alias cax='chmod u+x'
 alias cmx='chmod u-x'
 
@@ -123,6 +126,9 @@ alias fig='figlet -f banner3 -c -w100'
 
 # Maintenance
 alias update='nvim +PlugUpdate +q; rustup update;'
+
+alias gcc='sccache gcc'
+alias clang='sccache clang'
 
 # }}}
 

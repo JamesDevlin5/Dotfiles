@@ -9,5 +9,4 @@ rustdocflags = [
     "--sort-modules-by-appearance",
     "--enable-index-page",
 ]
-incremental=true
 

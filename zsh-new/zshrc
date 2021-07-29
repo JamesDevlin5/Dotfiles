@@ -23,6 +23,8 @@ source $ZDOTDIR/alias.zsh
 source $ZDOTDIR/completions.zsh
 # Keybindings
 source $ZDOTDIR/keys.zsh
+# Misc. Custom
+source $ZDOTDIR/custom.zsh
 
 # }}}
 

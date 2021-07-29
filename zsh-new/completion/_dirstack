@@ -1,0 +1,29 @@
+##compdef dirstack
+
+#compadd -M 'm:[0-9]=\+[0-9]'
+#_setup local-directories "Local Directories" 
+
+_dirstack_idx() {
+  #CURRENT_IDX=0
+  DIRSTACK_PACKED="$(dirs)"
+  DIRSTACK_ENTRIES=("${(@s: :)DIRSTACK_PACKED}")
+  echo "${DIRSTACK_ENTRIES[*]}"
+  #for DIRSTACK_ENTRY in ${DIRSTACK_ENTRIES[@]}; do
+    #print "$CURRENT_IDX -- $DIRSTACK_ENTRY"
+  #done
+  #DIRSTACK_ENTRIES=($(\dirs -v | tr '\n' ' '))
+  #echo "${(k)DIRSTACK_ENTRIES}"
+  #for ENTRY_IDX ENTRY_PATH in "$(\dirs -v)"; do
+#    declare IDX
+    #declare ENTRY_PATH
+
+    #print "$ENTRY_IDX $ENTRY_PATH"
+    #print -v IDX,ENTRY_PATH ${DIRSTACK_ENTRY:s/ /}
+  #done
+
+  #for IDX PATH in (
+}
+autoload -Uz _dirstack_idx
+_dirstack_idx "$@"
+#zstyle ':completions:*:directory-stack:' ${
+# vim:ft=zsh

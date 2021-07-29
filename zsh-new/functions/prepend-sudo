@@ -1,0 +1,9 @@
+
+# Prepend `sudo' to the current command being composed in the buffer
+prepend_sudo() {
+  if [[ $BUFFER != "sudo "* ]]; then
+    BUFFER="sudo $BUFFER"; CURSOR+=5
+  fi
+}
+
+# vim:ft=zsh

@@ -1,0 +1,18 @@
+---
+parts:
+  - direction: Vertical
+    split_size:
+      Fixed: 80
+    parts:
+  -direction: Horizontal
+    split_size:
+      Fixed: 25
+    run:
+      command:
+        cmd: ncal
+        args:
+          - "-A2"
+          - "-M"
+          - "-W4"
+          - "-w"
+

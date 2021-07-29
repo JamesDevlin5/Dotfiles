@@ -4,15 +4,21 @@
 # Named Directories (Begin with '~Dir/...')
 
 # Load Necessary Functions & Modules {{{2
-zmodload zsh/complist
+zmodload -i zsh/complist
+zmodload -i zsh/stat
+disable stat
 autoload -U compinit; compinit
 autoload -U colors; colors
 typeset -x CLICOLOR=1
 
-autoload -Uz functions/man
+autoload -Uz man
 
 autoload -Uz edit-command-line
 zle -N edit-command-line
+autoload -Uz insert-files
+zle -N insert-files
+autoload -Uz smart-insert-last-word
+zle -N insert-last-word smart-insert-last-word
 
 # KeyBindings {{{2
 
@@ -27,6 +33,7 @@ bindkey "^Q" push-line-or-edit
 
 #bindkey -s "jf" "\e"
 bindkey "^h" _complete_help
+bindkey "^f" insert-files
 
 bindkey "^u" kill-whole-line
 
@@ -41,6 +48,7 @@ bindkey -M menuselect 'j' vi-down-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'n' complete-word
 bindkey -M menuselect ' ' accept-search
+bindkey -M menuselect '^ ' accept-exact-dirs
 #bindkey -M menuselect '^i' vi-insert
 #bindkey -M menuselect '^I' upline
 

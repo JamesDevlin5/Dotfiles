@@ -1,0 +1,15 @@
+#compdef cd
+#zstyle ':completion:*:complete:cd:*:directory-stack' # local-directories)'
+#_alternative \
+#  'local-directories:directory' \
+#  'directory-stack:dirstack '
+#    
+#_describe -t
+
+for i in $((f)dirs -p)
+do
+  echo $i
+done
+#compadd -P '+' ($(dirs -p | awk '{print NR}')
+
+# vim:ft=zsh

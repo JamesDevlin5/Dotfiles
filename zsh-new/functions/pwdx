@@ -1,0 +1,15 @@
+
+# Present-Working-Directory-eXtended
+pwdx() {
+  typeset RELATIVE="$(pwd)" # (Including Links)
+  typeset PHYSICAL="$(pwd -P)" # (All Links Resolved)
+  if [[ $RELATIVE != $PHYSICAL ]]; then
+    #print -P "  %F{#c9b636}%B--->%b%f  :\t %F{yellow}$RELATIVE%f"
+    print -P "  %F{#8c8349}%S %B--->%b %s:%f\t%F{yellow}$RELATIVE%f"
+    print -P "%F{blue}%BPhysical%b:%f\t%F{cyan}$PHYSICAL%f"
+  else
+    print -P "\t- %U$RELATIVE%u"
+  fi
+}
+
+# vim:filetype=zsh
