@@ -56,7 +56,7 @@ typeset -x MANPAGER="nvim -R -c 'set ft=man' --"
 # Function definition search path
 fpath=( $ZDOTDIR/{functions,completion} $fpath )
 
-path=( ~/bin $path ) 
+path=( ~/bin ~/bin/util $path ) 
 # }}}
 
 # Load Them {{{

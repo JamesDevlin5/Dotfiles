@@ -13,6 +13,33 @@ git clone https://github.com/wbthomason/packer.nvim\
   -- Color Schemes
   use{ "lvim-tech/lvim-colorscheme" } -- cmd="\<colorscheme\>.*"
 
+  -- Language Server Protocol
+  --use{ "neovim/nvim-lspconfig" }
+  --use{ "nvim-lua/lsp_extensions" }
+
+  -- Sessions
+  use {
+    "rmagatti/auto-session",
+    config = function()
+      require('auto-session').setup{
+        log_level = 'info',
+        auto_session_enabled = true,
+        auto_save_enabled = true,
+        auto_restore_enabled = true,
+      }
+    end,
+    event = 'BufWinEnter',
+  }
+  --[[
+  use {
+    'rmagatti/session-lens',
+    requires = {'rmagatti/auto-session', 'nvim-telescope/telescope.nvim'},
+    config = function()
+      require('session-lens').setup({})
+    end
+  }
+  ]]
+
   -- Tree Sitter
   use{
     "nvim-treesitter/nvim-treesitter",
@@ -22,10 +49,7 @@ git clone https://github.com/wbthomason/packer.nvim\
     end,
   }
 
-  use {
-  "nvim-treesitter/nvim-tree-docs",
-  disable = true,
-  }
+  use{ "nvim-treesitter/nvim-tree-docs", disable = true }
 
   -- Status Line
   use{
@@ -59,24 +83,20 @@ git clone https://github.com/wbthomason/packer.nvim\
       require( "plugins.which-key" )
     end,
   }
-  use{
-    't9md/vim-choosewin',
-  }
-  use{
-    'rhysd/clever-f.vim',
-  }
+  use{ "t9md/vim-choosewin" }
+  use{ "rhysd/clever-f.vim" }
 
   -- Enhanced Editing
   use{ "mbbill/undotree", opt = true, cmd = { "UndotreeToggle" } }
   use{ "tpope/vim-surround" }
-  use{ 'junegunn/vim-easy-align', opt = true, cmd = {'EasyAlign'}}
-  use { 'junegunn/goyo.vim', opt = true, cmd = {'Goyo'}}
+  use{ "junegunn/vim-easy-align", opt = true, cmd = { "EasyAlign" } }
+  use{ "junegunn/goyo.vim", opt = true, cmd = { "Goyo" } }
   use{ "svermeulen/vim-yoink", disable = true }
   use{ "vimwiki/vimwiki", ft = { "markdown" } }
-  use{ 'kevinhwang91/nvim-bqf'}
+  use{ "kevinhwang91/nvim-bqf" }
 
   -- Fennel Support
-  use{'bakpakin/fennel.vim', ft = { "fennel", "lisp" } }
+  use{ "bakpakin/fennel.vim", ft = { "fennel", "lisp" } }
 
   -- Fuzzy
   use{

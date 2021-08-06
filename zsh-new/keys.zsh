@@ -19,19 +19,24 @@ autoload -Uz insert-files
 zle -N insert-files
 autoload -Uz smart-insert-last-word
 zle -N insert-last-word smart-insert-last-word
+autoload -Uz spell-word
+zle -N spell-word
 
 # KeyBindings {{{2
 
 bindkey "^A" beginning-of-line
-#bindkey "^E" end-of-line
+bindkey "^[[4" end-of-line
 bindkey "^R" history-incremental-search-backward
-bindkey "^P" history-search-backward
-bindkey "^Y" accept-and-hold
-bindkey "^N" insert-last-word
-bindkey "^Q" push-line-or-edit
-#bindkey "^s" spell-word
+#bindkey "^P" history-search-backward
+#bindkey "^Y" accept-and-hold
+#bindkey "^N" insert-last-word
+#bindkey "^Q" push-line-or-edit
+bindkey "^s" spell-word
 
 #bindkey -s "jf" "\e"
+bindkey -s '^`' '\e'
+bindkey -M vicmd -s '^`' 'A'
+
 bindkey "^h" _complete_help
 bindkey "^f" insert-files
 
@@ -39,7 +44,9 @@ bindkey "^u" kill-whole-line
 
 # Edit command line in $EDITOR
 bindkey '^e' edit-command-line
-bindkey -M vicmd v edit-command-line
+bindkey -M vicmd '^e' edit-command-line
+
+bindkey -M vicmd '^b' vi-backward-word
 
 # Vim-like menu
 bindkey -M menuselect 'h' vi-backward-char
@@ -49,7 +56,7 @@ bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'n' complete-word
 bindkey -M menuselect ' ' accept-search
 bindkey -M menuselect '^ ' accept-exact-dirs
-#bindkey -M menuselect '^i' vi-insert
+#bindkey -M menuselect 'i' vi-insert
 #bindkey -M menuselect '^I' upline
 
 # Check if fzf is installed {{{2

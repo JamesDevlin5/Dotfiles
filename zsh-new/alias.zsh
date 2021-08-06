@@ -98,9 +98,18 @@ alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
 #alias c='clear'
-alias view="$PAGER"
-alias e="$EDITOR"
+if [[ -f ~/bin/edit ]]; then
+  alias e="edit"
+else
+  alias e="$EDITOR"
+fi
+if [[ -f ~/bin/view ]]; then
+  alias v="view"
+else
+  alias view="$PAGER"
+fi
 #alias g='git'
+alias gs='git status'
 alias c='zoxide'
 alias p='pueue'
 alias sedit='sheldon edit'
@@ -109,6 +118,8 @@ alias mdcat='mdcat --paginate --columns $(( COLUMNS-15 ))'
 
 alias cax='chmod u+x'
 alias cmx='chmod u-x'
+
+alias jq='jq -C -S'
 
 # }}}
 

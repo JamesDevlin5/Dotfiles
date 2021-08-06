@@ -73,7 +73,7 @@ zstyle ':completion:*:cd:*' _alternative \
 #zstyle ':completion::complete:cd::' completer _directory_stack
 # }}}
 
-zstyle ':completion:*:*:-command-:*' group-order alias builtins functions commands
+zstyle ':completion:*:*:-command-:*' group-order alias builtins functions commands # external
 zstyle ':completion:*' group-name ''
 
 # Menu {{{
