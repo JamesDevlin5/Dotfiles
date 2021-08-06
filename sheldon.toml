@@ -55,6 +55,10 @@ inline = 'eval $(starship init zsh)'
 github = "wfxr/forgit"
 apply = ["defer"]
 
+[plugins.zsh-you-should-use]
+github = "MichaelAquilina/zsh-you-should-use"
+apply = ["defer"]
+
 [plugins.zoxide]
 inline = 'zsh-defer -c "$(zoxide init zsh --cmd j)"'
 
