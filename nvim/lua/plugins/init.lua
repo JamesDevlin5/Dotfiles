@@ -13,6 +13,8 @@ git clone https://github.com/wbthomason/packer.nvim\
   -- Color Schemes
   use{ "lvim-tech/lvim-colorscheme" } -- cmd="\<colorscheme\>.*"
 
+  use {"rktjmp/lush.nvim" }
+
   -- Language Server Protocol
   --use{ "neovim/nvim-lspconfig" }
   --use{ "nvim-lua/lsp_extensions" }
@@ -115,6 +117,7 @@ git clone https://github.com/wbthomason/packer.nvim\
       require( "plugins.any-jump" )
     end,
   }
+
   -- TODO: make `function() require(...) end` a function
 
   -- TODO: make requires these two a function
