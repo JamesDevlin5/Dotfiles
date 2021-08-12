@@ -13,24 +13,26 @@ git clone https://github.com/wbthomason/packer.nvim\
   -- Color Schemes
   use{ "lvim-tech/lvim-colorscheme" } -- cmd="\<colorscheme\>.*"
 
-  use {"rktjmp/lush.nvim" }
+  use{ "rktjmp/lush.nvim" }
+
+  use{ "mhinz/vim-signify" }
 
   -- Language Server Protocol
-  --use{ "neovim/nvim-lspconfig" }
-  --use{ "nvim-lua/lsp_extensions" }
+  -- use{ "neovim/nvim-lspconfig" }
+  -- use{ "nvim-lua/lsp_extensions" }
 
   -- Sessions
-  use {
+  use{
     "rmagatti/auto-session",
     config = function()
-      require('auto-session').setup{
-        log_level = 'info',
+      require( "auto-session" ).setup{
+        log_level = "info",
         auto_session_enabled = true,
         auto_save_enabled = true,
         auto_restore_enabled = true,
       }
     end,
-    event = 'BufWinEnter',
+    event = "BufWinEnter",
   }
   --[[
   use {

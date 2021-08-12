@@ -56,6 +56,8 @@ do
   wo.conceallevel = 1
   o.concealcursor = "nc"
 
+  o.updatetime = 100
+
   o.termguicolors = true
   -- o.guicursor = ''
   wo.cursorline = true
