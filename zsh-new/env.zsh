@@ -56,7 +56,11 @@ typeset -x MANPAGER="nvim -R -c 'set ft=man' --"
 # Function definition search path
 fpath=( $ZDOTDIR/{functions,completion} $fpath )
 
+<<<<<<< HEAD
 path=( ~/bin ~/bin/util $path ) 
+=======
+path=( ~/bin ~/.cargo $path ) 
+>>>>>>> 175bed3 (Added cargo to path)
 # }}}
 
 # Load Them {{{
@@ -156,7 +160,7 @@ typeset -x CARGO_CACHE_RUSTC_INFO=1
 # `Cargo install' Directory
 typeset -x CARGO_INSTALL_ROOT="$HOME/.cargo"
 #typeset -x CARGO_INSTALL_ROOT="$XDG_DATA_HOME/cargo"
-path=( $CARGO_INSTALL_ROOT $path )
+path=( $CARGO_INSTALL_ROOT/bin $path )
 # Compensate for Internet Quality
 typeset -x CARGO_NET_RETRY=6
 
