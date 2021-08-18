@@ -36,9 +36,11 @@ fi
 # Pager {{{
 # Command called when redirection operators are given w/o a command rname
 # Default: `cat'
-typeset -x NULLCMD=bat
+#typeset -x NULLCMD=bat
 # Like NULLCMD, only when the redirection is an input
-typeset -x READNULLCMD=bat
+#typeset -x READNULLCMD=bat
+
+typeset -x BAT_THEME="Dracula"
 
 # Man Pages
 typeset -x MANPAGER="nvim -R -c 'set ft=man'"
@@ -56,11 +58,7 @@ typeset -x MANPAGER="nvim -R -c 'set ft=man'"
 # Function definition search path
 fpath=( $ZDOTDIR/{functions,completion} $fpath )
 
-<<<<<<< HEAD
-path=( ~/bin ~/bin/util $path ) 
-=======
-path=( ~/bin ~/.cargo $path ) 
->>>>>>> 175bed3 (Added cargo to path)
+path=( ~/bin ~/.cargo/bin $path ) 
 # }}}
 
 # Load Them {{{
