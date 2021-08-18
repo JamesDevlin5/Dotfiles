@@ -41,9 +41,9 @@ typeset -x NULLCMD=bat
 typeset -x READNULLCMD=bat
 
 # Man Pages
-typeset -x MANPAGER="nvim -R -c 'set ft=man' --"
+typeset -x MANPAGER="nvim -R -c 'set ft=man'"
 
-#typeset -x LESS='--ignore-case --status-column --line-numbers --raw-control-chars --shift=0.15 --mouse --'
+#typeset -x LESS='--ignore-case --status-column --line-numbers --raw-control-chars --shift=0.15 --mouse'
 
 # }}}
 
@@ -81,7 +81,7 @@ typeset -x DIRSTACKSIZE=16
 # History {{{
 # ENV: Sourced when invoked as sh
 # FCEDIT: The editor used for the fc command
-typeset -x FCEDIT="nvim -c 'set ft=zsh' --"
+typeset -x FCEDIT="nvim -c 'set ft=zsh'"
 
 # File suffixes ignored during completion
 fignore=( o pyc ~ )
