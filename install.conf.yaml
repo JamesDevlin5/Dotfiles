@@ -60,6 +60,12 @@
 
 - shell:
   -
+    # Sync dotfiles with remote repo
+    command: git fetch --all --prune --verbose --progress
+    description: Fetching Latest Remote Dotfile Changes...
+    stdout: true
+    stderr: true
+  -
     # Ensure Default Shell
     command: if [[ $SHELL != *zsh ]]; then sudo chsh -s $(which zsh) $USER; fi
     description: Making ZSH the Default Shell...
