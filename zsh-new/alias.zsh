@@ -8,6 +8,11 @@ alias -g E="| ${EDITOR}"
 alias -g TF='| tail -f'
 alias -g DN='/dev/null'
 alias -g _='/dev/null'
+
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+
 # }}}
 
 # Dirs {{{ 

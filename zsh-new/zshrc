@@ -13,6 +13,15 @@ if [[ -f ~/.dircolors ]]; then
 fi
 # }}}
 
+# Named Directories {{{
+
+hash -d workspace=~/workspace
+hash -d dots=~/dotfiles
+hash -d nvim-dots=~/dotfiles/nvim
+hash -d docs=~/Documents
+
+# }}}
+
 # Extraneous Sources {{{
 
 # Options 
