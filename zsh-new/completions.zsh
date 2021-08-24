@@ -1,6 +1,9 @@
 
 # Completions
 
+# Shell Program Function Completions
+fpath=( ~/.zsh_functions $fpath )
+
 # :completion:<function>:<completer>:<command>:<argument>:<tag>
 
 zstyle ':completion:*' verbose yes
