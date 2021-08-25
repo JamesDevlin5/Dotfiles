@@ -37,6 +37,8 @@ map('n', '<Leader>t', ':NvimTreeToggle<CR>', options)
 --map('n', '<Leader>w', '<Plug>(choosewin)', options)
 map('n', '<Leader>w', ':ChooseWin<CR>', options)
 
+map('n', '<Leader>f', ':Neoformat<CR>', options)
+
 --[[ TODO: fix
 -- Yoink must be notified when a paste has occurred, to allow choosing an item to paste
 map( "n", "p", "<plug>(YoinkPaste_p)", options )

@@ -17,6 +17,16 @@ git clone https://github.com/wbthomason/packer.nvim\
 
   use{ "mhinz/vim-signify" }
 
+  -- Formatter
+  use{
+    "sbdchd/neoformat",
+    config = function()
+      require( "plugins.neoformat" )
+    end,
+    opt = true,
+    cmd = { "Neoformat" },
+  }
+
   -- Language Server Protocol
   -- use{ "neovim/nvim-lspconfig" }
   -- use{ "nvim-lua/lsp_extensions" }
