@@ -34,6 +34,8 @@ source $ZDOTDIR/completions.zsh
 source $ZDOTDIR/keys.zsh
 # Misc. Custom
 source $ZDOTDIR/custom.zsh
+# Prompt
+source $ZDOTDIR/prompt.zsh
 
 # }}}
 

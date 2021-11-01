@@ -135,6 +135,15 @@ namedir() {
   : ~$1
 }
 
+img() {
+    if [[ $# == 2 ]]; then
+        printf "Stripping: %s...\nClean file: %s\n" $1 $2
+        convert $1 -strip $2
+    else
+        echo "SYNTAX:\n  img <SRC_FILE> <OUTPUT_FILE>"
+    fi
+}
+
 # Open current line in $EDITOR
 autoload -U edit-command-line
 zle -N edit-command-line

@@ -11,12 +11,12 @@ augroup END
     
 let g:template_dir = expand("~/.config/nvim/templates") . '/'
 " Skeleton files
-augroup templates
-    autocmd!
-    autocmd BufNewFile *.sh     execute "0r " . g:template_dir . 'skel.sh'
-    autocmd BufNewFile *.bash   execute "0r " . g:template_dir . 'skel.bash'
-    autocmd BufNewFile *.py     execute "0r " . g:template_dir . 'skel.py'
-augroup END
+" augroup templates
+"     autocmd!
+"     autocmd BufNewFile *.sh     execute "0r " . g:template_dir . 'skel.sh'
+"     autocmd BufNewFile *.bash   execute "0r " . g:template_dir . 'skel.bash'
+"     autocmd BufNewFile *.py     execute "0r " . g:template_dir . 'skel.py'
+" augroup END
 
 command MakeHelp execute ":helptags ~/.local/share/nvim/site/pack/*/*/*/doc/"
 
@@ -27,6 +27,8 @@ command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
             \ | wincmd p | diffthis
 
 command Time !date --rfc-email
+
+source ~/Dotfiles/nvim/keys.vim
 
 " use <Tab> as trigger keys
 "imap <Tab> <Plug>(completion_smart_tab)

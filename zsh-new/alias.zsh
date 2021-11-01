@@ -42,7 +42,8 @@ alias fmtfnl='fnlfmt --fix'
 
 alias shlint='shellcheck --enable=all --severity=style'
 
-alias ls='ls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
+#alias ls='ls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
+alias ls='ls -F'
 alias lc='ls --context'
 
 alias l='ls'
@@ -72,6 +73,8 @@ alias ~='cd ~'
 # cd to git root directory
 alias cdg='cd $(git root)'
 
+alias ef='$EDITOR $(fzf)'
+
 # }}}
 
 # extra info {{{
@@ -85,23 +88,22 @@ alias touch="nocorrect touch"
 #done
 
 # }}}
-alias mkdir='mkdir --parents --verbose'
-alias rmdir='rmdir --verbose'
-alias mv='mv --verbose --interactive'
-alias cp='cp --verbose --interactive'
-alias ln='ln --verbose --interactive'
-alias rm='rm --verbose --interactive=once'
+alias mkdir='mkdir -p -v'
+alias rmdir='rmdir -v'
+alias mv='mv -v -i'
+alias cp='cp -v -i'
+alias ln='ln -v -i'
+alias rm='rm -v -i'
 alias rsync='rsync --verbose --mkpath --copy-unsafe-links --stats --progress'
-alias chmod='chmod --changes'
-alias chown='chown --changes'
 
 alias wh='whence -mv'
 # }}}
 
 # shortcuts {{{
-alias v='nvim'
-alias vi='nvim'
-alias vim='nvim'
+alias v="$EDITOR"
+alias vi="$EDITOR"
+alias vim="$EDITOR"
+alias nvim="$EDITOR"
 #alias c='clear'
 if [[ -f ~/bin/edit ]]; then
   alias e="edit"
@@ -141,7 +143,7 @@ alias peek='tee >(cat 1>&2)'
 alias fig='figlet -f banner3 -c -w100'
 
 # Maintenance
-alias update='nvim +PlugUpdate +q; rustup update;'
+alias update='vim +PlugUpdate +q; rustup update;'
 
 alias gcc='sccache gcc'
 alias clang='sccache clang'

@@ -45,3 +45,4 @@ set -o ignoreeof
 
 source /home/james/.config/broot/launcher/bash/br
 
+. "/Users/james/.local/share/cargo/env"

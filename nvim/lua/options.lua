@@ -91,7 +91,7 @@ do
   o.timeoutlen = 400 -- milliseconds
 
   o.shortmess = "inotTI"
-  vim.opt.cpoptions:append( "Z;_" )
+  opt.cpoptions:append( "Z;_" )
   --vim.opt.formatoptions="qn1jp"
   --bo.formatoptions = ""
 

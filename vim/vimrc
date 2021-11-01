@@ -1,0 +1,534 @@
+
+" +----------------------------------+
+" |          _                       |
+" |   __   _(_)_ __ ___  _ __ ___    |
+" |   \ \ / / | '_ ` _ \| '__/ __|   |
+" |    \ V /| | | | | | | | | (__    |
+" |     \_/ |_|_| |_| |_|_|  \___|   |
+" |                                  |
+" +----------------------------------+
+
+" Options {{{
+set cdpath+=~
+set ignorecase smartcase infercase wildignorecase
+set scrolloff=10 sidescrolloff=6 textwidth=88
+set linebreak breakindent
+let &showbreak=' ﬌ '
+set display=lastline,uhex
+set cmdheight=3
+set redrawtime=600
+set number
+set hlsearch
+set laststatus=2
+set shortmess=inwaxoI
+set hidden
+set switchbuf=useopen,split
+set splitbelow splitright
+set mouse=nvi mousefocus mousemodel=popup_setpos
+set noshowmode showcmd ruler
+set confirm
+set backspace=indent,eol,start
+set belloff=all
+set undolevels=9999
+set showmatch
+set nojoinspaces
+set tabstop=4 shiftwidth=4 smarttab softtabstop=4 shiftround expandtab
+set autoindent
+set foldlevelstart=1 foldcolumn=3
+set foldopen-=hor
+set diffopt=filler,context:4,vertical
+set ttimeoutlen=400
+set modelines=4
+set backupdir-=\.
+set autoread
+set directory-=\. " Swapfile
+set wildmenu
+set undofile undodir=~/.vim/undo
+set virtualedit=block
+set concealcursor=nv conceallevel=1
+set cursorline
+set listchars=tab:\ ▸,eol:¬,trail:·,nbsp:
+set fillchars=vert:│,fold:\.
+set formatoptions=crq1j
+" }}}
+
+if has("neovide") " {{{
+    let g:neovide_cursor_vfx_mode = "ripple"
+    let g:neovide_fullscreen=v:true
+    " let g:neovide_input_use_logo=v:true
+    let g:neovide_cursor_animation_length=0.16
+    let g:neovide_cursor_trail_length=0.5
+    let g:neovide_cursor_antialiasing=v:true
+    let g:neovide_cursor_vfx_particle_lifetime=1
+endif
+" }}}
+
+" Plugins {{{
+
+" Ensure Vim-Plug is installed {{{
+
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+    silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+
+" }}}
+
+" Plugin Sources {{{
+call plug#begin('~/.vim/plugged')
+
+" {{{ Color Themes
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
+Plug 'romainl/apprentice'
+" }}}
+
+Plug 'itchyny/lightline.vim'
+
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+" Markdown
+Plug 'tpope/vim-markdown', {'for': 'markdown'}
+
+" If nvim, use tree sitter!
+if !has('nvim')
+    Plug 'rust-lang/rust.vim', {'for': 'rust'}
+endif
+
+Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+
+Plug 'kien/rainbow_parentheses.vim'
+Plug 'Yggdroot/indentLine'
+Plug 'mbbill/undotree'
+
+" Initialize plugin system
+call plug#end()
+" }}}
+
+" Set colorscheme
+set bg=dark
+try
+    " colorscheme challenger_deep
+    colorscheme apprentice
+catch /E185:/
+    " If colorscheme doesn't exist, set to builtin
+    colorscheme pablo
+endtry
+
+
+" {{{ Lightline
+let g:lightline = {
+      \ 'colorscheme': 'wombat',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename' ], [ 'filepath', 'qfinfo' ] ],
+      \   'right': [ [ 'lineinfo' ], [ 'scrollbar', 'percent' ], [ 'filetype' ] ]
+      \ },
+      \ 'inactive': {
+      \   'left': [ [ 'filepath' ], [ 'filename' ] ],
+      \   'right': [ [ 'lineinfo' ], [ 'percent' ] ]
+      \ },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' },
+      \ 'tabline': {
+      \   'left': [ [ 'tabs' ] ],
+      \   'right': [ [ 'close' ] ]
+      \ },
+      \ 'component_function': {
+      \   'filename': 'LightlineFilename',
+      \   'filepath': 'LightlineFilepath',
+      \   'gitbranch': 'FugitiveHead',
+      \   'readonly': 'LightlineReadonly',
+      \   'lineinfo': 'LightlineLineinfo',
+      \   'scrollbar': 'LightlineScrollbar',
+      \   'qfinfo': 'LightlineQfinfo'
+      \ },
+      \ 'mode_map': {
+      \   'n' : 'NORMAL',
+      \   'i' : 'INSERT',
+      \   'R' : 'REPLACE',
+      \   'v' : 'VISUAL',
+      \   'V' : 'VISUAL-LINE',
+      \   "\<C-v>": 'VISUAL-BLOCK',
+      \   'c' : 'COMMAND',
+      \   's' : 'SELECT',
+      \   'S' : 'SELECT-LINE',
+      \   "\<C-s>": 'SELECT-BLOCK',
+      \   't': 'TERMINAL',
+      \ }
+      \ }
+
+function! LightlineReadonly()
+    return &readonly && &filetype !=# 'help' ? 'RO' : ''
+endfunction
+
+function! LightlineFilename()
+    let _fname = expand('%:t')
+    let filename = _fname !=# '' ? _fname : &ft == 'qf' ? 'QF' : 'No Name'
+    let modified = &modified ? '**' : ''
+    return '( ' . filename . ' ) ' . modified
+endfunction
+
+function! LightlineFilepath()
+    return expand('%:p:~:h') . '/'
+endfunction
+
+function! LightlineLineinfo()
+    if &filetype == 'undotree' || &filetype == 'qf' | return '' | endif
+    return "ln " . line('.') . ", ch " . col('.')
+endfunction
+
+function! LightlineQfinfo()
+    if &filetype == 'qf'
+        return "Entry ".line('.')
+    else
+        return ''
+    endif
+endfunction
+
+
+function! LightlineScrollbar()
+    let width = 9
+    let percent = (line('.') - 1.0) / (max([line('$'), 2]) - 1.0)
+    let before = float2nr(round(percent * (width - 3)))
+    let after = width - 3 - before
+    return '['.repeat(' ', before).'='.repeat(' ', after).']'
+endfunction
+" }}}
+
+" {{{ Undo Tree
+let g:undotree_WindowLayout       = 2
+let g:undotree_SetFocusWhenToggle = 1
+let g:undotree_ShortIndicators    = 0
+let g:undotree_TreeNodeShape      = ''
+let g:undotree_TreeVertShape      = ''
+
+function! g:Undotree_CustomMap()
+    nmap <buffer> K <plug>UndotreeNextState
+    nmap <buffer> J <plug>UndotreePreviousState
+    nmap <buffer> Q <plug>UndotreeClose
+    nmap <buffer> r <plug>UndotreeRedo
+    nmap <buffer> u <plug>UndotreeUndo
+endfunc
+" }}}
+
+let g:rustfmt_autosave = 1
+
+" Highlight Group
+let g:indentLine_setColors = 0
+let g:indentLine_defaultGroup = 'CursorLineNr'
+" let g:indentLine_char_list = ['|', '¦', '┆', '┊']
+" Enabled for filetypes:
+let g:indentLine_fileType = ['rust', 'python', 'vim']
+let g:indentLine_fileExclude = ['text', 'sh', 'bash', 'zsh', 'markdown']
+let g:indentLine_bufTypeExclude = ['help', 'man', 'terminal']
+
+
+" Don't load netrw
+" let g:loaded_netrw       = 1
+" let g:loaded_netrwPlugin = 1
+let g:netrw_dirhistmax = 0
+
+" }}}
+
+" Keys {{{
+let mapleader=' '
+
+" Disable some stuff
+nnoremap <Leader> <Nop>
+nnoremap [# <Nop>
+nnoremap ]# <Nop>
+
+" Prev split
+nnoremap <Leader><Leader> <C-w><C-p>
+nnoremap <Leader>Q :quit<CR>
+nnoremap <Leader>c :close<CR>
+nnoremap <Leader>w :write<CR>
+nnoremap <C-s> :update<CR>
+inoremap <C-s> <C-o>:update<CR>
+nnoremap <silent> <C-q> :try \| tabclose \| catch \| qa \| endtry<CR>
+inoremap jk <Esc>
+nnoremap <Leader>e :Lexplore 35<CR>
+nnoremap <Leader>, :Hsh<CR>
+nnoremap Q @q
+
+" Drop a mark before jumping
+nnoremap gg mjgg
+nnoremap G mjG
+
+inoreabbr @@ devlin.ja@husky.neu.edu
+inoreabbr JD James Devlin
+
+cnoreabbr W write!
+cnoreabbr Q quit!
+
+nnoremap 0 ^
+nnoremap j gj
+nnoremap k gk
+nnoremap H ^
+vnoremap H ^
+nnoremap L $
+vnoremap L $
+" Redo
+nnoremap U <C-r>
+"nnoremap ; :
+"nnoremap : ;
+inoremap <C-l> <C-o>l
+inoremap <C-h> <C-o>h
+
+" Paste, then fix indentation
+nnoremap p p=`]
+nnoremap P P=`[
+
+cnoremap <Space><Space> \<Space>
+
+" Open URL under cursor (in firefox)
+nnoremap <Leader>go :silent exe '!open -a firefox '.matchstr(getline('.'), 'http\S*')<CR>
+
+" {{{
+" Source file
+nnoremap <Leader>sf :source %<CR>
+nnoremap <Leader>p :echo expand("%:p:~")<CR>
+nnoremap <Leader>b :ls<CR>
+" }}}
+
+" Surround vis selection with foldmarkers
+" function! SurroundFdm() range
+"     set paste
+"     echo "first: ".a:firstline." | sec: ".a:lastline
+" endfunction
+
+vnoremap <silent> <Leader>f <Esc>`<O<Esc>`>o<Esc>`<kV`>jzf`<0a<Space><Esc>`>0a<Space><Esc>`<
+
+" Folding {{{
+nnoremap <Leader>f0 :setlocal foldlevel=0<CR>
+nnoremap <Leader>f1 :setlocal foldlevel=1<CR>
+nnoremap <Leader>f2 :setlocal foldlevel=2<CR>
+nnoremap <Leader>f3 :setlocal foldlevel=3<CR>
+nnoremap <Leader>f4 :setlocal foldlevel=4<CR>
+nnoremap <Leader>f5 :setlocal foldlevel=5<CR>
+nnoremap <Leader>f6 :setlocal foldlevel=6<CR>
+" }}}
+
+" Movement {{{
+nnoremap <C-f> <C-f>zz
+nnoremap <C-d> <C-d>zz
+nnoremap <C-b> <C-b>zz
+nnoremap <C-u> <C-u>zz
+
+" Quickfix
+nnoremap ]q :cnext<cr>zz
+nnoremap [q :cprev<cr>zz
+" Location List
+nnoremap ]l :lnext<cr>zz
+nnoremap [l :lprev<cr>zz
+" Buffers
+nnoremap ]b :bnext<cr>
+nnoremap [b :bprev<cr>
+" Tabs
+nnoremap ]t :tabn<cr>
+nnoremap [t :tabp<cr>
+nnoremap <C-t> :tabnew<cr>
+" }}}
+
+" Circular window navigation
+nnoremap <Tab>   <C-w>w
+nnoremap <S-Tab> <C-w>W
+nnoremap <C-n>   :new<CR>
+
+" Split window, switch focus
+nnoremap <Leader>V <C-w>v<C-w>l
+
+" Buffer navigation {{{
+nnoremap <M-1> :b1<CR>
+nnoremap <M-2> :b2<CR>
+nnoremap <M-3> :b3<CR>
+nnoremap <M-4> :b4<CR>
+nnoremap <M-5> :b5<CR>
+nnoremap <M-6> :b6<CR>
+nnoremap <M-7> :b7<CR>
+nnoremap <M-8> :b8<CR>
+nnoremap <M-9> :b9<CR>
+" }}}
+
+" Shebang
+inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype)
+
+" Delete easier
+inoremap <C-Bs> <C-w>
+nnoremap D d$
+nnoremap C c$
+
+" Completion menu navigation
+"inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
+"inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+"inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
+"inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
+"inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+"inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+"inoremap <expr> <Tab>      pumvisible() ? "\<C-n>" : "\<Tab>"
+"inoremap <expr> <S-Tab>    pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Plugin Keys {{{
+
+nnoremap <Leader>u :UndotreeToggle<CR>
+
+vmap <Enter> <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+
+nnoremap <silent> <Leader>g :Git<CR>
+
+" }}}
+
+" }}}
+
+" Funcs {{{
+
+" :Root | Change directory to the root of the Git repository
+function! s:root()
+    let root = systemlist('git rev-parse --show-toplevel')[0]
+    if v:shell_error
+        echoe 'Not in git repo'
+    else
+        execute 'lcd' root
+        execute 'Lexplore'
+        echo 'Changed directory to: '.root
+    endif
+endfunction
+command! Root call s:root()
+
+" Todo
+function! s:todo() abort
+    let entries = []
+    for cmd in ['git grep -niI -e TODO -e FIXME -e XXX 2> /dev/null',
+        \ 'grep -rniI -e TODO -e FIXME -e XXX * 2> /dev/null']
+        let lines = split(system(cmd), '\n')
+        if v:shell_error != 0 | continue | endif
+        for line in lines
+            let [fname, lno, text] = matchlist(line, '^\([^:]*\):\([^:]*\):\(.*\)')[1:3]
+            call add(entries, { 'filename': fname, 'lnum': lno, 'text': text })
+        endfor
+        break
+    endfor
+
+    if !empty(entries)
+        call setqflist(entries)
+        copen
+    endif
+endfunction
+command! Todo call s:todo()
+
+" Make file executable
+command! EX if !empty(expand('%'))
+    \|   write
+    \|   call system('chmod +x '.expand('%'))
+    \|   silent e
+    \| else
+    \|   echohl WarningMsg
+    \|   echo 'Save the file first'
+    \|   echohl None
+    \| endif
+
+" Create scratch buffer
+function! s:scratchbuf()
+    vnew
+    setlocal bt=nofile bh=hide nobl noswf nowb
+endfunction
+command! Scratch call s:scratchbuf()
+
+command! Hsh set hlsearch! hls?
+command! Cul set cursorline! cul?
+command! Erc :edit $MYVIMRC
+
+" Sudo write
+command! Sudo w !sudo tee "%" > /dev/null
+
+" See changes since last write
+command! Chngs w !diff -y % -
+
+" Toggle the QuickFix window
+nnoremap <silent> <Leader>q :copen<CR>
+" Toggle the LocList window
+nnoremap <silent> <Leader>l :lopen<CR>
+
+function! Wordcount(filename)
+    " Get the number of lines, words, and chars in a file
+    let counts = split(system('wc -mlw '.a:filename))
+    echo 'lines: '.counts[0]
+    echo 'words: '.counts[1]
+    echo 'chars: '.counts[2]
+endfunction
+" Wordcount current file
+command! Wc call Wordcount(expand("%"))
+
+" Highlight long lines
+" au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
+" au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+
+" Then clear matches:
+" call matchdelete(w:m1)
+" call matchdelete(w:m2)
+" " or
+" call clearmatches()
+
+" }}}
+
+" Autocmds {{{
+
+augroup vimrc_help
+    autocmd!
+    autocmd BufEnter *.txt
+                \ if &buftype == 'help' |
+                \   wincmd L |
+                \   setlocal scrolloff=999 |
+                \ endif
+augroup END
+
+augroup startup_screen
+    autocmd!
+    " Return to previous edit position
+    autocmd BufReadPost *
+                \ if line("'\"") > 0 && line("'\"") <= line("$") |
+                \   exe "normal! g`\"" |
+                \ endif
+    " If no file, show current directory
+    autocmd VimEnter *
+                \ if expand("%") == "" |
+                \   silent e . |
+                \   echohl WarningMsg |
+                \   echo "In Directory:\t" . fnamemodify(".", ":p:~") |
+                \   echohl None |
+                \ endif
+augroup END
+
+augroup setup_folds
+    " Define folds as indent, then allow manual folds as well
+    autocmd!
+    autocmd BufReadPre * setlocal foldmethod=indent
+    autocmd BufWinEnter *
+                \ if &fdm == 'indent' |
+                \   setlocal foldmethod=manual |
+                \ endif
+augroup END
+
+augroup setup_pairs
+    autocmd!
+    autocmd FileType html5\?,xml set matchpairs+=<:>
+    autocmd FileType python,bash,zsh,html,xml set matchpairs+=\":\"
+    autocmd FileType python,bash,zsh,html,xml set matchpairs+=\':\'
+augroup END
+
+augroup templates
+    autocmd!
+    autocmd BufNewFile if &filetype == 'sh'    | 0r ~/.vim/skel/skel.sh    | endif
+    autocmd BufNewFile if &filetype == 'bash'  | 0r ~/.vim/skel/skel.bash  | endif
+    autocmd BufNewFile if &filetype == 'zsh'   | 0r ~/.vim/skel/skel.zsh   | endif
+    autocmd BufNewFile if &filetype == 'cmake' | 0r ~/.vim/skel/skel.cmake | endif
+    autocmd BufNewFile if &filetype == 'html'  | 0r ~/.vim/skel/skel.html  | endif
+augroup END
+
+" }}}
+
+" vim:ft=vim:fdm=marker

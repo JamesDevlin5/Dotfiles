@@ -11,6 +11,8 @@ map( "n", "<Leader><Esc>", ":nohlsearch<CR>", options )
 map( "n", "<Leader>n", ":bnext<CR>", options )
 map( "n", "<Leader>p", ":bprev<CR>", options )
 map('n', '<Leader>ec', ':edit $MYVIMRC<CR>', options)
+map('n', 'D', 'd$', options)
+map('n', 'C', 'c$', options)
 
 map( "n", "<Leader>u", ":UndotreeToggle<CR>", options )
 

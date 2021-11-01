@@ -22,7 +22,7 @@ typeset -x DOTFILES_HOME="${HOME}/dotfiles"
 # }}}
 
 # Basic {{{
-typeset -x EDITOR=nvim
+typeset -x EDITOR=vim
 typeset -x BROWSER=firefox
 typeset -x PAGER=bat
 
@@ -36,14 +36,15 @@ fi
 # Pager {{{
 # Command called when redirection operators are given w/o a command rname
 # Default: `cat'
-#typeset -x NULLCMD=bat
+typeset -x NULLCMD=bat
 # Like NULLCMD, only when the redirection is an input
 #typeset -x READNULLCMD=bat
 
 typeset -x BAT_THEME="Dracula"
 
 # Man Pages
-typeset -x MANPAGER="nvim -R -c 'set ft=man'"
+# typeset -x MANPAGER="$EDITOR -R -c 'set ft=man'"
+typeset -x MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 #typeset -x LESS='--ignore-case --status-column --line-numbers --raw-control-chars --shift=0.15 --mouse'
 
@@ -79,7 +80,7 @@ typeset -x DIRSTACKSIZE=16
 # History {{{
 # ENV: Sourced when invoked as sh
 # FCEDIT: The editor used for the fc command
-typeset -x FCEDIT="nvim -c 'set ft=zsh'"
+typeset -x FCEDIT="$EDITOR -c 'set ft=zsh'"
 
 # File suffixes ignored during completion
 fignore=( o pyc ~ )
@@ -204,3 +205,4 @@ typeset -U cdpath
 # }}}
 
 # vim:foldmethod=marker
+. "/Users/james/.local/share/cargo/env"
