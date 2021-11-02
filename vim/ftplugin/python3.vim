@@ -17,3 +17,7 @@ command! Pyi !python3 -i %
 " List all classes (in loc list)
 command! Cls lvim /^class/ % | lopen
 
+augroup py_fmt_on_save
+    autocmd!
+    autocmd BufWritePost *.py silent !black --quiet %
+augroup END

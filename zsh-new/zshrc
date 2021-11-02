@@ -47,3 +47,5 @@ eval "$(sheldon source)"
 
 
 # vim:foldmethod=marker
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

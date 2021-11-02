@@ -44,7 +44,8 @@ typeset -x BAT_THEME="Dracula"
 
 # Man Pages
 # typeset -x MANPAGER="$EDITOR -R -c 'set ft=man'"
-typeset -x MANPAGER="sh -c 'col -bx | bat -l man -p'"
+typeset -x MANPAGER="sh -c 'col -bx | bat -l man -p --tabs 2 --paging=always'"
+typeset -x MANWIDTH=999
 
 #typeset -x LESS='--ignore-case --status-column --line-numbers --raw-control-chars --shift=0.15 --mouse'
 
@@ -172,7 +173,8 @@ typeset -x RUSTC_WRAPPER=$(whence sccache)
 #export FZF_DEFAULT_OPTS="--reverse --ansi --color=fg:15,hl:3,hl+:3,bg+:-1,fg+:-1,pointer:06,spinner:05,info:7,prompt:6"
 export FZF_DEFAULT_COMMAND='fd --follow --type file --color=always'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS="--ansi --height=40% --layout=reverse --info=inline --border --margin=2 --padding=2"
+# export FZF_CTRL_T_COMMAND="rg --files"
+export FZF_DEFAULT_OPTS="--height=50% --info=inline -m --border --margin=2 --padding=2"
 export FZF_COMPLETION_TRIGGER='--'
 
 # }}}

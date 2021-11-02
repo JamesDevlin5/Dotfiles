@@ -12,15 +12,17 @@ function! MdFold(line)
     let l:num = strlen(hashes)
     " If no header on line, keep previous foldlevel
     if l:num == 0
-        return -1
+        return "-1"
     else
-        return l:num
+        return string(l:num)
     endif
 endfunction
 
 set spell
 set foldmethod=expr
 set foldexpr=MdFold(v:line)
+
+set matchpairs+=`:`,*:*,_:_,~:~,<:>
 
 nnoremap <Leader>v :Goyo<CR>
 nnoremap <Leader>p :call Pandoc()<CR>

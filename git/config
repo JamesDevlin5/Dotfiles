@@ -6,19 +6,19 @@
   defaultBranch = master
 [color]
   interactive = always
-#[core]
-#  pager = bat
+[core]
+  pager = bat
 [push]
   default = upstream
 [help]
   autocorrect = 3
   format = web
 
-[pager]
-  diff = delta
-  log = delta
-  reflog = delta
-  show = delta
+# [pager]
+  # diff = delta
+  # log = delta
+  # reflog = delta
+  # show = delta
 
 [delta]
   line-numbers = true

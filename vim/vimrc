@@ -11,7 +11,7 @@
 " Options {{{
 set cdpath+=~
 set ignorecase smartcase infercase wildignorecase
-set scrolloff=10 sidescrolloff=6 textwidth=88
+set scrolloff=10 sidescrolloff=6 textwidth=89
 set linebreak breakindent
 let &showbreak=' ﬌ '
 set display=lastline,uhex
@@ -25,34 +25,64 @@ set hidden
 set switchbuf=useopen,split
 set splitbelow splitright
 set mouse=nvi mousefocus mousemodel=popup_setpos
-set noshowmode showcmd ruler
+set noshowmode showcmd
 set confirm
 set backspace=indent,eol,start
 set belloff=all
 set undolevels=9999
-set showmatch
+set showmatch matchtime=7
 set nojoinspaces
-set tabstop=4 shiftwidth=4 smarttab softtabstop=4 shiftround expandtab
+set tabstop=4 shiftwidth=4 softtabstop=4 shiftround expandtab
 set autoindent
-set foldlevelstart=1 foldcolumn=3
+set foldlevelstart=2 foldcolumn=3
 set foldopen-=hor
 set diffopt=filler,context:4,vertical
-set ttimeoutlen=400
+set ttimeoutlen=800
 set modelines=4
-set backupdir-=\.
 set autoread
-set directory-=\. " Swapfile
 set wildmenu
-set undofile undodir=~/.vim/undo
+set complete-=i complete-=t " Don't scan unnecessary random files => quicker completion suggestions
 set virtualedit=block
 set concealcursor=nv conceallevel=1
-set cursorline
 set listchars=tab:\ ▸,eol:¬,trail:·,nbsp:
 set fillchars=vert:│,fold:\.
 set formatoptions=crq1j
+
+" {{{ Creates special directories if they do not exist (backup, swap, undo dirs)
+
+
+" Creates the directory at the path, if it does not exists already
+" function! s:ensureDirExists(dir_path)
+"     return
+"     if !isdirectory(dir_path)
+"         call mkdir(dir_path)
+"     endif
+" endfunction
+
+" let _b_dir=$HOME.'/.local/share/vim/backup'
+" s:ensureExists(&_b_dir)
+" let &backupdir=_b_dir
+set backupdir-=\.
+
+" let _swap_dir=$HOME.'/.local/share/vim/swap'
+" s:ensureExists(&_swap_dir)
+" let &directory=_swap_dir
+set directory-=\. " Swapfile
+
+" let _undo_dir=$HOME.'/.local/share/vim/undo'
+" s:ensureExists(&_undo_dir)
+set undofile undodir=~/.vim/undo
+" let &undodir=_undo_dir
+
+let mapleader=' '
+let maplocalleader='-'
+
+" }}}
+ 
 " }}}
 
-if has("neovide") " {{{
+" {{{ Neovide
+if has("neovide")
     let g:neovide_cursor_vfx_mode = "ripple"
     let g:neovide_fullscreen=v:true
     " let g:neovide_input_use_logo=v:true
@@ -60,10 +90,33 @@ if has("neovide") " {{{
     let g:neovide_cursor_trail_length=0.5
     let g:neovide_cursor_antialiasing=v:true
     let g:neovide_cursor_vfx_particle_lifetime=1
+else
+    " {{{ Cursor switches size depending on mode
+    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+    let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+    " }}}
 endif
 " }}}
 
-" Plugins {{{
+" {{{ Plugins
+
+" {{{ Disable a bunch of (old) built-in plugins from loading
+let g:loaded_2html_plugin = 1
+let g:loaded_getscriptPlugin = 1
+let g:loaded_zip = 1
+let g:loaded_gzip = 1
+let g:loaded_logipat = 1
+let g:loaded_rrhelper = 1
+let g:loaded_tarPlugin = 1
+let g:loaded_vimballPlugin = 1
+let g:loaded_zipPlugin = 1
+let g:loaded_remote_plugins = 1
+let g:loaded_shada_plugin = 1
+let g:loaded_tutor_mode_plugin = 1
+" let g:loaded_netrw       = 1
+" let g:loaded_netrwPlugin = 1
+" }}}
 
 " Ensure Vim-Plug is installed {{{
 
@@ -76,15 +129,20 @@ endif
 
 " }}}
 
-" Plugin Sources {{{
+" {{{ Plugin Sources
 call plug#begin('~/.vim/plugged')
 
 " {{{ Color Themes
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 Plug 'romainl/apprentice'
+Plug 'blueshirts/darcula'
 " }}}
 
 Plug 'itchyny/lightline.vim'
+
+" Local FZF
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -98,10 +156,11 @@ if !has('nvim')
 endif
 
 Plug 'junegunn/vim-easy-align'
-Plug 'junegunn/goyo.vim', { 'for': 'markdown' }
+Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 
 Plug 'kien/rainbow_parentheses.vim'
-Plug 'Yggdroot/indentLine'
+Plug 'jiangmiao/auto-pairs'
+" Plug 'Yggdroot/indentLine'
 Plug 'mbbill/undotree'
 
 " Initialize plugin system
@@ -111,8 +170,9 @@ call plug#end()
 " Set colorscheme
 set bg=dark
 try
-    " colorscheme challenger_deep
-    colorscheme apprentice
+    let colors = ['challenger_deep', 'apprentice', 'darcula']
+    let color = colors[1]
+    exe 'colorscheme '.color
 catch /E185:/
     " If colorscheme doesn't exist, set to builtin
     colorscheme pablo
@@ -121,14 +181,14 @@ endtry
 
 " {{{ Lightline
 let g:lightline = {
-      \ 'colorscheme': 'wombat',
+      \ 'colorscheme': 'darcula',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filename' ], [ 'filepath', 'qfinfo' ] ],
-      \   'right': [ [ 'lineinfo' ], [ 'scrollbar', 'percent' ], [ 'filetype' ] ]
+      \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filepath', 'ftypeicon' ], [ 'filename', 'qfinfo' ] ],
+      \   'right': [ [ 'lineinfo' ], [ 'percent', 'scrollbar' ], [ 'filetype' ] ]
       \ },
       \ 'inactive': {
-      \   'left': [ [ 'filepath' ], [ 'filename' ] ],
-      \   'right': [ [ 'lineinfo' ], [ 'percent' ] ]
+      \   'left': [ [], [ 'filepath', 'readonly', 'ftypeicon' ], [ 'filename' ] ],
+      \   'right': [ [ 'filetype' ], [ 'scrollbar', 'percent' ] ]
       \ },
       \ 'separator': { 'left': '', 'right': '' },
       \ 'subseparator': { 'left': '', 'right': '' },
@@ -139,11 +199,12 @@ let g:lightline = {
       \ 'component_function': {
       \   'filename': 'LightlineFilename',
       \   'filepath': 'LightlineFilepath',
-      \   'gitbranch': 'FugitiveHead',
+      \   'gitbranch': 'LightlineFugHead',
       \   'readonly': 'LightlineReadonly',
       \   'lineinfo': 'LightlineLineinfo',
       \   'scrollbar': 'LightlineScrollbar',
-      \   'qfinfo': 'LightlineQfinfo'
+      \   'qfinfo': 'LightlineQfinfo',
+      \   'ftypeicon': 'LightlineFiletypeicon'
       \ },
       \ 'mode_map': {
       \   'n' : 'NORMAL',
@@ -165,10 +226,30 @@ function! LightlineReadonly()
 endfunction
 
 function! LightlineFilename()
-    let _fname = expand('%:t')
-    let filename = _fname !=# '' ? _fname : &ft == 'qf' ? 'QF' : 'No Name'
-    let modified = &modified ? '**' : ''
-    return '( ' . filename . ' ) ' . modified
+    let _fname = expand('%:p:~:t')
+    if _fname ==# ''
+        " If filename is empty
+        if &ft == 'qf'
+            return ' < QF > '
+        elseif &ft == 'netrw'
+            return ''
+        else
+            return ' [No Name] '
+        endif
+    else
+        let filename = '( '._fname.' ) '
+        let modified = &modified ? '**' : ''
+        return filename.modified
+    endif
+endfunction
+
+function! LightlineFiletypeicon()
+    let icon_map = { 'python': '  ', 'rust': '  ', 'c': ' ﭰ ', 'cpp': ' ﭱ ', 'vim': '  ',
+                \   'javascript': '  ', 'html': '  ', 'xml': '  ', 'go': '  ', 'java': '  ',
+                \   'text': '  ', 'terminal': '  ', 'shell': '  ', 'bash': '  ', 'zsh': '  ',
+                \   'undotree': '  ', 'qf': ' ﭟ ', 'scratch': '  ', 'netrw': '  ', 'todo': '  ',
+                \   'gitcommit': '  ' }
+    return get(icon_map, &filetype, '')
 endfunction
 
 function! LightlineFilepath()
@@ -190,11 +271,11 @@ endfunction
 
 
 function! LightlineScrollbar()
-    let width = 9
+    let width = 16
     let percent = (line('.') - 1.0) / (max([line('$'), 2]) - 1.0)
-    let before = float2nr(round(percent * (width - 3)))
-    let after = width - 3 - before
-    return '['.repeat(' ', before).'='.repeat(' ', after).']'
+    let before = float2nr(round(percent * (width - 4)))
+    let after = width - 4 - before
+    return '['.repeat(' ', before).' '.repeat(' ', after).']'
 endfunction
 " }}}
 
@@ -217,52 +298,84 @@ endfunc
 let g:rustfmt_autosave = 1
 
 " Highlight Group
-let g:indentLine_setColors = 0
-let g:indentLine_defaultGroup = 'CursorLineNr'
+" let g:indentLine_defaultGroup = 'CursorLineNr'
+" let g:indentLine_color_term = 49
+" let g:indentLine_showFirstIndentLevel = 1
+" let g:indentLine_setConceal = 0
 " let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 " Enabled for filetypes:
-let g:indentLine_fileType = ['rust', 'python', 'vim']
-let g:indentLine_fileExclude = ['text', 'sh', 'bash', 'zsh', 'markdown']
-let g:indentLine_bufTypeExclude = ['help', 'man', 'terminal']
+" let g:indentLine_fileType = ['rust', 'python', 'vim', 'java', 'c', 'cpp']
+" let g:indentLine_fileExclude = ['text', 'sh', 'bash', 'zsh', 'markdown', 'html', 'undotree', 'qf', 'netrw', 'man', 'help']
+" let g:indentLine_bufTypeExclude = ['help', 'terminal']
 
+" FZF
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+let g:fzf_layout = { 'down': '45%' }
+" Show a preview
+let g:fzf_preview_window = ['right:75%', 'ctrl-/']
 
-" Don't load netrw
-" let g:loaded_netrw       = 1
-" let g:loaded_netrwPlugin = 1
+command! Colorfzf call fzf#run(fzf#wrap({
+            \   'source': map(split(globpath(&rtp, 'colors/*.vim')),
+            \   'fnamemodify(v:val, ":t:r")'),
+            \   'sink': 'colo'
+            \ }))
+
+command! -bang -complete=dir -nargs=? Ls
+            \ call fzf#run(fzf#wrap('ls',
+            \   {'source': 'ls', 'dir': <q-args>}, <bang>0))
+
+" Script that comes packaged with FZF, and uses bat
+" command! -bang -nargs=? -complete=dir Files
+"     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
+command! -bang -nargs=? -complete=dir Fls
+    \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
+
+" Use grep, not rg
+" command! -bang -nargs=* GGrep
+"             \ call fzf#vim#grep(
+"             \   'git grep --line-number -- '.shellescape(<q-args>), 0,
+"             \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
+
+nnoremap <silent> <Leader>F :Files!<CR>
+nnoremap <silent> <Leader>b :ls<CR>
+nnoremap <silent> <Leader>B :Buffers<CR>
+
+" Don't save .netrwhist files
 let g:netrw_dirhistmax = 0
 
 " }}}
 
 " Keys {{{
-let mapleader=' '
 
 " Disable some stuff
 nnoremap <Leader> <Nop>
+nnoremap <LocalLeader> <Nop>
 nnoremap [# <Nop>
 nnoremap ]# <Nop>
 
 " Prev split
-nnoremap <Leader><Leader> <C-w><C-p>
+" nnoremap <Leader><Leader> <C-w><C-p>
 nnoremap <Leader>Q :quit<CR>
 nnoremap <Leader>c :close<CR>
 nnoremap <Leader>w :write<CR>
 nnoremap <C-s> :update<CR>
 inoremap <C-s> <C-o>:update<CR>
 nnoremap <silent> <C-q> :try \| tabclose \| catch \| qa \| endtry<CR>
-inoremap jk <Esc>
+inoremap jf <Esc>
 nnoremap <Leader>e :Lexplore 35<CR>
-nnoremap <Leader>, :Hsh<CR>
+nnoremap <LocalLeader>h :Hsh<CR>
 nnoremap Q @q
-
-" Drop a mark before jumping
-nnoremap gg mjgg
-nnoremap G mjG
 
 inoreabbr @@ devlin.ja@husky.neu.edu
 inoreabbr JD James Devlin
 
+inoreabbr adn and
+
 cnoreabbr W write!
 cnoreabbr Q quit!
+
+cnoremap <expr> <c-n> wildmenumode() ? "\<c-n>" : "\<down>"
+cnoremap <expr> <c-p> wildmenumode() ? "\<c-p>" : "\<up>"
 
 nnoremap 0 ^
 nnoremap j gj
@@ -279,28 +392,20 @@ inoremap <C-l> <C-o>l
 inoremap <C-h> <C-o>h
 
 " Paste, then fix indentation
-nnoremap p p=`]
-nnoremap P P=`[
+nnoremap p p==`]
+nnoremap P P==`[
 
-cnoremap <Space><Space> \<Space>
+" Edit Macro
+nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
 " Open URL under cursor (in firefox)
 nnoremap <Leader>go :silent exe '!open -a firefox '.matchstr(getline('.'), 'http\S*')<CR>
 
-" {{{
 " Source file
 nnoremap <Leader>sf :source %<CR>
 nnoremap <Leader>p :echo expand("%:p:~")<CR>
-nnoremap <Leader>b :ls<CR>
-" }}}
 
-" Surround vis selection with foldmarkers
-" function! SurroundFdm() range
-"     set paste
-"     echo "first: ".a:firstline." | sec: ".a:lastline
-" endfunction
-
-vnoremap <silent> <Leader>f <Esc>`<O<Esc>`>o<Esc>`<kV`>jzf`<0a<Space><Esc>`>0a<Space><Esc>`<
+vnoremap <silent> <Leader>f <Esc>`<O<Esc>`>o<Esc>`<kV`>jzf`<0a<Space><Esc>`>0a<Space><Esc>`<A<Space>
 
 " Folding {{{
 nnoremap <Leader>f0 :setlocal foldlevel=0<CR>
@@ -317,6 +422,36 @@ nnoremap <C-f> <C-f>zz
 nnoremap <C-d> <C-d>zz
 nnoremap <C-b> <C-b>zz
 nnoremap <C-u> <C-u>zz
+
+" {{{ `n` always searches forward, `N` always goes back
+nnoremap <expr> n  'Nn'[v:searchforward]
+xnoremap <expr> n  'Nn'[v:searchforward]
+onoremap <expr> n  'Nn'[v:searchforward]
+
+nnoremap <expr> N  'nN'[v:searchforward]
+xnoremap <expr> N  'nN'[v:searchforward]
+onoremap <expr> N  'nN'[v:searchforward]
+" }}}
+
+" Move Lines
+" nnoremap [e  :<c-u>execute 'move -1-'. v:count1<cr>
+" nnoremap ]e  :<c-u>execute 'move +'. v:count1<cr>
+
+" Move lines down with ctrl-j, or up with ctrl-k
+nnoremap <C-j> :m .+1<CR>==
+nnoremap <C-k> :m .-2<CR>==
+inoremap <C-j> <Esc>:m .+1<CR>==gi
+inoremap <C-k> <Esc>:m .-2<CR>==gi
+vnoremap <C-j> :m '>+1<CR>gv=gv
+vnoremap <C-k> :m '<-2<CR>gv=gv
+
+" Add Empty Lines
+nnoremap [<space>  :<c-u>put! =repeat(nr2char(10), v:count1)<cr>'[
+nnoremap ]<space>  :<c-u>put =repeat(nr2char(10), v:count1)<cr>
+" Visual Movement
+xnoremap <  <gv
+xnoremap >  >gv
+
 
 " Quickfix
 nnoremap ]q :cnext<cr>zz
@@ -342,15 +477,15 @@ nnoremap <C-n>   :new<CR>
 nnoremap <Leader>V <C-w>v<C-w>l
 
 " Buffer navigation {{{
-nnoremap <M-1> :b1<CR>
-nnoremap <M-2> :b2<CR>
-nnoremap <M-3> :b3<CR>
-nnoremap <M-4> :b4<CR>
-nnoremap <M-5> :b5<CR>
-nnoremap <M-6> :b6<CR>
-nnoremap <M-7> :b7<CR>
-nnoremap <M-8> :b8<CR>
-nnoremap <M-9> :b9<CR>
+" nnoremap <M-1> :b1<CR>
+" nnoremap <M-2> :b2<CR>
+" nnoremap <M-3> :b3<CR>
+" nnoremap <M-4> :b4<CR>
+" nnoremap <M-5> :b5<CR>
+" nnoremap <M-6> :b6<CR>
+" nnoremap <M-7> :b7<CR>
+" nnoremap <M-8> :b8<CR>
+" nnoremap <M-9> :b9<CR>
 " }}}
 
 " Shebang
@@ -360,31 +495,37 @@ inoreabbrev <expr> #!! "#!/usr/bin/env" . (empty(&filetype) ? '' : ' '.&filetype
 inoremap <C-Bs> <C-w>
 nnoremap D d$
 nnoremap C c$
+nnoremap Y y$
 
 " Completion menu navigation
-"inoremap <expr> <Esc>      pumvisible() ? "\<C-e>" : "\<Esc>"
-"inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
-"inoremap <expr> <Down>     pumvisible() ? "\<C-n>" : "\<Down>"
-"inoremap <expr> <Up>       pumvisible() ? "\<C-p>" : "\<Up>"
-"inoremap <expr> <C-d>      pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-"inoremap <expr> <C-u>      pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-"inoremap <expr> <Tab>      pumvisible() ? "\<C-n>" : "\<Tab>"
-"inoremap <expr> <S-Tab>    pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
+inoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <expr> <C-d> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
+inoremap <expr> <C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Plugin Keys {{{
 
 nnoremap <Leader>u :UndotreeToggle<CR>
 
 vmap <Enter> <Plug>(EasyAlign)
-nmap ga <Plug>(EasyAlign)
+nmap ga      <Plug>(EasyAlign)
 
 nnoremap <silent> <Leader>g :Git<CR>
 
-" }}}
+" Surround
+nnoremap s ys
+
+nnoremap <Leader>GG :Goyo<CR>
 
 " }}}
 
-" Funcs {{{
+" }}}
+
+" Funcs and Commands {{{
 
 " :Root | Change directory to the root of the Git repository
 function! s:root()
@@ -394,16 +535,20 @@ function! s:root()
     else
         execute 'lcd' root
         execute 'Lexplore'
+        echohl ModeMsg
         echo 'Changed directory to: '.root
+        echohl None
     endif
 endfunction
 command! Root call s:root()
+
+command! Home cd ~
 
 " Todo
 function! s:todo() abort
     let entries = []
     for cmd in ['git grep -niI -e TODO -e FIXME -e XXX 2> /dev/null',
-        \ 'grep -rniI -e TODO -e FIXME -e XXX * 2> /dev/null']
+                \ 'grep -rniI -e TODO -e FIXME -e XXX * 2> /dev/null']
         let lines = split(system(cmd), '\n')
         if v:shell_error != 0 | continue | endif
         for line in lines
@@ -421,26 +566,32 @@ endfunction
 command! Todo call s:todo()
 
 " Make file executable
-command! EX if !empty(expand('%'))
-    \|   write
-    \|   call system('chmod +x '.expand('%'))
-    \|   silent e
-    \| else
-    \|   echohl WarningMsg
-    \|   echo 'Save the file first'
-    \|   echohl None
-    \| endif
+command! Ex if !empty(expand('%'))
+            \|   write
+            \|   call system('chmod +x '.expand('%'))
+            \|   silent e
+            \| else
+                \|   echohl WarningMsg
+                \|   echo 'Save the file first'
+                \|   echohl None
+                \| endif
 
-" Create scratch buffer
-function! s:scratchbuf()
-    vnew
-    setlocal bt=nofile bh=hide nobl noswf nowb
-endfunction
-command! Scratch call s:scratchbuf()
+" Creates a scratch buffer from some existing buf
+command! Scratchify setlocal nobuflisted buftype=nofile bufhidden=delete noswapfile
+" New vertical scratch window
+command! Scratch vnew +Scratchify
+nnoremap <Leader>ss :Scratch<CR>
+" New horizontal scratch window
+command! SScratch new +Scratchify
+nnoremap <Leader>sS :SScratch<CR>
+" New vertical scratch window
+command! TScratch tabnew +Scratchify
+nnoremap <Leader>sT :TScratch<CR>
 
 command! Hsh set hlsearch! hls?
 command! Cul set cursorline! cul?
 command! Erc :edit $MYVIMRC
+command! Ecd :lcd ~/.vim/ | :Lexplore
 
 " Sudo write
 command! Sudo w !sudo tee "%" > /dev/null
@@ -477,15 +628,6 @@ command! Wc call Wordcount(expand("%"))
 
 " Autocmds {{{
 
-augroup vimrc_help
-    autocmd!
-    autocmd BufEnter *.txt
-                \ if &buftype == 'help' |
-                \   wincmd L |
-                \   setlocal scrolloff=999 |
-                \ endif
-augroup END
-
 augroup startup_screen
     autocmd!
     " Return to previous edit position
@@ -503,6 +645,25 @@ augroup startup_screen
                 \ endif
 augroup END
 
+augroup center_cursor_line
+    autocmd!
+    autocmd BufEnter *
+                \ if &buftype == 'help' |
+                \   wincmd L |
+                \   set scrolloff=999 |
+                \ endif
+    autocmd BufLeave *
+                \ if &buftype == 'help' |
+                \   set scrolloff=10 |
+                \ endif
+augroup END
+
+augroup active_win_cursorline
+    autocmd!
+    autocmd InsertLeave,WinEnter * set cursorline
+    autocmd InsertEnter,WinLeave * set nocursorline
+augroup END
+
 augroup setup_folds
     " Define folds as indent, then allow manual folds as well
     autocmd!
@@ -513,21 +674,14 @@ augroup setup_folds
                 \ endif
 augroup END
 
-augroup setup_pairs
-    autocmd!
-    autocmd FileType html5\?,xml set matchpairs+=<:>
-    autocmd FileType python,bash,zsh,html,xml set matchpairs+=\":\"
-    autocmd FileType python,bash,zsh,html,xml set matchpairs+=\':\'
-augroup END
-
-augroup templates
-    autocmd!
-    autocmd BufNewFile if &filetype == 'sh'    | 0r ~/.vim/skel/skel.sh    | endif
-    autocmd BufNewFile if &filetype == 'bash'  | 0r ~/.vim/skel/skel.bash  | endif
-    autocmd BufNewFile if &filetype == 'zsh'   | 0r ~/.vim/skel/skel.zsh   | endif
-    autocmd BufNewFile if &filetype == 'cmake' | 0r ~/.vim/skel/skel.cmake | endif
-    autocmd BufNewFile if &filetype == 'html'  | 0r ~/.vim/skel/skel.html  | endif
-augroup END
+" augroup templates
+"     autocmd!
+"     autocmd BufNewFile if &filetype == 'sh'    | 0r expand("<sfile>:h").'/skel/skel.sh'    | endif
+"     autocmd BufNewFile if &filetype == 'bash'  | 0r <sfile>:h/skel/skel.bash  | endif
+"     autocmd BufNewFile if &filetype == 'zsh'   | 0r <sfile>:h/skel/skel.zsh   | endif
+"     autocmd BufNewFile if &filetype == 'cmake' | 0r <sfile>:h/skel/skel.cmake | endif
+"     autocmd BufNewFile if &filetype == 'html'  | 0r <sfile>:h/skel/skel.html  | endif
+" augroup END
 
 " }}}
 

@@ -83,11 +83,11 @@
     # Mypy plugins
     command: >
       curl
-      --silent --show-error --location --create-dirs
-      --parallel --tcp-fastopen --retry 5 --retry-max-time 10 --retry-delay 0
+      --silent --location --create-dirs
+      # --show-error --parallel --tcp-fastopen
       --output-dir "$HOME/.config/mypy" --remote-name
       --write-out "Downloaded %{filename_effective} -- (%{size_download} Bytes)\n"
-      --url "https://raw.githubusercontent.com/python/mypy/master/mypy/plugins/{functools,enums,dataclasses}.py"
+      --url="https://raw.githubusercontent.com/python/mypy/master/mypy/plugins/{functools,enums,dataclasses}.py"
     description: Downloading plugins for MyPy Python linter...
     quiet: true
     stdout: true

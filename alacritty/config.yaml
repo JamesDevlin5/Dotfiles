@@ -131,7 +131,7 @@ font:
   # The normal (roman) font face to use.
   normal:
     family: "VictorMono Nerd Font"
-    style: "Regular"
+    style: "Light"
 
   # The bold font face
   bold:
@@ -140,17 +140,17 @@ font:
 
   # The italic font face
   italic:
-    family: "Hack Nerd Font"
-    style: "Regular Italic"
+    family: "VictorMono Nerd Font"
+    style: "Italic"
 
   # The bold and itablic font face
   bold_italic:
     family: "Hack Nerd Font"
-    style: "Bold Italic"
+    style: "Italic"
 
 
   # Point size of the font
-  size: 13
+  size: 14
 
   # Offset is the extra space around each character. offset.y can be thought of
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
@@ -232,7 +232,7 @@ cursor:
     #   - ▇ Block
     #   - _ Underline
     #   - | Beam
-    shape: Block
+    shape: Beam
 
     # Cursor blinking state
     #
@@ -249,10 +249,10 @@ cursor:
   # the style of the active value of the normal cursor.
   #
   # See `cursor.style` for available options.
-  vi_mode_style: Beam
+  vi_mode_style: Block
 
   # Cursor blinking interval in milliseconds.
-  blink_interval: 900
+  blink_interval: 700
 
   # If this is `true`, the cursor will be rendered as a hollow box when the
   # window is not focused.
