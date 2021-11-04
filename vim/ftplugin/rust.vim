@@ -6,6 +6,6 @@ let &formatprg='rustfmt'
 
 augroup rust_fmt_on_save
     autocmd!
-    autocmd BufWritePost *.rs Rfmt
+    autocmd BufWritePost <silent> *.rs Rfmt
 augroup END
 

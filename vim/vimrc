@@ -15,41 +15,40 @@ set scrolloff=10 sidescrolloff=6 textwidth=89
 set linebreak breakindent
 let &showbreak=' ﬌ '
 set display=lastline,uhex
-set cmdheight=3
-set redrawtime=600
 set number
 set hlsearch
-set laststatus=2
-set shortmess=inwaxoI
 set hidden
-set switchbuf=useopen,split
-set splitbelow splitright
-set mouse=nvi mousefocus mousemodel=popup_setpos
-set noshowmode showcmd
 set confirm
+set autoread
+set wildmenu
+set cmdheight=3 laststatus=2
+set splitbelow splitright
+set switchbuf=useopen,split
+set mouse=nvi mousefocus mousemodel=popup_setpos
+set concealcursor=nv conceallevel=1
+set virtualedit=block
 set backspace=indent,eol,start
+set noshowmode showcmd
 set belloff=all
 set undolevels=9999
 set showmatch matchtime=7
 set nojoinspaces
 set tabstop=4 shiftwidth=4 softtabstop=4 shiftround expandtab
 set autoindent
-set foldlevelstart=2 foldcolumn=3
+set foldlevelstart=2 foldcolumn=3 foldmethod=indent
 set foldopen-=hor
 set diffopt=filler,context:4,vertical
+set redrawtime=600
 set ttimeoutlen=800
+set updatetime=1000
 set modelines=4
-set autoread
-set wildmenu
 set complete-=i complete-=t " Don't scan unnecessary random files => quicker completion suggestions
-set virtualedit=block
-set concealcursor=nv conceallevel=1
 set listchars=tab:\ ▸,eol:¬,trail:·,nbsp:
-set fillchars=vert:│,fold:\.
+set fillchars=vert:\|,fold:\.
 set formatoptions=crq1j
+set shortmess=inwaxoI
 
 " {{{ Creates special directories if they do not exist (backup, swap, undo dirs)
-
 
 " Creates the directory at the path, if it does not exists already
 " function! s:ensureDirExists(dir_path)
@@ -74,11 +73,14 @@ set directory-=\. " Swapfile
 set undofile undodir=~/.vim/undo
 " let &undodir=_undo_dir
 
+" }}}
+
 let mapleader=' '
 let maplocalleader='-'
-
-" }}}
  
+" Shell is Bash
+let g:is_bash = 1
+
 " }}}
 
 " {{{ Neovide
@@ -136,13 +138,18 @@ call plug#begin('~/.vim/plugged')
 Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 Plug 'romainl/apprentice'
 Plug 'blueshirts/darcula'
+Plug 'morhetz/gruvbox'
+Plug 'tek256/simple-dark'
+Plug 'joshdick/onedark.vim'
 " }}}
 
 Plug 'itchyny/lightline.vim'
+Plug 'airblade/vim-gitgutter'
 
 " Local FZF
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+Plug 'jremmen/vim-ripgrep', {'on': 'Rg'}
 
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -158,7 +165,11 @@ endif
 Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 
-Plug 'kien/rainbow_parentheses.vim'
+Plug 'wellle/visual-split.vim'
+Plug 'wellle/targets.vim'
+" Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
+Plug 'luochen1990/rainbow'
 Plug 'jiangmiao/auto-pairs'
 " Plug 'Yggdroot/indentLine'
 Plug 'mbbill/undotree'
@@ -170,8 +181,8 @@ call plug#end()
 " Set colorscheme
 set bg=dark
 try
-    let colors = ['challenger_deep', 'apprentice', 'darcula']
-    let color = colors[1]
+    let colors = ['challenger_deep', 'apprentice', 'darcula', 'gruvbox', 'simple-dark-transparent', 'onedark']
+    let color = colors[5]
     exe 'colorscheme '.color
 catch /E185:/
     " If colorscheme doesn't exist, set to builtin
@@ -181,10 +192,10 @@ endtry
 
 " {{{ Lightline
 let g:lightline = {
-      \ 'colorscheme': 'darcula',
+      \ 'colorscheme': 'deus',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'gitbranch', 'readonly', 'filepath', 'ftypeicon' ], [ 'filename', 'qfinfo' ] ],
-      \   'right': [ [ 'lineinfo' ], [ 'percent', 'scrollbar' ], [ 'filetype' ] ]
+      \   'left': [ [ 'filepath', 'mode', 'paste' ], [ 'readonly', 'ftypeicon', 'filename' ], [ 'gitbranch', 'githunkstats', 'qfinfo' ] ],
+      \   'right': [ [ 'filetype', 'filesize' ], [ 'lineinfo' ], [ 'percent', 'scrollbar' ] ]
       \ },
       \ 'inactive': {
       \   'left': [ [], [ 'filepath', 'readonly', 'ftypeicon' ], [ 'filename' ] ],
@@ -204,7 +215,9 @@ let g:lightline = {
       \   'lineinfo': 'LightlineLineinfo',
       \   'scrollbar': 'LightlineScrollbar',
       \   'qfinfo': 'LightlineQfinfo',
-      \   'ftypeicon': 'LightlineFiletypeicon'
+      \   'ftypeicon': 'LightlineFiletypeicon',
+      \   'filesize': 'LightlineFilesize',
+      \   'githunkstats': 'LightlineGithunkStats'
       \ },
       \ 'mode_map': {
       \   'n' : 'NORMAL',
@@ -222,7 +235,7 @@ let g:lightline = {
       \ }
 
 function! LightlineReadonly()
-    return &readonly && &filetype !=# 'help' ? 'RO' : ''
+    return &readonly && &filetype !=# 'help' ? '[  ] RO' : ''
 endfunction
 
 function! LightlineFilename()
@@ -245,10 +258,10 @@ endfunction
 
 function! LightlineFiletypeicon()
     let icon_map = { 'python': '  ', 'rust': '  ', 'c': ' ﭰ ', 'cpp': ' ﭱ ', 'vim': '  ',
-                \   'javascript': '  ', 'html': '  ', 'xml': '  ', 'go': '  ', 'java': '  ',
+                \   'javascript': '  ', 'html': '  ', 'xml': '  ', 'go': '  ', 'java': '  ',
                 \   'text': '  ', 'terminal': '  ', 'shell': '  ', 'bash': '  ', 'zsh': '  ',
-                \   'undotree': '  ', 'qf': ' ﭟ ', 'scratch': '  ', 'netrw': '  ', 'todo': '  ',
-                \   'gitcommit': '  ' }
+                \   'undotree': '  ', 'qf': '  ', 'scratch': '  ', 'netrw': '  ', 'todo': '  ',
+                \   'gitcommit': '  ', 'markdown': '  ' }
     return get(icon_map, &filetype, '')
 endfunction
 
@@ -258,17 +271,26 @@ endfunction
 
 function! LightlineLineinfo()
     if &filetype == 'undotree' || &filetype == 'qf' | return '' | endif
-    return "ln " . line('.') . ", ch " . col('.')
+    return "col ".col('.')." ~ line ".line('.')
 endfunction
 
 function! LightlineQfinfo()
     if &filetype == 'qf'
-        return "Entry ".line('.')
+        return "Entry:  ".line('.')
     else
         return ''
     endif
 endfunction
 
+function! LightlineFilesize()
+    return line('$').' Lines'
+endfunction
+
+function! LightlineGithunkStats()
+    let [a,m,r] = GitGutterGetHunkSummary()
+    if a == 0 && m == 0 && r == 0 | return '' | endif
+    return printf('+%d ~%d -%d', a, m, r)
+endfunction
 
 function! LightlineScrollbar()
     let width = 16
@@ -297,18 +319,52 @@ endfunc
 
 let g:rustfmt_autosave = 1
 
-" Highlight Group
+" {{{ Git Gutter
+set foldtext=gitgutter#fold#foldtext()
+
+let g:gitgutter_set_sign_backgrounds = 1
+let g:gitgutter_enabled = 1
+let g:gitgutter_signs = 1
+let g:gitgutter_highlight_lines = 0
+
+let g:gitgutter_diff_args = '-w'
+let g:gitgutter_grep = 'rg'
+
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_modified = '~'
+let g:gitgutter_sign_removed = '-'
+let g:gitgutter_sign_removed_first_line = '^'
+let g:gitgutter_sign_removed_above_and_below = '{'
+let g:gitgutter_sign_modified_removed = '*'
+
+function! GitGutterNextHunkCycle()
+    let line = line('.')
+    silent! GitGutterNextHunk
+    if line('.') == line
+        1
+        GitGutterNextHunk
+    endif
+endfunction
+
+" }}}
+
+" {{{ Indent Line
 " let g:indentLine_defaultGroup = 'CursorLineNr'
+" let g:indentLine_enabled = 0
 " let g:indentLine_color_term = 49
 " let g:indentLine_showFirstIndentLevel = 1
 " let g:indentLine_setConceal = 0
+" let g:indentLine_char = '┊'
 " let g:indentLine_char_list = ['|', '¦', '┆', '┊']
 " Enabled for filetypes:
 " let g:indentLine_fileType = ['rust', 'python', 'vim', 'java', 'c', 'cpp']
 " let g:indentLine_fileExclude = ['text', 'sh', 'bash', 'zsh', 'markdown', 'html', 'undotree', 'qf', 'netrw', 'man', 'help']
 " let g:indentLine_bufTypeExclude = ['help', 'terminal']
+" let g:vim_json_syntax_conceal = 0
+" "}}}
 
-" FZF
+" {{{ FZF
+
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 let g:fzf_layout = { 'down': '45%' }
 " Show a preview
@@ -316,7 +372,7 @@ let g:fzf_preview_window = ['right:75%', 'ctrl-/']
 
 command! Colorfzf call fzf#run(fzf#wrap({
             \   'source': map(split(globpath(&rtp, 'colors/*.vim')),
-            \   'fnamemodify(v:val, ":t:r")'),
+            \     'fnamemodify(v:val, ":t:r")'),
             \   'sink': 'colo'
             \ }))
 
@@ -330,15 +386,17 @@ command! -bang -complete=dir -nargs=? Ls
 command! -bang -nargs=? -complete=dir Fls
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
 
-" Use grep, not rg
-" command! -bang -nargs=* GGrep
-"             \ call fzf#vim#grep(
-"             \   'git grep --line-number -- '.shellescape(<q-args>), 0,
-"             \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
-
 nnoremap <silent> <Leader>F :Files!<CR>
-nnoremap <silent> <Leader>b :ls<CR>
 nnoremap <silent> <Leader>B :Buffers<CR>
+" }}}
+
+let g:rg_highlight = 0
+let g:rg_derive_root = 0
+let g:rg_root_types = ['.git', 'src']
+
+" Enable rainbow parens
+let g:rainbow_active = 1
+let g:rainbow_conf = { 'ctermfgs': [ 'LightBlue', 'Red', 'Green', 'White', 'Yellow' ] }
 
 " Don't save .netrwhist files
 let g:netrw_dirhistmax = 0
@@ -362,6 +420,8 @@ nnoremap <C-s> :update<CR>
 inoremap <C-s> <C-o>:update<CR>
 nnoremap <silent> <C-q> :try \| tabclose \| catch \| qa \| endtry<CR>
 inoremap jf <Esc>
+inoremap jjj <Esc>
+nnoremap <silent> <Leader>b :ls<CR>
 nnoremap <Leader>e :Lexplore 35<CR>
 nnoremap <LocalLeader>h :Hsh<CR>
 nnoremap Q @q
@@ -374,26 +434,30 @@ inoreabbr adn and
 cnoreabbr W write!
 cnoreabbr Q quit!
 
+inoremap <C-r> <Nop>
+" Insert (vim) command line output directly into buffer
+inoremap <C-r><C-r> <C-r>=
+
 cnoremap <expr> <c-n> wildmenumode() ? "\<c-n>" : "\<down>"
 cnoremap <expr> <c-p> wildmenumode() ? "\<c-p>" : "\<up>"
 
-nnoremap 0 ^
 nnoremap j gj
 nnoremap k gk
+
 nnoremap H ^
 vnoremap H ^
 nnoremap L $
 vnoremap L $
 " Redo
 nnoremap U <C-r>
-"nnoremap ; :
-"nnoremap : ;
 inoremap <C-l> <C-o>l
 inoremap <C-h> <C-o>h
 
 " Paste, then fix indentation
 nnoremap p p==`]
 nnoremap P P==`[
+nnoremap \p p
+nnoremap \P P
 
 " Edit Macro
 nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
@@ -466,12 +530,15 @@ nnoremap [b :bprev<cr>
 nnoremap ]t :tabn<cr>
 nnoremap [t :tabp<cr>
 nnoremap <C-t> :tabnew<cr>
+" Hunks
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+
 " }}}
 
 " Circular window navigation
 nnoremap <Tab>   <C-w>w
 nnoremap <S-Tab> <C-w>W
-nnoremap <C-n>   :new<CR>
 
 " Split window, switch focus
 nnoremap <Leader>V <C-w>v<C-w>l
@@ -514,12 +581,28 @@ nnoremap <Leader>u :UndotreeToggle<CR>
 vmap <Enter> <Plug>(EasyAlign)
 nmap ga      <Plug>(EasyAlign)
 
-nnoremap <silent> <Leader>g :Git<CR>
+nnoremap <silent> <Leader>gg :Git<CR>
 
-" Surround
-nnoremap s ys
+nmap ghs <Plug>(GitGutterStageHunk)
+nmap ghu <Plug>(GitGutterUndoHunk)
+nmap ghp <Plug>(GitGutterPreviewHunk)
+nnoremap gqf :GitGutterQuickFix<CR>:copen<CR>
 
-nnoremap <Leader>GG :Goyo<CR>
+nnoremap <Leader>GG :Goyo<CR>zz
+
+
+" {{{ Visual Split Resizing
+xmap <C-W>gr  <Plug>(Visual-Split-VSResize)
+xmap <C-W>gss <Plug>(Visual-Split-VSSplit)
+xmap <C-W>gsa <Plug>(Visual-Split-VSSplitAbove)
+xmap <C-W>gsb <Plug>(Visual-Split-VSSplitBelow)
+
+nmap <C-W>gr  <Plug>(Visual-Split-Resize)
+nmap <C-W>gss <Plug>(Visual-Split-Split)
+nmap <C-W>gsa <Plug>(Visual-Split-SplitAbove)
+nmap <C-W>gsb <Plug>(Visual-Split-SplitBelow)
+" }}}
+
 
 " }}}
 
@@ -527,8 +610,8 @@ nnoremap <Leader>GG :Goyo<CR>
 
 " Funcs and Commands {{{
 
-" :Root | Change directory to the root of the Git repository
-function! s:root()
+" :Groot | Change directory to the root of the Git repository
+function! s:gitRoot()
     let root = systemlist('git rev-parse --show-toplevel')[0]
     if v:shell_error
         echoe 'Not in git repo'
@@ -540,8 +623,8 @@ function! s:root()
         echohl None
     endif
 endfunction
-command! Root call s:root()
 
+command! Groot call s:gitRoot()
 command! Home cd ~
 
 " Todo
@@ -664,23 +747,13 @@ augroup active_win_cursorline
     autocmd InsertEnter,WinLeave * set nocursorline
 augroup END
 
-augroup setup_folds
-    " Define folds as indent, then allow manual folds as well
-    autocmd!
-    autocmd BufReadPre * setlocal foldmethod=indent
-    autocmd BufWinEnter *
-                \ if &fdm == 'indent' |
-                \   setlocal foldmethod=manual |
-                \ endif
-augroup END
-
 " augroup templates
 "     autocmd!
-"     autocmd BufNewFile if &filetype == 'sh'    | 0r expand("<sfile>:h").'/skel/skel.sh'    | endif
-"     autocmd BufNewFile if &filetype == 'bash'  | 0r <sfile>:h/skel/skel.bash  | endif
-"     autocmd BufNewFile if &filetype == 'zsh'   | 0r <sfile>:h/skel/skel.zsh   | endif
-"     autocmd BufNewFile if &filetype == 'cmake' | 0r <sfile>:h/skel/skel.cmake | endif
-"     autocmd BufNewFile if &filetype == 'html'  | 0r <sfile>:h/skel/skel.html  | endif
+"     autocmd BufNewFile if &filetype == 'sh'    | exe '0r '.expand("<sfile>:h").'/skel/skel.sh'    | endif
+"     autocmd BufNewFile if &filetype == 'bash'  | exe '0r '.expand("<sfile>:h").'/skel/skel.bash' | endif
+"     autocmd BufNewFile if &filetype == 'zsh'   | exe '0r '.expand("<sfile>:h").'/skel/skel.zsh' | endif
+"     autocmd BufNewFile if &filetype == 'cmake' | exe '0r '.expand("<sfile>:h").'/skel/skel.cmake' | endif
+"     autocmd BufNewFile if &filetype == 'html'  | exe '0r '.expand("<sfile>:h").'/skel/skel.html' | endif
 " augroup END
 
 " }}}

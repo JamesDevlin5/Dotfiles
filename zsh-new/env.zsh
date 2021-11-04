@@ -171,7 +171,7 @@ typeset -x RUSTC_WRAPPER=$(whence sccache)
 # FZF {{{
 
 #export FZF_DEFAULT_OPTS="--reverse --ansi --color=fg:15,hl:3,hl+:3,bg+:-1,fg+:-1,pointer:06,spinner:05,info:7,prompt:6"
-export FZF_DEFAULT_COMMAND='fd --follow --type file --color=always'
+export FZF_DEFAULT_COMMAND='fd --follow --type file'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # export FZF_CTRL_T_COMMAND="rg --files"
 export FZF_DEFAULT_OPTS="--height=50% --info=inline -m --border --margin=2 --padding=2"

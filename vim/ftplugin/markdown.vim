@@ -6,7 +6,7 @@ function! Pandoc()
     call delete(fname)
 endfunction
 
-function! MdFold(line)
+function! s:mdFold(line)
     " Start-of-line (Whitespace) `#`*
     let hashes = substitute(a:line, '^\s*\(#\+\)\?.*', '\1', '')
     let l:num = strlen(hashes)
@@ -19,12 +19,11 @@ function! MdFold(line)
 endfunction
 
 set spell
-set foldmethod=expr
-set foldexpr=MdFold(v:line)
+setlocal foldmethod=expr
+setlocal foldexpr=s:mdFold(v:line)
 
 set matchpairs+=`:`,*:*,_:_,~:~,<:>
 
-nnoremap <Leader>v :Goyo<CR>
 nnoremap <Leader>p :call Pandoc()<CR>
 
 " Populates location list with header tags
