@@ -79,17 +79,17 @@
     command: sheldon lock --update
     description: Updating Sheldon Plugins...
     stderr: true
-  -
-    # Mypy plugins
-    command: >
-      curl
-      --silent --location --create-dirs
-      # --show-error --parallel --tcp-fastopen
-      --output-dir "$HOME/.config/mypy" --remote-name
-      --write-out "Downloaded %{filename_effective} -- (%{size_download} Bytes)\n"
-      --url="https://raw.githubusercontent.com/python/mypy/master/mypy/plugins/{functools,enums,dataclasses}.py"
-    description: Downloading plugins for MyPy Python linter...
-    quiet: true
-    stdout: true
-    stderr: true
+  # -
+  #   # Mypy plugins
+  #   command: >
+  #     curl
+  #     --silent --location --create-dirs
+  #     # --show-error --parallel --tcp-fastopen
+  #     --output-dir "$HOME/.config/mypy" --remote-name
+  #     --write-out "Downloaded %{filename_effective} -- (%{size_download} Bytes)\n"
+  #     --url="https://raw.githubusercontent.com/python/mypy/master/mypy/plugins/{functools,enums,dataclasses}.py"
+  #   description: Downloading plugins for MyPy Python linter...
+  #   quiet: true
+  #   stdout: true
+  #   stderr: true
 

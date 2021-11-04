@@ -44,9 +44,9 @@ apply = ["fpath", "autoload"]
 github = "hlissner/zsh-autopair"
 apply = ["defer"]
 
-[plugins.fast-syntax-highlighting]
-github = "zdharma/fast-syntax-highlighting"
-apply = ["defer"]
+# [plugins.fast-syntax-highlighting]
+# github = "zdharma/fast-syntax-highlighting"
+# apply = ["defer"]
 
 [plugins.starship]
 inline = 'eval $(starship init zsh)'
@@ -59,6 +59,6 @@ apply = ["defer"]
 github = "MichaelAquilina/zsh-you-should-use"
 apply = ["defer"]
 
-[plugins.zoxide]
-inline = 'zsh-defer -c "$(zoxide init zsh --cmd j)"'
+# [plugins.zoxide]
+# inline = 'zsh-defer -c "$(zoxide init zsh --cmd j)"'
 

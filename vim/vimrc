@@ -81,6 +81,8 @@ let maplocalleader='-'
 " Shell is Bash
 let g:is_bash = 1
 
+let g:skel_dir='~/.vim/skel'
+
 " }}}
 
 " {{{ Neovide
@@ -94,9 +96,21 @@ if has("neovide")
     let g:neovide_cursor_vfx_particle_lifetime=1
 else
     " {{{ Cursor switches size depending on mode
-    let &t_SI = "\<Esc>]50;CursorShape=1\x7"
-    let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-    let &t_SR = "\<Esc>]50;CursorShape=2\x7"
+    let &t_SI = "\e[6 q"
+    let &t_EI = "\e[2 q"
+    let &t_SR = "\e[4 q"
+    " Ps = 0  -> blinking block.
+    " Ps = 1  -> blinking block (default).
+    " Ps = 2  -> steady block.
+    " Ps = 3  -> blinking underline.
+    " Ps = 4  -> steady underline.
+    " Ps = 5  -> blinking bar (xterm).
+    " Ps = 6  -> steady bar (xterm).
+    " reset the cursor on start (for older versions of vim, usually not required)
+    " augroup cursorResetOnStart
+    "     autocmd!
+    "     autocmd VimEnter * silent !echo -ne "\e[2 q"
+    " augroup END
     " }}}
 endif
 " }}}
@@ -144,11 +158,12 @@ Plug 'joshdick/onedark.vim'
 " }}}
 
 Plug 'itchyny/lightline.vim'
+
 Plug 'airblade/vim-gitgutter'
+Plug 'kshenoy/vim-signature'
 
 " Local FZF
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim'
 Plug 'jremmen/vim-ripgrep', {'on': 'Rg'}
 
 Plug 'tpope/vim-fugitive'
@@ -168,6 +183,9 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'wellle/visual-split.vim'
 Plug 'wellle/targets.vim'
 " Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+Plug 'haya14busa/incsearch.vim'
+
+Plug 'fholgado/minibufexpl.vim'
 
 Plug 'luochen1990/rainbow'
 Plug 'jiangmiao/auto-pairs'
@@ -195,7 +213,7 @@ let g:lightline = {
       \ 'colorscheme': 'deus',
       \ 'active': {
       \   'left': [ [ 'filepath', 'mode', 'paste' ], [ 'readonly', 'ftypeicon', 'filename' ], [ 'gitbranch', 'githunkstats', 'qfinfo' ] ],
-      \   'right': [ [ 'filetype', 'filesize' ], [ 'lineinfo' ], [ 'percent', 'scrollbar' ] ]
+      \   'right': [ [ 'filetype', 'filesize' ], [ 'spell', 'lineinfo' ], [ 'percent', 'scrollbar' ] ]
       \ },
       \ 'inactive': {
       \   'left': [ [], [ 'filepath', 'readonly', 'ftypeicon' ], [ 'filename' ] ],
@@ -212,6 +230,7 @@ let g:lightline = {
       \   'filepath': 'LightlineFilepath',
       \   'gitbranch': 'LightlineFugHead',
       \   'readonly': 'LightlineReadonly',
+      \   'spell': 'LightlineSpell',
       \   'lineinfo': 'LightlineLineinfo',
       \   'scrollbar': 'LightlineScrollbar',
       \   'qfinfo': 'LightlineQfinfo',
@@ -238,27 +257,37 @@ function! LightlineReadonly()
     return &readonly && &filetype !=# 'help' ? '[  ] RO' : ''
 endfunction
 
+function! LightlineSpell()
+    return &spell ? &spelllang.'  ' : ''
+endfunction
+
+function! LightlineFugHead()
+    if empty(FugitiveGitDir()) | return '' | endif
+    let branch_name = substitute(FugitiveStatusline(), '^\[Git(\(.*\))]$', '\1', '')
+    return branch_name.'  '
+endfunction
+
 function! LightlineFilename()
     let _fname = expand('%:p:~:t')
     if _fname ==# ''
         " If filename is empty
         if &ft == 'qf'
-            return ' < QF > '
+            return '{ QF }'
         elseif &ft == 'netrw'
             return ''
         else
             return ' [No Name] '
         endif
     else
-        let filename = '( '._fname.' ) '
-        let modified = &modified ? '**' : ''
-        return filename.modified
+        let filename = _fname
+        let modified = &modified ? '  ' : '  '
+        return '['.modified.' '.filename.' '.modified.']'
     endif
 endfunction
 
 function! LightlineFiletypeicon()
     let icon_map = { 'python': '  ', 'rust': '  ', 'c': ' ﭰ ', 'cpp': ' ﭱ ', 'vim': '  ',
-                \   'javascript': '  ', 'html': '  ', 'xml': '  ', 'go': '  ', 'java': '  ',
+                \   'javascript': '  ', 'html': '  ', 'xml': '  ', 'go': '  ', 'java': '  ',
                 \   'text': '  ', 'terminal': '  ', 'shell': '  ', 'bash': '  ', 'zsh': '  ',
                 \   'undotree': '  ', 'qf': '  ', 'scratch': '  ', 'netrw': '  ', 'todo': '  ',
                 \   'gitcommit': '  ', 'markdown': '  ' }
@@ -266,12 +295,15 @@ function! LightlineFiletypeicon()
 endfunction
 
 function! LightlineFilepath()
-    return expand('%:p:~:h') . '/'
+    let fpath = expand('%:p:~:h')
+    return fpath
 endfunction
 
 function! LightlineLineinfo()
     if &filetype == 'undotree' || &filetype == 'qf' | return '' | endif
-    return "col ".col('.')." ~ line ".line('.')
+    return "ln ".line('.')
+    " return '%3l:%-2c'
+    " return "col ".col('.')." ~ line ".line('.')
 endfunction
 
 function! LightlineQfinfo()
@@ -289,7 +321,8 @@ endfunction
 function! LightlineGithunkStats()
     let [a,m,r] = GitGutterGetHunkSummary()
     if a == 0 && m == 0 && r == 0 | return '' | endif
-    return printf('+%d ~%d -%d', a, m, r)
+    return printf('{ +%02d : ~%02d : -%02d }', a, m, r)
+    " return printf('+%d, ~%d, -%d', a, m, r)
 endfunction
 
 function! LightlineScrollbar()
@@ -305,7 +338,7 @@ endfunction
 let g:undotree_WindowLayout       = 2
 let g:undotree_SetFocusWhenToggle = 1
 let g:undotree_ShortIndicators    = 0
-let g:undotree_TreeNodeShape      = ''
+let g:undotree_TreeNodeShape      = '-'
 let g:undotree_TreeVertShape      = ''
 
 function! g:Undotree_CustomMap()
@@ -363,6 +396,43 @@ endfunction
 " let g:vim_json_syntax_conceal = 0
 " "}}}
 
+" {{{ Inc Search
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+let g:incsearch#consistent_n_direction = 1
+let g:incsearch#do_not_save_error_message_history = 1
+let g:incsearch#separate_highlight = 1
+let g:incsearch#no_inc_hlsearch = 0
+
+" Turn off 'hlsearch' after cursor move
+let g:incsearch#auto_nohlsearch = 1
+map n  <Plug>(incsearch-nohl-n)
+map N  <Plug>(incsearch-nohl-N)
+map *  <Plug>(incsearch-nohl-*)
+map #  <Plug>(incsearch-nohl-#)
+map g* <Plug>(incsearch-nohl-g*)
+map g# <Plug>(incsearch-nohl-g#)
+
+" Search previous pattern
+noremap <expr> <Leader>/ incsearch#go({'pattern': histget('/', -1)})
+
+augroup incsearch-keymap
+    autocmd!
+    autocmd VimEnter * call s:incsearch_keymap()
+augroup END
+
+function! s:incsearch_keymap()
+    IncSearchNoreMap <C-j>   <Over>(incsearch-next)
+    IncSearchNoreMap <C-k>   <Over>(incsearch-prev)
+    IncSearchNoreMap <C-n>   <Over>(incsearch-scroll-f)
+    IncSearchNoreMap <C-p>   <Over>(incsearch-scroll-b)
+    IncSearchNoreMap <Tab>   <Over>(buffer-complete)        
+    IncSearchNoreMap <S-Tab> <Over>(buffer-complete-prev)
+endfunction
+
+" }}}
+
 " {{{ FZF
 
 let g:fzf_history_dir = '~/.local/share/fzf-history'
@@ -391,7 +461,7 @@ nnoremap <silent> <Leader>B :Buffers<CR>
 " }}}
 
 let g:rg_highlight = 0
-let g:rg_derive_root = 0
+let g:rg_derive_root = 1
 let g:rg_root_types = ['.git', 'src']
 
 " Enable rainbow parens
@@ -419,7 +489,7 @@ nnoremap <Leader>w :write<CR>
 nnoremap <C-s> :update<CR>
 inoremap <C-s> <C-o>:update<CR>
 nnoremap <silent> <C-q> :try \| tabclose \| catch \| qa \| endtry<CR>
-inoremap jf <Esc>
+inoremap jk <Esc>
 inoremap jjj <Esc>
 nnoremap <silent> <Leader>b :ls<CR>
 nnoremap <Leader>e :Lexplore 35<CR>
@@ -488,13 +558,13 @@ nnoremap <C-b> <C-b>zz
 nnoremap <C-u> <C-u>zz
 
 " {{{ `n` always searches forward, `N` always goes back
-nnoremap <expr> n  'Nn'[v:searchforward]
-xnoremap <expr> n  'Nn'[v:searchforward]
-onoremap <expr> n  'Nn'[v:searchforward]
+" nnoremap <expr> n  'Nn'[v:searchforward]
+" xnoremap <expr> n  'Nn'[v:searchforward]
+" onoremap <expr> n  'Nn'[v:searchforward]
 
-nnoremap <expr> N  'nN'[v:searchforward]
-xnoremap <expr> N  'nN'[v:searchforward]
-onoremap <expr> N  'nN'[v:searchforward]
+" nnoremap <expr> N  'nN'[v:searchforward]
+" xnoremap <expr> N  'nN'[v:searchforward]
+" onoremap <expr> N  'nN'[v:searchforward]
 " }}}
 
 " Move Lines
@@ -565,14 +635,14 @@ nnoremap C c$
 nnoremap Y y$
 
 " Completion menu navigation
-inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>"
-inoremap <expr> <Down> pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <expr> <Up> pumvisible() ? "\<C-p>" : "\<Up>"
-inoremap <expr> <C-d> pumvisible() ? "\<PageDown>\<C-p>\<C-n>" : "\<C-d>"
-inoremap <expr> <C-u> pumvisible() ? "\<PageUp>\<C-p>\<C-n>" : "\<C-u>"
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+inoremap <expr> <Esc>   pumvisible() ? "\<C-e>":                  "\<Esc>"
+inoremap <expr> <CR>    pumvisible() ? "\<C-y>":                  "\<CR>"
+inoremap <expr> <Down>  pumvisible() ? "\<C-n>":                  "\<Down>"
+inoremap <expr> <Up>    pumvisible() ? "\<C-p>":                  "\<Up>"
+inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>": "\<C-d>"
+inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>":   "\<C-u>"
+inoremap <expr> <Tab>   pumvisible() ? "\<C-n>":                  "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>":                  "\<S-Tab>"
 
 " Plugin Keys {{{
 
@@ -589,6 +659,19 @@ nmap ghp <Plug>(GitGutterPreviewHunk)
 nnoremap gqf :GitGutterQuickFix<CR>:copen<CR>
 
 nnoremap <Leader>GG :Goyo<CR>zz
+
+" {{{ Mini-Buf-Explorer
+map <Leader>mbe :MBEOpen<CR>
+map <Leader>mbc :MBEClose<CR>
+map <Leader>mbt :MBEToggle<CR>
+
+let g:miniBufExplSplitToEdge = 0
+let g:miniBufExplMinSize = 2
+" let g:miniBufExplAutoStart = 0
+let g:miniBufExplBuffersNeeded = 3
+let g:miniBufExplHideWhenDiff = 0
+let g:miniBufExplStatusLineText='%#Normal#'
+" }}}
 
 
 " {{{ Visual Split Resizing
@@ -654,10 +737,10 @@ command! Ex if !empty(expand('%'))
             \|   call system('chmod +x '.expand('%'))
             \|   silent e
             \| else
-                \|   echohl WarningMsg
-                \|   echo 'Save the file first'
-                \|   echohl None
-                \| endif
+            \|   echohl WarningMsg
+            \|   echo 'Save the file first'
+            \|   echohl None
+            \| endif
 
 " Creates a scratch buffer from some existing buf
 command! Scratchify setlocal nobuflisted buftype=nofile bufhidden=delete noswapfile
@@ -737,6 +820,7 @@ augroup center_cursor_line
                 \ endif
     autocmd BufLeave *
                 \ if &buftype == 'help' |
+                \ if &scrolloff > 10 |
                 \   set scrolloff=10 |
                 \ endif
 augroup END
@@ -747,14 +831,14 @@ augroup active_win_cursorline
     autocmd InsertEnter,WinLeave * set nocursorline
 augroup END
 
-" augroup templates
-"     autocmd!
-"     autocmd BufNewFile if &filetype == 'sh'    | exe '0r '.expand("<sfile>:h").'/skel/skel.sh'    | endif
-"     autocmd BufNewFile if &filetype == 'bash'  | exe '0r '.expand("<sfile>:h").'/skel/skel.bash' | endif
-"     autocmd BufNewFile if &filetype == 'zsh'   | exe '0r '.expand("<sfile>:h").'/skel/skel.zsh' | endif
-"     autocmd BufNewFile if &filetype == 'cmake' | exe '0r '.expand("<sfile>:h").'/skel/skel.cmake' | endif
-"     autocmd BufNewFile if &filetype == 'html'  | exe '0r '.expand("<sfile>:h").'/skel/skel.html' | endif
-" augroup END
+augroup newfile_templates
+    autocmd!
+    autocmd BufNewFile *.sh    exe '0r '.g:skel_dir.'/skel.sh'
+    autocmd BufNewFile *.bash  exe '0r '.g:skel_dir.'/skel.bash'
+    autocmd BufNewFile *.zsh   exe '0r '.g:skel_dir.'/skel.zsh'
+    autocmd BufNewFile *.cmake exe '0r '.g:skel_dir.'/skel.cmake'
+    autocmd BufNewFile *.html  exe '0r '.g:skel_dir.'/skel.html'
+augroup END
 
 " }}}
 
