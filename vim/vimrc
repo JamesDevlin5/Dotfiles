@@ -16,6 +16,7 @@ set linebreak breakindent
 let &showbreak=' ﬌ '
 set display=lastline,uhex
 set number
+set cursorline
 set hlsearch
 set hidden
 set confirm
@@ -185,6 +186,7 @@ Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 
 Plug 'wellle/visual-split.vim'
 Plug 'wellle/targets.vim'
+Plug 'terryma/vim-expand-region'
 " Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'haya14busa/incsearch.vim'
 
@@ -201,7 +203,7 @@ call plug#end()
 set bg=dark
 try
     let colors = ['challenger_deep', 'apprentice', 'darcula', 'gruvbox', 'simple-dark-transparent', 'onedark']
-    let color = colors[0]
+    let color = colors[1]
     exe 'colorscheme '.color
 catch /E185:/
     " If colorscheme doesn't exist, set to builtin
@@ -320,8 +322,24 @@ endfunction
 
 function! LightlineGithunkStats()
     let [a,m,r] = GitGutterGetHunkSummary()
-    if a == 0 && m == 0 && r == 0 | return '' | endif
-    return printf(' %02d, ﰣ %02d,  %02d', a, m, r)
+    let l:res = []
+    " for [amt, sym] in [[a, '+'], [m, '~'], [r, '-']]
+    "     if amt != 0
+    "         call add(l:res, printf(sym.'%02d', sym))
+    "     endif
+    " endfor
+    " return join(l:res, ', ')
+    if a != 0
+        call add(l:res, printf(' %02d', a))
+    endif
+    if m != 0
+        call add(l:res, printf('ﰣ %02d', m))
+    endif
+    if r != 0
+        call add(l:res, printf(' %02d', r))
+    endif
+    return join(l:res, ', ')
+    " return printf(' %02d, ﰣ %02d,  %02d', a, m, r)
     " return printf('+%d, ~%d, -%d', a, m, r)
 endfunction
 
@@ -330,7 +348,7 @@ function! LightlineScrollbar()
     let percent = (line('.') - 1.0) / (max([line('$'), 2]) - 1.0)
     let before = float2nr(round(percent * (width - 4)))
     let after = width - 4 - before
-    return repeat(' ', before).'ﰊ '.repeat(' ', after)
+    return repeat(' ', before).'ﰊ '.repeat('·', after)
 endfunction
 " }}}
 
@@ -494,9 +512,6 @@ nnoremap <LocalLeader> <Nop>
 nnoremap [# <Nop>
 nnoremap ]# <Nop>
 
-inoremap OD <Left>
-inoremap OC <Right>
-
 " Prev split
 " nnoremap <Leader><Leader> <C-w><C-p>
 nnoremap <Leader>Q :quit<CR>
@@ -516,6 +531,8 @@ inoreabbr @@ devlin.ja@husky.neu.edu
 inoreabbr JD James Devlin
 
 inoreabbr adn and
+inoreabbr si is
+inoreabbr ni in
 
 cnoreabbr W write!
 cnoreabbr Q quit!
@@ -820,26 +837,47 @@ augroup active_win_cursorline
     autocmd InsertEnter,WinLeave * set nocursorline
 augroup END
 
-" Reads a skeleton file (in the skel directory) with the associated name
-function! ReadSkelFile(ext) abort
-    let l:skelname = 'skel.'.a:ext
-    let l:skelpath = g:skel_dir.'/'.l:skelname
-    exe 'silent 0r '.l:skelpath
-    normal G
-    echohl DiffAdd
-    echom 'Loaded skeleton file:    '.l:skelname
-    echohl None
+" {{{ Skeleton Files
+" Takes a filetype, or extension, and appends the full path to the skeleton file
+" corresponding to this filetype
+function! s:nameSkelFile(ext)
+    return g:skel_dir.'/skel.'.a:ext
+endfunction
+
+" Creates a new skeleton file for the specified filetype
+function! NewSkelFile(ext)
+    let l:skelfile = s:nameSkelFile(a:ext)
+    exe 'new '.l:skelfile
+    let &filetype = a:ext
+endfunction
+
+function! s:maybeReadSkelFile(ext)
+    " If the filetype matches
+    if &ft == a:ext
+        let l:skelname = s:nameSkelFile(a:ext)
+        " If the skeleton file doesn't exist
+        if empty(glob(l:skelname))
+            " no skel file
+            return
+        endif
+        exe 'silent 0r '.l:skelname
+        normal G
+        echohl DiffAdd
+        echom 'Loaded skeleton file:    '.l:skelname
+        echohl None
+    endif
 endfunction
 
 augroup newfile_templates
     autocmd!
-    autocmd BufNewFile * if &ft == 'sh'  | call ReadSkelFile('shell') | endif
-    autocmd BufNewFile * if &ft == 'bash'  | call ReadSkelFile('bash') | endif
-    autocmd BufNewFile * if &ft == 'zsh'  | call ReadSkelFile('zsh') | endif
-    autocmd BufNewFile * if &ft == 'cmake'  | call ReadSkelFile('cmake') | endif
-    autocmd BufNewFile * if &ft == 'html'  | call ReadSkelFile('html') | endif
-    autocmd BufNewFile * if &ft == 'python'  | call ReadSkelFile('python') | endif
+    autocmd BufNewFile * call s:maybeReadSkelFile('sh')
+    autocmd BufNewFile * call s:maybeReadSkelFile('bash')
+    autocmd BufNewFile * call s:maybeReadSkelFile('zsh')
+    autocmd BufNewFile * call s:maybeReadSkelFile('cmake')
+    autocmd BufNewFile * call s:maybeReadSkelFile('html')
+    autocmd BufNewFile * call s:maybeReadSkelFile('python')
 augroup END
+" }}}
 
 " }}}
 
