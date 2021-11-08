@@ -174,7 +174,7 @@ typeset -x RUSTC_WRAPPER=$(whence sccache)
 export FZF_DEFAULT_COMMAND='fd --follow --type file'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # export FZF_CTRL_T_COMMAND="rg --files"
-export FZF_DEFAULT_OPTS="--height=50% --info=inline -m --border --margin=2 --padding=2"
+export FZF_DEFAULT_OPTS="--height=50% --info=inline -m --border --margin=2,4 --padding=2 --preview-window 'right:60%' --layout reverse --preview 'bat --color=always --style=header,grid --line-range :100 {}'"
 export FZF_COMPLETION_TRIGGER='--'
 
 # }}}

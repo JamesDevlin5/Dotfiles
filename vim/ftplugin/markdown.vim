@@ -6,22 +6,7 @@ function! Pandoc()
     call delete(fname)
 endfunction
 
-function! s:mdFold(line)
-    " Start-of-line (Whitespace) `#`*
-    let hashes = substitute(a:line, '^\s*\(#\+\)\?.*', '\1', '')
-    let l:num = strlen(hashes)
-    " If no header on line, keep previous foldlevel
-    if l:num == 0
-        return "-1"
-    else
-        return string(l:num)
-    endif
-endfunction
-
 set spell
-setlocal foldmethod=expr
-setlocal foldexpr=s:mdFold(v:line)
-
 set matchpairs+=`:`,*:*,_:_,~:~,<:>
 
 nnoremap <Leader>p :call Pandoc()<CR>
@@ -30,3 +15,7 @@ nnoremap <Leader>p :call Pandoc()<CR>
 command! Headers lvimgrep /^#\+/ % | lopen
 nnoremap <Leader>h :Headers<CR>
 
+nnoremap ]c :.,/^#/<CR>
+nnoremap [c :.,?^#?<CR>
+
+nnoremap <Leader>t :Toc<CR>

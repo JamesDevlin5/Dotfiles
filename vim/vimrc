@@ -20,8 +20,8 @@ set hlsearch
 set hidden
 set confirm
 set autoread
-set wildmenu
-set cmdheight=3 laststatus=2
+set wildmenu wildmode=list:longest,full
+set cmdheight=1 laststatus=2
 set splitbelow splitright
 set switchbuf=useopen,split
 set mouse=nvi mousefocus mousemodel=popup_setpos
@@ -161,6 +161,7 @@ Plug 'itchyny/lightline.vim'
 
 Plug 'airblade/vim-gitgutter'
 Plug 'kshenoy/vim-signature'
+" Plug 'chrisbra/Colorizer', { 'on': 'ColorToggle' } " Requires Vim >= 8.0
 
 " Local FZF
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim'
@@ -170,22 +171,22 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
 " Markdown
-Plug 'tpope/vim-markdown', {'for': 'markdown'}
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
+
+Plug 'cespare/vim-toml', { 'branch': 'main', 'for': 'toml' }
 
 " If nvim, use tree sitter!
 if !has('nvim')
     Plug 'rust-lang/rust.vim', {'for': 'rust'}
 endif
 
-Plug 'junegunn/vim-easy-align'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 
 Plug 'wellle/visual-split.vim'
 Plug 'wellle/targets.vim'
 " Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'haya14busa/incsearch.vim'
-
-Plug 'fholgado/minibufexpl.vim'
 
 Plug 'luochen1990/rainbow'
 Plug 'jiangmiao/auto-pairs'
@@ -200,10 +201,11 @@ call plug#end()
 set bg=dark
 try
     let colors = ['challenger_deep', 'apprentice', 'darcula', 'gruvbox', 'simple-dark-transparent', 'onedark']
-    let color = colors[5]
+    let color = colors[0]
     exe 'colorscheme '.color
 catch /E185:/
     " If colorscheme doesn't exist, set to builtin
+    echom "Couldn't find colorscheme: ".color."!"
     colorscheme pablo
 endtry
 
@@ -212,15 +214,15 @@ endtry
 let g:lightline = {
       \ 'colorscheme': 'deus',
       \ 'active': {
-      \   'left': [ [ 'filepath', 'mode', 'paste' ], [ 'readonly', 'ftypeicon', 'filename' ], [ 'gitbranch', 'githunkstats', 'qfinfo' ] ],
-      \   'right': [ [ 'filetype', 'filesize' ], [ 'spell', 'lineinfo' ], [ 'percent', 'scrollbar' ] ]
+      \   'left': [ [ 'mode', 'paste', 'filepath' ], [ 'readonly', 'filename', 'ftypeicon' ], [ 'gitbranch', 'qfinfo' ] ],
+      \   'right': [ [ 'scrollbar', 'filetype' ], [ 'spell', 'lineinfo' ], [ 'percent', 'githunkstats' ] ]
       \ },
       \ 'inactive': {
       \   'left': [ [], [ 'filepath', 'readonly', 'ftypeicon' ], [ 'filename' ] ],
       \   'right': [ [ 'filetype' ], [ 'scrollbar', 'percent' ] ]
       \ },
-      \ 'separator': { 'left': '', 'right': '' },
-      \ 'subseparator': { 'left': '', 'right': '' },
+      \ 'separator': { 'left': '', 'right': '' },
+      \ 'subseparator': { 'left': '', 'right': '' },
       \ 'tabline': {
       \   'left': [ [ 'tabs' ] ],
       \   'right': [ [ 'close' ] ]
@@ -235,7 +237,6 @@ let g:lightline = {
       \   'scrollbar': 'LightlineScrollbar',
       \   'qfinfo': 'LightlineQfinfo',
       \   'ftypeicon': 'LightlineFiletypeicon',
-      \   'filesize': 'LightlineFilesize',
       \   'githunkstats': 'LightlineGithunkStats'
       \ },
       \ 'mode_map': {
@@ -262,9 +263,11 @@ function! LightlineSpell()
 endfunction
 
 function! LightlineFugHead()
-    if empty(FugitiveGitDir()) | return '' | endif
+    if empty(FugitiveGitDir())
+        return 'Not in Git Dir'
+    endif
     let branch_name = substitute(FugitiveStatusline(), '^\[Git(\(.*\))]$', '\1', '')
-    return branch_name.'  '
+    return branch_name.'   '
 endfunction
 
 function! LightlineFilename()
@@ -280,8 +283,8 @@ function! LightlineFilename()
         endif
     else
         let filename = _fname
-        let modified = &modified ? '  ' : '  '
-        return '['.modified.' '.filename.' '.modified.']'
+        let modified = &modified ? '* ' : '  '
+        return ' '.filename.modified
     endif
 endfunction
 
@@ -290,20 +293,21 @@ function! LightlineFiletypeicon()
                 \   'javascript': '  ', 'html': '  ', 'xml': '  ', 'go': '  ', 'java': '  ',
                 \   'text': '  ', 'terminal': '  ', 'shell': '  ', 'bash': '  ', 'zsh': '  ',
                 \   'undotree': '  ', 'qf': '  ', 'scratch': '  ', 'netrw': '  ', 'todo': '  ',
-                \   'gitcommit': '  ', 'markdown': '  ' }
+                \   'gitcommit': '  ', 'markdown': '  ' }
     return get(icon_map, &filetype, '')
 endfunction
 
 function! LightlineFilepath()
     let fpath = expand('%:p:~:h')
-    return fpath
+    if fpath[0] == '~'
+        let fpath = ' ﮟ ' . fpath[1:]
+    endif
+    return substitute(fpath, '/', '  ', 'g')
 endfunction
 
 function! LightlineLineinfo()
     if &filetype == 'undotree' || &filetype == 'qf' | return '' | endif
-    return "ln ".line('.')
-    " return '%3l:%-2c'
-    " return "col ".col('.')." ~ line ".line('.')
+    return printf("col %3d    line (%3d / %3d)", col('.'), line('.'), line('$'))
 endfunction
 
 function! LightlineQfinfo()
@@ -314,23 +318,19 @@ function! LightlineQfinfo()
     endif
 endfunction
 
-function! LightlineFilesize()
-    return line('$').' Lines'
-endfunction
-
 function! LightlineGithunkStats()
     let [a,m,r] = GitGutterGetHunkSummary()
     if a == 0 && m == 0 && r == 0 | return '' | endif
-    return printf('{ +%02d : ~%02d : -%02d }', a, m, r)
+    return printf(' %02d, ﰣ %02d,  %02d', a, m, r)
     " return printf('+%d, ~%d, -%d', a, m, r)
 endfunction
 
 function! LightlineScrollbar()
-    let width = 16
+    let width = 12
     let percent = (line('.') - 1.0) / (max([line('$'), 2]) - 1.0)
     let before = float2nr(round(percent * (width - 4)))
     let after = width - 4 - before
-    return '['.repeat(' ', before).' '.repeat(' ', after).']'
+    return repeat(' ', before).'ﰊ '.repeat(' ', after)
 endfunction
 " }}}
 
@@ -358,7 +358,7 @@ set foldtext=gitgutter#fold#foldtext()
 let g:gitgutter_set_sign_backgrounds = 1
 let g:gitgutter_enabled = 1
 let g:gitgutter_signs = 1
-let g:gitgutter_highlight_lines = 0
+" let g:gitgutter_highlight_lines = 1
 
 let g:gitgutter_diff_args = '-w'
 let g:gitgutter_grep = 'rg'
@@ -378,6 +378,8 @@ function! GitGutterNextHunkCycle()
         GitGutterNextHunk
     endif
 endfunction
+
+nnoremap ghl :GitGutterLineHighlightsToggle<CR>
 
 " }}}
 
@@ -403,7 +405,7 @@ map g/ <Plug>(incsearch-stay)
 let g:incsearch#consistent_n_direction = 1
 let g:incsearch#do_not_save_error_message_history = 1
 let g:incsearch#separate_highlight = 1
-let g:incsearch#no_inc_hlsearch = 0
+" let g:incsearch#no_inc_hlsearch = 1
 
 " Turn off 'hlsearch' after cursor move
 let g:incsearch#auto_nohlsearch = 1
@@ -420,6 +422,8 @@ noremap <expr> <Leader>/ incsearch#go({'pattern': histget('/', -1)})
 augroup incsearch-keymap
     autocmd!
     autocmd VimEnter * call s:incsearch_keymap()
+    autocmd User IncSearchEnter set hls cul
+    autocmd User IncSearchLeave set nohls nocul
 augroup END
 
 function! s:incsearch_keymap()
@@ -431,6 +435,15 @@ function! s:incsearch_keymap()
     IncSearchNoreMap <S-Tab> <Over>(buffer-complete-prev)
 endfunction
 
+" }}}
+
+" {{{ Markdown
+let g:vim_markdown_toc_autofit = 1
+let g:vim_markdown_emphasis_multiline = 0
+let g:vim_markdown_follow_anchor = 1
+let g:vim_markdown_anchorexpr = "substitute(v:anchor, '-', ' ', 'g')"
+let g:vim_markdown_strikethrough = 1
+let g:vim_markdown_autowrite = 1
 " }}}
 
 " {{{ FZF
@@ -480,6 +493,9 @@ nnoremap <Leader> <Nop>
 nnoremap <LocalLeader> <Nop>
 nnoremap [# <Nop>
 nnoremap ]# <Nop>
+
+inoremap OD <Left>
+inoremap OC <Right>
 
 " Prev split
 " nnoremap <Leader><Leader> <C-w><C-p>
@@ -648,9 +664,6 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>":                  "\<S-Tab>"
 
 nnoremap <Leader>u :UndotreeToggle<CR>
 
-vmap <Enter> <Plug>(EasyAlign)
-nmap ga      <Plug>(EasyAlign)
-
 nnoremap <silent> <Leader>gg :Git<CR>
 
 nmap ghs <Plug>(GitGutterStageHunk)
@@ -660,18 +673,6 @@ nnoremap gqf :GitGutterQuickFix<CR>:copen<CR>
 
 nnoremap <Leader>GG :Goyo<CR>zz
 
-" {{{ Mini-Buf-Explorer
-map <Leader>mbe :MBEOpen<CR>
-map <Leader>mbc :MBEClose<CR>
-map <Leader>mbt :MBEToggle<CR>
-
-let g:miniBufExplSplitToEdge = 0
-let g:miniBufExplMinSize = 2
-" let g:miniBufExplAutoStart = 0
-let g:miniBufExplBuffersNeeded = 3
-let g:miniBufExplHideWhenDiff = 0
-let g:miniBufExplStatusLineText='%#Normal#'
-" }}}
 
 
 " {{{ Visual Split Resizing
@@ -686,6 +687,7 @@ nmap <C-W>gsa <Plug>(Visual-Split-SplitAbove)
 nmap <C-W>gsb <Plug>(Visual-Split-SplitBelow)
 " }}}
 
+" nnoremap <Leader>tc :ColorToggle<CR>
 
 " }}}
 
@@ -700,7 +702,7 @@ function! s:gitRoot()
         echoe 'Not in git repo'
     else
         execute 'lcd' root
-        execute 'Lexplore'
+        execute 'Lexplore 30'
         echohl ModeMsg
         echo 'Changed directory to: '.root
         echohl None
@@ -772,10 +774,11 @@ nnoremap <silent> <Leader>l :lopen<CR>
 
 function! Wordcount(filename)
     " Get the number of lines, words, and chars in a file
-    let counts = split(system('wc -mlw '.a:filename))
-    echo 'lines: '.counts[0]
-    echo 'words: '.counts[1]
-    echo 'chars: '.counts[2]
+    let l:counts = split(system('wc -mlw '.a:filename))
+    echo 'file:  '.a:filename
+    echo 'lines: '.l:counts[0]
+    echo 'words: '.l:counts[1]
+    echo 'chars: '.l:counts[2]
 endfunction
 " Wordcount current file
 command! Wc call Wordcount(expand("%"))
@@ -811,33 +814,31 @@ augroup startup_screen
                 \ endif
 augroup END
 
-augroup center_cursor_line
-    autocmd!
-    autocmd BufEnter *
-                \ if &buftype == 'help' |
-                \   wincmd L |
-                \   set scrolloff=999 |
-                \ endif
-    autocmd BufLeave *
-                \ if &buftype == 'help' |
-                \ if &scrolloff > 10 |
-                \   set scrolloff=10 |
-                \ endif
-augroup END
-
 augroup active_win_cursorline
     autocmd!
     autocmd InsertLeave,WinEnter * set cursorline
     autocmd InsertEnter,WinLeave * set nocursorline
 augroup END
 
+" Reads a skeleton file (in the skel directory) with the associated name
+function! ReadSkelFile(ext) abort
+    let l:skelname = 'skel.'.a:ext
+    let l:skelpath = g:skel_dir.'/'.l:skelname
+    exe 'silent 0r '.l:skelpath
+    normal G
+    echohl DiffAdd
+    echom 'Loaded skeleton file:    '.l:skelname
+    echohl None
+endfunction
+
 augroup newfile_templates
     autocmd!
-    autocmd BufNewFile *.sh    exe '0r '.g:skel_dir.'/skel.sh'
-    autocmd BufNewFile *.bash  exe '0r '.g:skel_dir.'/skel.bash'
-    autocmd BufNewFile *.zsh   exe '0r '.g:skel_dir.'/skel.zsh'
-    autocmd BufNewFile *.cmake exe '0r '.g:skel_dir.'/skel.cmake'
-    autocmd BufNewFile *.html  exe '0r '.g:skel_dir.'/skel.html'
+    autocmd BufNewFile * if &ft == 'sh'  | call ReadSkelFile('shell') | endif
+    autocmd BufNewFile * if &ft == 'bash'  | call ReadSkelFile('bash') | endif
+    autocmd BufNewFile * if &ft == 'zsh'  | call ReadSkelFile('zsh') | endif
+    autocmd BufNewFile * if &ft == 'cmake'  | call ReadSkelFile('cmake') | endif
+    autocmd BufNewFile * if &ft == 'html'  | call ReadSkelFile('html') | endif
+    autocmd BufNewFile * if &ft == 'python'  | call ReadSkelFile('python') | endif
 augroup END
 
 " }}}
