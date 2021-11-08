@@ -89,7 +89,7 @@ alias touch="nocorrect touch"
 
 # }}}
 alias mkdir='mkdir -p -v'
-alias rmdir='rmdir -v'
+# alias rmdir='rmdir -v'
 alias mv='mv -v -i'
 alias cp='cp -v -i'
 alias ln='ln -v -i'

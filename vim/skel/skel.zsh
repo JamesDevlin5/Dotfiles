@@ -2,4 +2,3 @@
 
 echo "Hello World!"
 
-# vim:foldmethod=indent
