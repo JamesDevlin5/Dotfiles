@@ -340,6 +340,8 @@ function! LightlineGithunkStats()
     endif
     return join(l:res, ', ')
     " return printf(' %02d, ﰣ %02d,  %02d', a, m, r)
+    " if a == 0 && m == 0 && r == 0 | return '' | endif
+    " return printf(' %02d, ﰣ %02d,  %02d', a, m, r)
     " return printf('+%d, ~%d, -%d', a, m, r)
 endfunction
 
@@ -511,6 +513,9 @@ nnoremap <Leader> <Nop>
 nnoremap <LocalLeader> <Nop>
 nnoremap [# <Nop>
 nnoremap ]# <Nop>
+
+inoremap OD <Left>
+inoremap OC <Right>
 
 " Prev split
 " nnoremap <Leader><Leader> <C-w><C-p>
