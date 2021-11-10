@@ -98,7 +98,7 @@ fi
 # }}}
 
 # Generic Completions (for `--help')
-compdef _gnu_generic bat fd
+# compdef _gnu_generic bat fd
 #compdef '_files -g "*.py"' python
 
 # vim:foldmethod=marker

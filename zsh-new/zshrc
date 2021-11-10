@@ -1,14 +1,4 @@
 
-# Checks:
-#   1. If we are in the base shell (Zellij will enter an infinitely recursive loop if not)
-#   2. If we are in an interactive shell
-if [[ $SHLVL -eq 1 && $- == *i* ]]; then
-    sleep 0.001
-    zellij
-    # Exit with zellij's exit code once it's done
-    exit $?
-fi
-
 # No external command found {{{
 command_not_found_handler () {
 	# Executed in a sub-shell
@@ -19,7 +9,11 @@ command_not_found_handler () {
 
 # Dircolors {{{
 if [[ -f ~/.dircolors ]]; then
-  eval $(dircolors -b ~/.dircolors)
+  if command -v dircolors >/dev/null; then
+    eval "$(dircolors -b ~/.dircolors)"
+  elif command -v gdircolors >/dev/null; then
+    eval "$(gdircolors -b ~/.dircolors)"
+  fi
 fi
 # }}}
 
@@ -52,12 +46,22 @@ source $ZDOTDIR/fzf.zsh
 
 # }}}
 
-ricksay
+# Checks:
+#   1. If we are in the base shell (Zellij will enter an infinitely recursive loop if not)
+#   2. If we are in an interactive shell
+if [[ $SHLVL -eq 1 && $- == *i* ]]; then
+    sleep 0.1
+    zellij
+    # Exit with zellij's exit code once it's done
+    # exit $?
+else
+    ricksay
+fi
 
 # Sheldon {{{
 eval "$(sheldon source)"
 # }}}
 
-# vim:foldmethod=marker
-
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# vim:foldmethod=marker

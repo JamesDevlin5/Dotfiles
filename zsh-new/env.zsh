@@ -60,7 +60,7 @@ typeset -x MANWIDTH=999
 # Function definition search path
 fpath=( $ZDOTDIR/{functions,completion} $fpath )
 
-path=( ~/bin ~/.cargo/bin $path ) 
+path=( ~/bin ~/.cargo/bin $path )
 # }}}
 
 # Load Them {{{
@@ -173,12 +173,12 @@ typeset -x RUSTC_WRAPPER=$(whence sccache)
 
 # FZF {{{
 
-#export FZF_DEFAULT_OPTS="--reverse --ansi --color=fg:15,hl:3,hl+:3,bg+:-1,fg+:-1,pointer:06,spinner:05,info:7,prompt:6"
-export FZF_DEFAULT_COMMAND='fd --follow --type file'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-# export FZF_CTRL_T_COMMAND="rg --files"
-export FZF_DEFAULT_OPTS="--height=50% --info=inline -m --border --margin=2,4 --padding=2 --preview-window 'right:60%' --layout reverse --preview 'bat --color=always --style=header,grid --line-range :100 {}'"
-export FZF_COMPLETION_TRIGGER='--'
+#typeset -x FZF_DEFAULT_OPTS="--reverse --ansi --color=fg:15,hl:3,hl+:3,bg+:-1,fg+:-1,pointer:06,spinner:05,info:7,prompt:6"
+typeset -x FZF_DEFAULT_COMMAND='fd --follow --type file'
+typeset -x FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# typeset -x FZF_CTRL_T_COMMAND="rg --files"
+typeset -x FZF_DEFAULT_OPTS="--height=60% -m --border --margin=1,2,2,3 --padding=1 --tiebreak=index --cycle --scroll-off=5 --filepath-word --tabstop=2 --preview-window 'right:60%' --layout reverse --preview 'bat -f --line-range :100 {}'"' --prompt="  " --pointer="ﱡ " --marker="ﱢ " --color=fg:#b5b5b5,bg:#262626,hl:#9a5ead --color=fg+:#b5b5b5,bg+:#393d40,hl+:#62b9d6 --color=info:#ba9052,prompt:#29e668,pointer:#afdcf2 --color=marker:#cc4e7a,spinner:#136113,header:#bdbd0a --color=border:#4e11b8,query:#3ea7b8,gutter:#3b484d'
+# typeset -x FZF_COMPLETION_TRIGGER='--'
 
 # }}}
 

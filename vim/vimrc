@@ -35,7 +35,7 @@ set undolevels=9999
 set showmatch matchtime=7
 set nojoinspaces
 set pastetoggle=<C-t>
-set tabstop=4 shiftwidth=4 softtabstop=4 shiftround expandtab
+set tabstop=2 shiftwidth=2 softtabstop=2 shiftround expandtab
 set autoindent
 set foldlevelstart=2 foldcolumn=3 foldmethod=indent
 set foldopen-=hor
@@ -492,6 +492,8 @@ let g:vim_markdown_follow_anchor = 1
 " let g:vim_markdown_anchorexpr = "substitute(v:anchor, '-', ' ', 'g')"
 let g:vim_markdown_strikethrough = 1
 let g:vim_markdown_autowrite = 1
+" Use 2 spaces instead of 4
+let g:vim_markdown_new_list_item_indent = 2
 " }}}
 
 " {{{ FZF
@@ -560,6 +562,7 @@ inoremap <expr> <C-x>s fzf#vim#complete('cat /usr/share/dict/words')
 " }}}
 
 " {{{ Auto Pairs
+" TODO: Remove '<' and '>' autopairs from bash
 let g:AutoPairsMultilineClose = 0
 let g:AutoPairsShortcutToggle = "\<LocalLeader>("
 
@@ -809,6 +812,37 @@ inoremap <expr> <Tab>   pumvisible() ? "\<C-n>":                  "\<Tab>"
 " inoremap <expr> <Tab>   (pumvisible() || col('.') > 1 && getline('.')[col('.') - 1] != ' ' ? "\<C-n>" : "\<Tab>")
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>":                  "\<S-Tab>"
 
+" inoremap <Tab> <C-r>=SmartTabKeyPress()<CR>
+" function! SmartTabKeyPress()
+"     " 1. Check if the completion menu is open
+"     if pumvisible()
+"         return "\<C-n>"
+"     endif
+"     " 2. Check if this could be starting the completion menu
+"     "    + If there is some text immediately preceding the cursor, to infer a query from
+"     let l:col = col('.')
+"     if l:col == 1
+"         " First Column => Left character space does not exist
+"         return "\<Tab>"
+"     endif
+
+"     " Get current line, extract char immediately before cursor, remove any whitespace
+"     let l:substr = substitute(strpart(getline('.'), l:col-1, 1), '\(\S\)', '\1', '')
+
+"     " If there is only whitespace before the cursor, this probably wasn't a call to
+"     " start completion. Insert tab-whitespace instead
+"     if (strlen(l:substr) == 0)
+"         return "\<Tab>"
+"     else
+"         return "\<C-n>"
+"     endif
+
+"     " let has_period = match(l:substr, '\.') != -1
+"     " let has_slash = match(l:substr, '\/') != -1
+"     " if (!has_period && !has_slash)
+"     "     return "\<C-x>\<C-p>"
+"     " endif
+" endfunction
 
 " {{{ Operator-Pending Mappings
 

@@ -1,8 +1,8 @@
 
 zmodload -i zsh/parameter
 
-insert-last-command-output() {
-  LBUFFER+="$(eval $history[$((HISTCMD-1))])"
-}
+# insert-last-command-output() {
+#   LBUFFER+="$(eval $history[$((HISTCMD-1))])"
+# }
 
 # vim:ft=zsh
