@@ -131,6 +131,9 @@ typeset -x ZELLIJ_CONFIG_FILE=$ZELLIJ_CONFIG_DIR/config.yaml
 typeset -x STARSHIP_CONFIG=$HOME/.config/starship/config.toml
 typeset -x STARSHIP_CACHE=$XDG_CACHE_HOME/starship
 
+# RipGrep Config
+typeset -x RIPGREP_CONFIG_PATH=$HOME/.config/ripgreprc
+
 # Allow us to autoload pls
 typeset -x AUTOPAIR_INHIBIT_INIT=1
 

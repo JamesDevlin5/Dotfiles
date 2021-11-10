@@ -1,0 +1,35 @@
+#               _____________        _________                    
+#               ___  __ \__(_)_________  ____/___________________ 
+#               __  /_/ /_  /___  __ \  / __ __  ___/  _ \__  __ \
+#               _  _, _/_  / __  /_/ / /_/ / _  /   /  __/_  /_/ /
+#               /_/ |_| /_/  _  .___/\____/  /_/    \___/_  .___/ 
+#                            /_/                         /_/      
+#               --------------------------------------------------
+#
+
+# Don't let ripgrep vomit really long lines to my terminal, and show a preview.
+--max-columns=150
+--max-columns-preview
+
+# Add my 'web' type.
+--type-add=web:*.{html,css,js}*
+--type-add=vim:vimrc
+
+# Using glob patterns to include/exclude files or folders
+--glob=!git/*
+
+# Set the colors.
+--colors=line:fg:38,212,96
+--colors=match:fg:212,110,38
+--colors=match:style:underline
+--colors=path:fg:220,70,119
+--colors=path:style:bold
+--colors=column:fg:37,128,232
+
+# Because who cares about case!?
+--smart-case
+
+# Cleanup output
+--trim
+
+# vim:fdm=marker:ft=sh

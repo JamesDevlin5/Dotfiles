@@ -59,6 +59,7 @@
     ~/.config/zellij/layouts: zellij/layouts
     ~/.config/luarocks/config-5.3.lua: luarocks/config-5.3.lua
     ~/.config/sheldon/plugins.toml: sheldon.toml
+    ~/.config/ripgreprc: ripgreprc
 
 - shell:
   -

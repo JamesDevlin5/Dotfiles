@@ -1,5 +1,8 @@
 
-set foldmethod=indent
+setlocal foldmethod=indent
+" compiler pylint
+" let &errorformat = '%f:%l:%c: %t%n: %m (%p)'
+
 "inoreabbr <buffer> def def():<Esc>2hi
 "inoreabbr <buffer> class class:<Esc>i
 

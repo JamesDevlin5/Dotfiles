@@ -1,4 +1,14 @@
 
+# Checks:
+#   1. If we are in the base shell (Zellij will enter an infinitely recursive loop if not)
+#   2. If we are in an interactive shell
+if [[ $SHLVL -eq 1 && $- == *i* ]]; then
+    sleep 0.001
+    zellij
+    # Exit with zellij's exit code once it's done
+    exit $?
+fi
+
 # No external command found {{{
 command_not_found_handler () {
 	# Executed in a sub-shell
@@ -37,6 +47,9 @@ source $ZDOTDIR/custom.zsh
 # Prompt
 source $ZDOTDIR/prompt.zsh
 
+# FZF
+source $ZDOTDIR/fzf.zsh
+
 # }}}
 
 ricksay
@@ -44,7 +57,6 @@ ricksay
 # Sheldon {{{
 eval "$(sheldon source)"
 # }}}
-
 
 # vim:foldmethod=marker
 

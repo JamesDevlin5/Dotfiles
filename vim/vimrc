@@ -17,7 +17,7 @@ let &showbreak=' ﬌ '
 set display=lastline,uhex
 set number
 set cursorline
-set hlsearch
+set nohlsearch
 set hidden
 set confirm
 set autoread
@@ -34,6 +34,7 @@ set belloff=all
 set undolevels=9999
 set showmatch matchtime=7
 set nojoinspaces
+set pastetoggle=<C-t>
 set tabstop=4 shiftwidth=4 softtabstop=4 shiftround expandtab
 set autoindent
 set foldlevelstart=2 foldcolumn=3 foldmethod=indent
@@ -45,7 +46,7 @@ set updatetime=1000
 set modelines=4
 set complete-=i complete-=t " Don't scan unnecessary random files => quicker completion suggestions
 set listchars=tab:\ ▸,eol:¬,trail:·,nbsp:
-set fillchars=vert:\|,fold:\.
+set fillchars=vert:$,fold:\.
 set formatoptions=crq1j
 set shortmess=inwaxoI
 
@@ -80,7 +81,7 @@ let mapleader=' '
 let maplocalleader='-'
  
 " Shell is Bash
-let g:is_bash = 1
+" let g:is_bash = 1
 
 let g:skel_dir='~/.vim/skel'
 
@@ -108,10 +109,10 @@ else
     " Ps = 5  -> blinking bar (xterm).
     " Ps = 6  -> steady bar (xterm).
     " reset the cursor on start (for older versions of vim, usually not required)
-    " augroup cursorResetOnStart
-    "     autocmd!
-    "     autocmd VimEnter * silent !echo -ne "\e[2 q"
-    " augroup END
+    augroup cursorResetOnStart
+        autocmd!
+        autocmd VimEnter * silent !echo -ne "\e[2 q"
+    augroup END
     " }}}
 endif
 " }}}
@@ -160,7 +161,9 @@ Plug 'joshdick/onedark.vim'
 
 Plug 'itchyny/lightline.vim'
 
+" Git gutter-glyphs
 Plug 'airblade/vim-gitgutter'
+" Mark gutter-signatures
 Plug 'kshenoy/vim-signature'
 " Plug 'chrisbra/Colorizer', { 'on': 'ColorToggle' } " Requires Vim >= 8.0
 
@@ -168,9 +171,12 @@ Plug 'kshenoy/vim-signature'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' } | Plug 'junegunn/fzf.vim'
 Plug 'jremmen/vim-ripgrep', {'on': 'Rg'}
 
+" Plug 'yuki-yano/fzf-preview.vim'
+
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-commentary'
+" Plug 'tpope/vim-dispatch'
 " Markdown
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown', {'for': 'markdown'}
@@ -184,11 +190,10 @@ endif
 
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 
-Plug 'wellle/visual-split.vim'
-Plug 'wellle/targets.vim'
-Plug 'terryma/vim-expand-region'
 " Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'haya14busa/incsearch.vim'
+
+Plug 'sukima/xmledit', { 'for': [ 'xml', 'html' ] }
 
 Plug 'luochen1990/rainbow'
 Plug 'jiangmiao/auto-pairs'
@@ -199,7 +204,7 @@ Plug 'mbbill/undotree'
 call plug#end()
 " }}}
 
-" Set colorscheme
+" {{{ Set Colorscheme
 set bg=dark
 try
     let colors = ['challenger_deep', 'apprentice', 'darcula', 'gruvbox', 'simple-dark-transparent', 'onedark']
@@ -210,24 +215,43 @@ catch /E185:/
     echom "Couldn't find colorscheme: ".color."!"
     colorscheme pablo
 endtry
-
+" }}}
 
 " {{{ Lightline
 let g:lightline = {
       \ 'colorscheme': 'deus',
       \ 'active': {
-      \   'left': [ [ 'mode', 'paste', 'filepath' ], [ 'readonly', 'filename', 'ftypeicon' ], [ 'gitbranch', 'qfinfo' ] ],
-      \   'right': [ [ 'scrollbar', 'filetype' ], [ 'spell', 'lineinfo' ], [ 'percent', 'githunkstats' ] ]
+      \   'left': [
+      \     [ 'mode', 'bufinfo', 'paste', 'filepath' ],
+      \     [ 'readonly', 'filename', 'ftypeicon' ],
+      \     [ 'gitbranch', 'qfinfo' ]
+      \   ],
+      \   'right': [
+      \     [ 'scrollbar', 'filetype' ],
+      \     [ 'spell', 'lineinfo' ],
+      \     [ 'percent', 'githunkstats' ]
+      \   ]
       \ },
       \ 'inactive': {
-      \   'left': [ [], [ 'filepath', 'readonly', 'ftypeicon' ], [ 'filename' ] ],
-      \   'right': [ [ 'filetype' ], [ 'scrollbar', 'percent' ] ]
+      \   'left': [
+      \     [ 'filepath', 'filename' ],
+      \     [ 'readonly', 'ftypeicon' ],
+      \     [ 'bufinfo' ]
+      \   ],
+      \   'right': [
+      \     [ 'filetype' ],
+      \     [ 'scrollbar', 'percent' ]
+      \   ]
       \ },
       \ 'separator': { 'left': '', 'right': '' },
       \ 'subseparator': { 'left': '', 'right': '' },
       \ 'tabline': {
       \   'left': [ [ 'tabs' ] ],
       \   'right': [ [ 'close' ] ]
+      \ },
+      \ 'tab': {
+      \   'active': [ 'tabnum', 'filename', 'modified' ],
+      \   'inactive': [ 'tabnum', 'filename', 'modified' ]
       \ },
       \ 'component_function': {
       \   'filename': 'LightlineFilename',
@@ -239,7 +263,8 @@ let g:lightline = {
       \   'scrollbar': 'LightlineScrollbar',
       \   'qfinfo': 'LightlineQfinfo',
       \   'ftypeicon': 'LightlineFiletypeicon',
-      \   'githunkstats': 'LightlineGithunkStats'
+      \   'githunkstats': 'LightlineGithunkStats',
+      \   'bufinfo': 'LightlineBufferInfo',
       \ },
       \ 'mode_map': {
       \   'n' : 'NORMAL',
@@ -309,7 +334,7 @@ endfunction
 
 function! LightlineLineinfo()
     if &filetype == 'undotree' || &filetype == 'qf' | return '' | endif
-    return printf("col %3d    line (%3d / %3d)", col('.'), line('.'), line('$'))
+    return printf("c %d  ln (%d/%d)", col('.'), line('.'), line('$'))
 endfunction
 
 function! LightlineQfinfo()
@@ -352,6 +377,12 @@ function! LightlineScrollbar()
     let after = width - 4 - before
     return repeat(' ', before).'ﰊ '.repeat('·', after)
 endfunction
+
+function! LightlineBufferInfo()
+    let l:bnum = bufnr('%')
+    return "Buf ".l:bnum
+endfunction
+
 " }}}
 
 " {{{ Undo Tree
@@ -370,12 +401,10 @@ function! g:Undotree_CustomMap()
 endfunc
 " }}}
 
-let g:rustfmt_autosave = 1
-
 " {{{ Git Gutter
 set foldtext=gitgutter#fold#foldtext()
 
-let g:gitgutter_set_sign_backgrounds = 1
+" let g:gitgutter_set_sign_backgrounds = 1
 let g:gitgutter_enabled = 1
 let g:gitgutter_signs = 1
 " let g:gitgutter_highlight_lines = 1
@@ -458,26 +487,54 @@ endfunction
 " }}}
 
 " {{{ Markdown
-let g:vim_markdown_toc_autofit = 1
 let g:vim_markdown_emphasis_multiline = 0
 let g:vim_markdown_follow_anchor = 1
-let g:vim_markdown_anchorexpr = "substitute(v:anchor, '-', ' ', 'g')"
+" let g:vim_markdown_anchorexpr = "substitute(v:anchor, '-', ' ', 'g')"
 let g:vim_markdown_strikethrough = 1
 let g:vim_markdown_autowrite = 1
 " }}}
 
 " {{{ FZF
 
-let g:fzf_history_dir = '~/.local/share/fzf-history'
+function! s:build_quickfix_list(lines)
+    call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+    copen
+    cc
+endfunction
+
+let g:fzf_action = {
+            \ 'ctrl-g': function('s:build_quickfix_list'),
+            \ 'ctrl-t': 'tab split',
+            \ 'ctrl-s': 'split',
+            \ 'ctrl-v': 'vsplit'
+            \ }
+
 let g:fzf_layout = { 'down': '45%' }
+let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+let g:fzf_colors = {
+            \ 'fg':      ['fg', 'Normal'],
+            \ 'bg':      ['bg', 'Normal'],
+            \ 'hl':      ['fg', 'Comment'],
+            \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+            \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
+            \ 'hl+':     ['fg', 'Statement'],
+            \ 'info':    ['fg', 'PreProc'],
+            \ 'border':  ['fg', 'Ignore'],
+            \ 'prompt':  ['fg', 'Conditional'],
+            \ 'pointer': ['fg', 'Exception'],
+            \ 'marker':  ['fg', 'Keyword'],
+            \ 'spinner': ['fg', 'Label'],
+            \ 'header':  ['fg', 'Comment'] }
+
 " Show a preview
-let g:fzf_preview_window = ['right:75%', 'ctrl-/']
+let g:fzf_preview_window = ['right:65%', 'ctrl-o']
 
 command! Colorfzf call fzf#run(fzf#wrap({
-            \   'source': map(split(globpath(&rtp, 'colors/*.vim')),
-            \     'fnamemodify(v:val, ":t:r")'),
-            \   'sink': 'colo'
+            \   'source': map(split(globpath(&rtp, 'colors/*.vim')), 'fnamemodify(v:val, ":t:r")'),
+            \   'sink': 'colo',
             \ }))
+" call fzf#vim#colors(<bang>0)
 
 command! -bang -complete=dir -nargs=? Ls
             \ call fzf#run(fzf#wrap('ls',
@@ -486,12 +543,50 @@ command! -bang -complete=dir -nargs=? Ls
 " Script that comes packaged with FZF, and uses bat
 " command! -bang -nargs=? -complete=dir Files
 "     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', '~/.vim/plugged/fzf.vim/bin/preview.sh {}']}, <bang>0)
+" command! -bang -nargs=? -complete=dir Fiii
+"             \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'if [ -f {} ]; then ~/.vim/plugged/fzf.vim/bin/preview.sh {}; else ls {}; fi']}, <bang>0)
 command! -bang -nargs=? -complete=dir Fls
     \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({'options': ['--layout=reverse', '--info=inline']}), <bang>0)
 
 nnoremap <silent> <Leader>F :Files!<CR>
-nnoremap <silent> <Leader>B :Buffers<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>p :BLines<CR>
+nnoremap <silent> <Leader>m :Marks<CR>
+nnoremap <silent> <Leader>w :Windows<CR>
+
+inoremap <expr> <C-x>f fzf#vim#complete#path('rg --files')
+inoremap <expr> <C-x>s fzf#vim#complete('cat /usr/share/dict/words')
+
 " }}}
+
+" {{{ Auto Pairs
+let g:AutoPairsMultilineClose = 0
+let g:AutoPairsShortcutToggle = "\<LocalLeader>("
+
+let g:AutoPairs = {
+            \   '(':')',
+            \   '[':']',
+            \   '{':'}',
+            \   "'":"'",
+            \   '"':'"',
+            \   '`':'`',
+            \   '<':'>'
+            \ }
+
+augroup filetype_pairs
+    autocmd!
+    autocmd Filetype markdown let b:AutoPairs = {
+                \   '*':'*',
+                \   '_':'_',
+                \   '~':'~'
+                \ }
+augroup END
+" }}}
+
+" let g:SignatureMarkLineHL = 'SpellRare'
+let g:SignatureDeleteConfirmation = 1
+let g:SignaturePurgeConfirmation = 1
+let g:SignatureMarkerTextHLDynamic = 1
 
 let g:rg_highlight = 0
 let g:rg_derive_root = 1
@@ -527,7 +622,6 @@ inoremap <C-s> <C-o>:update<CR>
 nnoremap <silent> <C-q> :try \| tabclose \| catch \| qa \| endtry<CR>
 inoremap jk <Esc>
 inoremap jjj <Esc>
-nnoremap <silent> <Leader>b :ls<CR>
 nnoremap <Leader>e :Lexplore 35<CR>
 nnoremap <LocalLeader>h :Hsh<CR>
 nnoremap Q @q
@@ -556,28 +650,35 @@ nnoremap H ^
 vnoremap H ^
 nnoremap L $
 vnoremap L $
+
 " Redo
 nnoremap U <C-r>
 inoremap <C-l> <C-o>l
 inoremap <C-h> <C-o>h
 
 " Paste, then fix indentation
-nnoremap p p==`]
-nnoremap P P==`[
+nnoremap p p`[V`]=`>
+nnoremap P P`[V`]=`>
 nnoremap \p p
 nnoremap \P P
 
 " Edit Macro
-nnoremap <leader>m  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
+nnoremap <leader>r  :<c-u><c-r><c-r>='let @'. v:register .' = '. string(getreg(v:register))<cr><c-f><left>
 
 " Open URL under cursor (in firefox)
 nnoremap <Leader>go :silent exe '!open -a firefox '.matchstr(getline('.'), 'http\S*')<CR>
 
 " Source file
 nnoremap <Leader>sf :source %<CR>
-nnoremap <Leader>p :echo expand("%:p:~")<CR>
+nnoremap <Leader>P :echo expand("%:p:~")<CR>
 
+" {{{ Visual Selection Manipulation
+" Wraps a selection in fold-markers
 vnoremap <silent> <Leader>f <Esc>`<O<Esc>`>o<Esc>`<kV`>jzf`<0a<Space><Esc>`>0a<Space><Esc>`<A<Space>
+
+" Joins the selected lines, with a bar-suffix appended to each line
+vnoremap <Leader>j :s/$/\ \|/<CR>`>$2xgvJ
+" }}}
 
 " Folding {{{
 nnoremap <Leader>f0 :setlocal foldlevel=0<CR>
@@ -594,16 +695,6 @@ nnoremap <C-f> <C-f>zz
 nnoremap <C-d> <C-d>zz
 nnoremap <C-b> <C-b>zz
 nnoremap <C-u> <C-u>zz
-
-" {{{ `n` always searches forward, `N` always goes back
-" nnoremap <expr> n  'Nn'[v:searchforward]
-" xnoremap <expr> n  'Nn'[v:searchforward]
-" onoremap <expr> n  'Nn'[v:searchforward]
-
-" nnoremap <expr> N  'nN'[v:searchforward]
-" xnoremap <expr> N  'nN'[v:searchforward]
-" onoremap <expr> N  'nN'[v:searchforward]
-" }}}
 
 " Move Lines
 " nnoremap [e  :<c-u>execute 'move -1-'. v:count1<cr>
@@ -648,10 +739,45 @@ nmap [h <Plug>(GitGutterPrevHunk)
 nnoremap <Tab>   <C-w>w
 nnoremap <S-Tab> <C-w>W
 
-" Split window, switch focus
-nnoremap <Leader>V <C-w>v<C-w>l
+" Split Window, Don'T Switch Focus
+nnoremap <Leader>V <C-w>v<C-w><C-w>
+nnoremap <Leader>H <C-w>s<C-w><C-w>
 
-" Buffer navigation {{{
+function! s:sentCase(str)
+    return substitute(a:str,'\(\<\w\+\>\)', '\u\1', 'g')
+endfunction
+
+function! s:titleCase(str)
+    return substitute(a:str,'\(\<\w\+\>\)', '\u&', 'g')
+endfunction
+
+function! TwiddleCase(str)
+    let l:cache = { 'lower': tolower(a:str), 'upper': toupper(a:str) }
+    " Upper --> Lower
+    if a:str ==# l:cache['upper']
+        echom "Lowercase"
+        return l:cache['lower']
+    endif
+
+    " Lower --> Sentence
+    let l:cache['sent'] = s:sentCase(a:str)
+    if a:str ==# l:cache['lower']
+        echom "Sentence-Case"
+        return l:cache['sent']
+    endif
+
+    " Sentence --> Uppercase
+    if a:str ==# l:cache['sent']
+        echom "Uppercase"
+        return l:cache['upper']
+    endif
+
+    echom "Title-Case"
+    return s:titleCase(a:str)
+endfunction
+vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv"))
+
+" Buffer Navigation {{{
 " nnoremap <M-1> :b1<CR>
 " nnoremap <M-2> :b2<CR>
 " nnoremap <M-3> :b3<CR>
@@ -680,7 +806,17 @@ inoremap <expr> <Up>    pumvisible() ? "\<C-p>":                  "\<Up>"
 inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>": "\<C-d>"
 inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>":   "\<C-u>"
 inoremap <expr> <Tab>   pumvisible() ? "\<C-n>":                  "\<Tab>"
+" inoremap <expr> <Tab>   (pumvisible() || col('.') > 1 && getline('.')[col('.') - 1] != ' ' ? "\<C-n>" : "\<Tab>")
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>":                  "\<S-Tab>"
+
+
+" {{{ Operator-Pending Mappings
+
+" Entire Line
+onoremap L :<C-u>normal! ^v$<CR>
+
+" }}}
+
 
 " Plugin Keys {{{
 
@@ -805,6 +941,15 @@ endfunction
 " Wordcount current file
 command! Wc call Wordcount(expand("%"))
 
+function! Test()
+    let l:tagfiles = globpath(&rtp, '**/doc/tags', 0, 1)
+    let l:helptags = []
+    for tfile in l:tagfiles
+        call extend(l:helptags, readfile(tfile))
+    endfor
+    call fzf#run(fzf#wrap('Help Tags', { 'source': l:helptags, 'sink': 'e', 'options': ['--preview', ''] }))
+endfunction
+
 " Highlight long lines
 " au BufWinEnter * let w:m1=matchadd('Search', '\%<81v.\%>77v', -1)
 " au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
@@ -883,6 +1028,11 @@ augroup newfile_templates
     autocmd BufNewFile * call s:maybeReadSkelFile('python')
 augroup END
 " }}}
+
+augroup gitcommit_file_utils
+    autocmd!
+    autocmd Filetype gitcommit Git \--paginate diff \--cached
+augroup END
 
 " }}}
 
