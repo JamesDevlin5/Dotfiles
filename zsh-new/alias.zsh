@@ -74,6 +74,7 @@ alias ~='cd ~'
 alias cdg='cd $(git root)'
 
 alias ef='$EDITOR $(fzf)'
+alias cdf='cd "$(fd -HgLtd --base-directory=${PWD} | fzf --preview="exa -TFadL1 --color=always --icons {}")"'
 
 # }}}
 
@@ -81,6 +82,7 @@ alias ef='$EDITOR $(fzf)'
 # First, work properly with zsh completion... {{{
 alias mkdir="nocorrect mkdir"
 alias touch="nocorrect touch"
+alias vim="nocorrect vim"
 #typeset -a NOCORRECT_CMDS=( mkdir touch )
 #
 #for CMD in ${(k)NOCORRECT_CMDS}; do

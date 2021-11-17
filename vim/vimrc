@@ -78,7 +78,7 @@ set undofile undodir=~/.vim/undo
 " }}}
 
 let mapleader=' '
-let maplocalleader='-'
+let maplocalleader='~'
  
 " Shell is Bash
 " let g:is_bash = 1
@@ -556,7 +556,7 @@ nnoremap <silent> <Leader>p :BLines<CR>
 nnoremap <silent> <Leader>m :Marks<CR>
 nnoremap <silent> <Leader>w :Windows<CR>
 
-inoremap <expr> <C-x>f fzf#vim#complete#path('rg --files')
+inoremap <expr> <C-x>f fzf#vim#complete#path('fd --hidden')
 inoremap <expr> <C-x>s fzf#vim#complete('cat /usr/share/dict/words')
 
 " }}}
@@ -585,6 +585,12 @@ augroup filetype_pairs
                 \ }
 augroup END
 " }}}
+
+" Commentary
+augroup set_comment_str
+  autocmd!
+  autocmd Filetype bash,gitcommit let &commentstring="# %s"
+augroup END
 
 " let g:SignatureMarkLineHL = 'SpellRare'
 let g:SignatureDeleteConfirmation = 1
@@ -800,16 +806,26 @@ inoremap <C-Bs> <C-w>
 nnoremap D d$
 nnoremap C c$
 nnoremap Y y$
+nnoremap dD v0d
+nnoremap cC v0c
 
 " Completion menu navigation
+function! SmartTab()
+  if pumvisible() || (col('.') > 1 && getline('.')[col('.')-1]==' ')
+    return "\<C-n>"
+  else
+    return "\<Tab>"
+  endif
+endfunction
+
 inoremap <expr> <Esc>   pumvisible() ? "\<C-e>":                  "\<Esc>"
 inoremap <expr> <CR>    pumvisible() ? "\<C-y>":                  "\<CR>"
 inoremap <expr> <Down>  pumvisible() ? "\<C-n>":                  "\<Down>"
 inoremap <expr> <Up>    pumvisible() ? "\<C-p>":                  "\<Up>"
 inoremap <expr> <C-d>   pumvisible() ? "\<PageDown>\<C-p>\<C-n>": "\<C-d>"
 inoremap <expr> <C-u>   pumvisible() ? "\<PageUp>\<C-p>\<C-n>":   "\<C-u>"
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>":                  "\<Tab>"
-" inoremap <expr> <Tab>   (pumvisible() || col('.') > 1 && getline('.')[col('.') - 1] != ' ' ? "\<C-n>" : "\<Tab>")
+" inoremap <expr> <Tab>   pumvisible() ? "\<C-n>":                  "\<Tab>"
+inoremap <Tab>   <C-o>:echo SmartTab()<CR>
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>":                  "\<S-Tab>"
 
 " inoremap <Tab> <C-r>=SmartTabKeyPress()<CR>
