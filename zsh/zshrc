@@ -2,9 +2,8 @@
 # ----------+============+----------
 
 
-eval "$(starship init zsh)"
-eval "$(zoxide init zsh --cmd j --hook prompt)"
-source ~/dotfiles/zsh/p2.zsh
+#eval "$(starship init zsh)"
+#source ~/dotfiles/zsh/p2.zsh
 eval "$(sheldon source)"
 
 # -- Modules {{{
@@ -29,11 +28,8 @@ promptinit
 
 export PATH="$HOME/bin:/usr/local/sbin:$PATH"
 
-. "$HOME/.config/zsh/alias.zsh"
-. "$HOME/.config/zsh/options.zsh"
-. /home/james/dotfiles/shell/setup_env.bash
-. /home/james/dotfiles/shell/setup_alias.bash
-source /home/james/.config/broot/launcher/bash/br
+#. "$HOME/.config/zsh/alias.zsh"
+#. "$HOME/.config/zsh/options.zsh"
 
 # }}}
 
@@ -204,3 +200,7 @@ bindkey -M menuselect '^i' vi-insert
 bindkey "^R" history-incremental-pattern-search-backward
 
 # vim:foldmethod=marker
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+source /home/james/.config/broot/launcher/bash/br

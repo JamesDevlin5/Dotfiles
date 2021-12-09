@@ -1,12 +1,3 @@
-[diff]
-    tool = delta
-    guitool = vscode
-    wsErrorHighlight = new,context
-    abbrev = 8
-    renames = true
-    renameLimit = 6
-[difftool]
-    prompt = true
 [delta]
     # plus-style = "syntax #72c270"
     # minus-style = "syntax #ad6163"
@@ -17,12 +8,4 @@
     zero-style = dim syntax
     hyperlinks = true
     paging = always
-    pager = less
-[difftool "vscode"]
-    cmd = code --wait --diff $LOCAL $REMOTE
-    prompt = false
-[merge]
-	tool = vscode
-    conflictStyle = diff3
-[mergetool "vscode"]
-	cmd = code --wait $MERGED
+    pager = bat

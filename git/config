@@ -1,35 +1,98 @@
 # This is Git's per-user configuration file.
+[advice]
+fetchShowForcedUpdates = true
+pushNonFFCurrent = true
+pushNeedsForce = true
+statusAheadBehind = true
+statusHints = true
+statusUoption = true
+commitBeforeMerge = true
+resetQuiet = true
+resolveConflict = true
+sequencerInUse = true
+implicitIdentity = true
+detachedHead = true
+checkoutAmbiguousRemoteBranchName = true
+rmHints = true
+addEmbeddedRepo = true
+nestedTag = true
+addIgnoredFile = true
+addEmptyPathspec = true
+updateSparsePath = true
+
 [user]
   name  = James Devlin
   email = devlin.ja@northeastern.edu
 [init]
-  defaultBranch = master
+  defaultBranch = main
+[interactive]
+  diffFilter = delta --color-only --features=interactive
 [color]
   interactive = always
+  # push.error = bold yellow
+  #advice.hint = brightred
+[color "branch"]
+  local = blue
+  current = ul brightblue
+  remote = magenta
+  upstream = ul brightmagenta
+  plain = normal
+[color "remote"]
+  hint = cyan
+  warning = yellow
+  success = green
+  error = brightred
+# [color "status"]
 [core]
-  pager = bat
+  editor = nvim
+  pager = delta
+  eol = lf
+[fetch]
+  prune = true
+  parallel = 0
 [push]
   default = upstream
 [help]
-  autocorrect = 3
+  autocorrect = prompt
+  browser = firefox
   format = web
-
-# [pager]
-  # diff = delta
-  # log = delta
-  # reflog = delta
-  # show = delta
-
+[gui]
+  diffContext = 3
+  displayUntracked = false
+[log]
+  abbrevCommit = true
+  date = relative
+  diffMerges = dense-combined
+[merge]
+  autoStash = true
+  tool = vscode
+[mergetool "vscode"]
+  cmd = code --wait $MERGED
+[diff]
+  tool = delta
+  guitool = vscode
+  colorMoved = blocks
+  wsErrorHighlight = new,context
+  indentHeuristic = false
+  renames = true
+  renameLimit = 20
+[difftool "vscode"]
+  cmd = code --wait --diff $LOCAL $REMOTE
 [delta]
-  line-numbers = true
-  side-by-side = true
-  colorMoved = default
-  plus-style = "syntax #3b9e39"
-  minus-style = "syntax #c45255"
-  syntax-theme = gruvbox-dark
+  features = decorations
+  # line-numbers = true
+  syntax-theme = Dracula
+[delta "decorations"]
+  commit-decoration-style = bold yellow box ul
+  file-style = bold yellow ul
+  hunk-header-decoration-style = yellow box
+[sequence]
+  editor = /home/james/.cargo/bin/interactive-rebase-tool
+[status]
+  relativePaths = true
+  showStash = true
 
 
 [include]
   path = alias
 #  path = tools
-

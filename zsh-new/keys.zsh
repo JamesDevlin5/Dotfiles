@@ -37,7 +37,7 @@ bindkey "^s" spell-word
 bindkey -s '^`' '\e'
 bindkey -M vicmd -s '^`' 'A'
 
-bindkey "^h" _complete_help
+#bindkey "^h" _complete_help
 bindkey "^f" insert-files
 
 bindkey "^u" kill-whole-line

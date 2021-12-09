@@ -1,9 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =7
-let g:netrw_dirhist_7='/Users/james/workspace/java/Graph/src/main/java/com/graph'
-let g:netrw_dirhist_6='/Users/james/workspace/java/Graph/src/main/java/com'
-let g:netrw_dirhist_5='/Users/james/workspace/java/Graph/src/main/java'
-let g:netrw_dirhist_4='/Users/james/workspace/java/Graph/src/main'
-let g:netrw_dirhist_3='/Users/james/workspace/java/Graph/src'
-let g:netrw_dirhist_2='/Users/james/workspace/java/Graph'
-let g:netrw_dirhist_1='/Users/james/workspace/python/env-manager'

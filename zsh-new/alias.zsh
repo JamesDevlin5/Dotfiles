@@ -30,20 +30,17 @@ alias treed='tree --only-dirs'
 alias tread='trea --only-dirs'
 alias treld='trel --only-dirs'
 
-
-alias python='python3'
-alias pip='pip3'
 # Enter interactive mode after executing a python script
-alias ppy='python3 -i'
+alias ppy='python -i'
 
 #alias li='lua -i -e "_PROMPT"=" lua:-> "'
-alias lua-fmt='lua-format --in-place'
-alias fmtfnl='fnlfmt --fix'
+alias luafmt='stylua --config-path "$XDG_CONFIG_HOME"/stylua/config.toml'
+alias lua='lua5.3'
 
 alias shlint='shellcheck --enable=all --severity=style'
 
-#alias ls='ls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
-alias ls='ls -F'
+alias ls='ls --ignore-backups --classify --group-directories-first -v --human-readable --dereference-command-line --color=auto'
+# alias ls='ls -F'
 alias lc='ls --context'
 
 alias l='ls'
@@ -51,11 +48,10 @@ alias ll='ls -l'
 alias la='ls -A'
 alias l.='ls -d .*'
 
-alias lgi='ls | rg'
-alias lagi='la | rg'
-alias lg='fd'
-#alias lag='fd --hidden --exec-batch rg {} $1;'
+alias lg='ls | rg'
+alias lag='la | rg'
 alias envg='env | rg'
+alias envf='env | fzf'
 
 alias PWD='pwd -P'
 alias CD='cd $(PWD)'
@@ -80,10 +76,11 @@ alias cdf='cd "$(fd -HgLtd --base-directory=${PWD} | fzf --preview="exa -TFadL1 
 
 # extra info {{{
 # First, work properly with zsh completion... {{{
-alias mkdir="nocorrect mkdir"
-alias touch="nocorrect touch"
-alias vim="nocorrect vim"
-#typeset -a NOCORRECT_CMDS=( mkdir touch )
+# alias mkdir="nocorrect mkdir"
+# alias touch="nocorrect touch"
+# alias vim="nocorrect vim"
+# alias nvim="nocorrect nvim"
+typeset -a NOCORRECT_CMDS=( mkdir touch vim nvim )
 #
 #for CMD in ${(k)NOCORRECT_CMDS}; do
 #  alias $CMD="nocorrect $CMD"
@@ -117,9 +114,6 @@ if [[ -f ~/bin/view ]]; then
 else
   alias view="$PAGER"
 fi
-#alias g='git'
-alias gs='git status'
-alias c='zoxide'
 alias p='pueue'
 alias sedit='sheldon edit'
 

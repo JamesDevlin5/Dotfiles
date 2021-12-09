@@ -9,9 +9,9 @@
 # - `sheldon remove` to remove a plugin from the config file
 #
 # See the documentation for more https://github.com/rossmacarthur/sheldon#readme
-
-shell = "zsh"
-
+#
+#shell = "zsh"
+#
 # match = [
 #     "{{ name }}.plugin.zsh",
 #     "{{ name }}.zsh",
@@ -44,21 +44,10 @@ apply = ["fpath", "autoload"]
 github = "hlissner/zsh-autopair"
 apply = ["defer"]
 
-# [plugins.fast-syntax-highlighting]
-# github = "zdharma/fast-syntax-highlighting"
-# apply = ["defer"]
-
-[plugins.starship]
-inline = 'eval $(starship init zsh)'
-
-[plugins.forgit]
-github = "wfxr/forgit"
-apply = ["defer"]
+#[plugins.starship]
+#inline = 'eval "$(starship init zsh)"'
 
 [plugins.zsh-you-should-use]
 github = "MichaelAquilina/zsh-you-should-use"
 apply = ["defer"]
-
-# [plugins.zoxide]
-# inline = 'zsh-defer -c "$(zoxide init zsh --cmd j)"'
 

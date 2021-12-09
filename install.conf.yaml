@@ -24,6 +24,7 @@
   - ~/.local/share/zellij
   - ~/.local/share/Trash
   - ~/.local/share/pandoc
+  - ~/.local/share/zsh
 
 #- shell:
 #- [git submodule update --init --recursive, Installing submodules...]
@@ -54,7 +55,7 @@
     ~/.vim: vim
     # Colors
     ~/.config/dircolors: dircolors
-    ~/.config/starship/config.toml: starship.toml
+    ~/.config/starship/config.toml: starship/config.toml
     ~/.config/zellij/config.yaml: zellij/config.yaml
     ~/.config/zellij/layouts: zellij/layouts
     ~/.config/luarocks/config-5.3.lua: luarocks/config-5.3.lua

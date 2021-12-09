@@ -1,5 +1,102 @@
 # https://starship.rs/config
 
+add_newline = true
+
+format = """
+[$status $username](bg:white)\
+[ ](bg:blue)[ $directory ](bg:blue fg:black)[ ](fg:blue)\
+$git_state\
+      $fill      \
+$git_branch\
+$git_status\
+$git_metrics\
+$git_commit\
+\n\
+ ['--](fg:6) \
+$lua\
+$python\
+$rust\
+$jobs\
+$shell\
+$character"""
+
 [character]
-format = "$symbol"
-success_symbol="[>](green)"
+format = "$symbol "
+success_symbol = "[➜ ](fg:#3BA150)"
+error_symbol = "[ ✗](fg:#8E3729)"
+vicmd_symbol = "[vi](italic fg:#A7A7A7)"
+
+[directory]
+format = "[$path]($style)[$read_only]($read_only_style)"
+style = "underline fg:white bg:blue"
+read_only_style = "fg:#B9BB33 bg:blue"
+truncation_symbol = "…/"
+home_symbol = "~"
+
+[fill]
+symbol = "-"
+style = "fg:#7B7B7B"
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = " "
+style = "fg:#CB628F"
+# only_attached = true
+
+[git_commit]
+commit_hash_length = 6
+format = "[\\($hash$tag\\)]($style) "
+style = "bold fg:#E4913D"
+only_detached = true
+
+[git_metrics]
+added_style = "fg:#39DC74"
+deleted_style = "fg:#DC7856"
+format = '([+$added]($added_style) )([-$deleted]($deleted_style) )'
+disabled = false
+
+[git_status]
+style = "bold bg:#F18500 fg:#2E2E2E"
+
+[lua]
+format = "[$symbol($version )]($style)"
+symbol = "L "
+style = "fg:#4B98BC"
+version_format = "v${major}.${minor}"
+
+[python]
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+symbol = "P "
+style = "fg:#C1C71A"
+version_format = "v${major}.${minor}"
+
+[rust]
+format = "[$symbol($version )]($style)"
+version_format = "v${major}.${minor}"
+symbol = "R "
+style = "fg:#DB3C23"
+
+[shell]
+format = "[$indicator shell]($style) "
+style = "fg:#A356D3"
+disabled = false
+bash_indicator = "Bsh"
+zsh_indicator = "Zsh"
+unknown_indicator = "<?>"
+
+[status]
+format = '[\[$symbol $common_meaning$signal_name$maybe_int\]]($style) '
+symbol = "✖"
+success_symbol = "✔️"
+not_executable_symbol = "!"
+not_found_symbol = "?"
+sigint_symbol = "~"
+signal_symbol = "⚡"
+style = "fg:#0061BF"
+disabled = false
+
+[username]
+style_root = "bold fg:red"
+style_user = "bold fg:3 bg:white"
+format = "[$user]($style) "
+show_always = true

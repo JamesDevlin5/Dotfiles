@@ -14,7 +14,3 @@ autoload -Uz zmv
 autoload -Uz zcp
 autoload -Uz zln
 
-autoload -Uz insert-last-command-output
-zle -N insert-last-command-output
-bindkey '^[p' insert-last-command-output
-

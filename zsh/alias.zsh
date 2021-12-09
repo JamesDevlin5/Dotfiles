@@ -22,7 +22,7 @@ alias pip='pip3'
 alias ppy='python3 -i'
 
 #alias li='lua -i -e "_PROMPT"=" lua:-> "'
-alias lua-fmt='lua-format --in-place'
+alias luafmt='lua-format --in-place'
 
 alias shlint='shellcheck --enable=all --severity=style'
 

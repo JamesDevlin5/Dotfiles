@@ -22,9 +22,10 @@ typeset -x DOTFILES_HOME="${HOME}/dotfiles"
 # }}}
 
 # Basic {{{
-typeset -x EDITOR=vim
+typeset -x EDITOR=nvim
 typeset -x BROWSER=firefox
 typeset -x PAGER=bat
+typeset -x TERMINAL=alacritty
 
 if command -v luarocks &>/dev/null; then
   eval "$(luarocks path)"
@@ -38,13 +39,13 @@ fi
 # Default: `cat'
 typeset -x NULLCMD=bat
 # Like NULLCMD, only when the redirection is an input
-#typeset -x READNULLCMD=bat
+typeset -x READNULLCMD=bat
 
 typeset -x BAT_THEME="Dracula"
 
 # Man Pages
-# typeset -x MANPAGER="$EDITOR -R -c 'set ft=man'"
-typeset -x MANPAGER="sh -c 'col -bx | bat -l man -p --tabs 2 --paging=always'"
+# typeset -x MANPAGER="nvim -R -c 'set ft=man'"
+typeset -x MANPAGER="sh -c 'col -b | bat -l man'"
 typeset -x MANWIDTH=999
 
 #typeset -x LESS='--ignore-case --status-column --line-numbers --raw-control-chars --shift=0.15 --mouse'
@@ -55,12 +56,15 @@ typeset -x MANWIDTH=999
 
 # (F)Path {{{
 
+typeset -x JAVA_HOME=/usr/lib/jvm/default-runtime
+typeset -x GOPATH="$XDG_DATA_HOME"/go
+
 # Custom Functions {{{
 
 # Function definition search path
 fpath=( $ZDOTDIR/{functions,completion} $fpath )
 
-path=( ~/bin ~/.cargo/bin $path )
+path=( ~/bin ~/.cargo/bin $GOPATH/bin ~/.local/bin $JAVA_HOME/bin $path )
 # }}}
 
 # Load Them {{{
@@ -156,6 +160,7 @@ typeset -x _ZO_RESOLVE_SYMLINKS=1
 # Cargo {{{
 # Registry Index Cache
 typeset -x CARGO_HOME="$XDG_DATA_HOME/cargo"
+source "$CARGO_HOME/env"
 # Generated Artifacts (Compiler Output)
 #typeset -x CARGO_TARGET_DIR="$CARGO_HOME/out"
 # Cache Compiler Info
@@ -186,15 +191,15 @@ typeset -x FZF_DEFAULT_OPTS="--height=60% -m --border --margin=1,2,2,3 --padding
 
 # Named Directories {{{
 
-typeset -A NAMED_DIRS
-NAMED_DIRS=(
-  Z-Dots $ZDOTDIR
-  Conf $XDG_CONFIG_HOME
-  Data $XDG_DATA_HOME
-  Cache $XDG_CACHE_HOME
-  Trash $TRASH_HOME
-  Dots $DOTFILES_HOME
-)
+#typeset -A NAMED_DIRS
+#NAMED_DIRS=(
+#  Z-Dots $ZDOTDIR
+#  Conf $XDG_CONFIG_HOME
+#  Data $XDG_DATA_HOME
+#  Cache $XDG_CACHE_HOME
+#  Trash $TRASH_HOME
+#  Dots $DOTFILES_HOME
+#)
 
 for NICKNAME DIRNAME in ${(kv)NAMED_DIRS}; do
   hash -d $NICKNAME=$DIRNAME
@@ -209,5 +214,7 @@ typeset -U manpath
 typeset -U cdpath
 # }}}
 
+# . "~/.local/share/cargo/env"
+# . "$HOME/.cargo/env"
+
 # vim:foldmethod=marker
-. "/Users/james/.local/share/cargo/env"

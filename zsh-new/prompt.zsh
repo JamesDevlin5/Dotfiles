@@ -1,5 +1,6 @@
 
-PS1="%(?.%F{green}√.%F{red}✗%U%?%u)%f %B%F{248}%2~%f%b %F{69}%(!.root.%n)%f %# "
+# PS1="%(?.%F{green}√.%F{red}✗%U%?%u)%f %B%F{248}%2~%f%b %F{69}%(!.root.%n)%f %# "
+PS1="%(?.%F{green} %{奈%2G%}.%F{red}%U%?%u)%f %B%F{248}%2~%f%b %F{69}%(!.root.%n)%f %# "
 PS2="%_> "
 PS3="?# "
 PS4="+%N:%i> "
