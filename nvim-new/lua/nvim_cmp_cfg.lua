@@ -72,7 +72,7 @@ for _, lsp in ipairs(servers) do
   }
 end
 
-vim.cmd [[ autocmd FileType TelescopePrompt,gitcommit lua require('cmp').setup.buffer { enabled = false } ]]
+vim.cmd [[ autocmd FileType gitcommit lua require('cmp').setup.buffer { enabled = false } ]]
 
 local has_words_before = function()
   local line, col = unpack(vim.api.nvim_win_get_cursor(0))

@@ -21,7 +21,6 @@
   - ~/workspace
   - ~/.local/share
   - ~/.local/share/nvim
-  - ~/.local/share/zellij
   - ~/.local/share/Trash
   - ~/.local/share/pandoc
   - ~/.local/share/zsh
@@ -41,6 +40,7 @@
     ~/.config/git: git
     ~/.config/mypy/config: mypy.conf
     ~/.config/nvim: nvim-new
+    ~/.config/xplr: xplr
     ~/.config/zfunc: zfunc
     ~/.config/zsh: zsh-new
     ~/.zshenv: zsh-new/zshenv
@@ -56,12 +56,11 @@
     # Colors
     ~/.config/dircolors: dircolors
     ~/.config/starship/config.toml: starship/config.toml
-    ~/.config/zellij/config.yaml: zellij/config.yaml
-    ~/.config/zellij/layouts: zellij/layouts
     ~/.config/luarocks/config-5.3.lua: luarocks/config-5.3.lua
     ~/.config/sheldon/plugins.toml: sheldon.toml
     ~/.config/ripgreprc: ripgreprc
-
+    ~/.config/i3: i3
+    ~/.config/polybar: polybar
 - shell:
   -
     # Sync dotfiles with remote repo

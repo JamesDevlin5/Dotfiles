@@ -26,7 +26,7 @@ zle -N spell-word
 
 bindkey "^A" beginning-of-line
 bindkey "^[[4" end-of-line
-bindkey "^R" history-incremental-search-backward
+# bindkey "^R" history-incremental-search-backward
 #bindkey "^P" history-search-backward
 #bindkey "^Y" accept-and-hold
 #bindkey "^N" insert-last-word
@@ -64,7 +64,7 @@ bindkey -M menuselect '^ ' accept-exact-dirs
 if [[ -d ~/.fzf ]]; then
   source ~/.fzf/shell/key-bindings.zsh
 else
-  bindkey '^r' history-incremental-search-backward
+  bindkey '^R' history-incremental-search-backward
 fi
 # }}}
 

@@ -24,7 +24,7 @@ updateSparsePath = true
   name  = James Devlin
   email = devlin.ja@northeastern.edu
 [init]
-  defaultBranch = main
+  defaultBranch = master
 [interactive]
   diffFilter = delta --color-only --features=interactive
 [color]

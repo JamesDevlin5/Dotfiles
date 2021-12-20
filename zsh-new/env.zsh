@@ -128,12 +128,12 @@ typeset -x SPROMPT="%Bzsh%b:
 #typeset -x JAVA_HOME=""
 
 # ZelliJ Terminal Multiplexer
-typeset -x ZELLIJ_CONFIG_DIR=$HOME/.config/zellij
-typeset -x ZELLIJ_CONFIG_FILE=$ZELLIJ_CONFIG_DIR/config.yaml
+# typeset -x ZELLIJ_CONFIG_DIR=$HOME/.config/zellij
+# typeset -x ZELLIJ_CONFIG_FILE=$ZELLIJ_CONFIG_DIR/config.yaml
 
 # Starship Prompt
 typeset -x STARSHIP_CONFIG=$HOME/.config/starship/config.toml
-typeset -x STARSHIP_CACHE=$XDG_CACHE_HOME/starship
+# typeset -x STARSHIP_CACHE=$XDG_CACHE_HOME/starship
 
 # RipGrep Config
 typeset -x RIPGREP_CONFIG_PATH=$HOME/.config/ripgreprc
@@ -141,7 +141,7 @@ typeset -x RIPGREP_CONFIG_PATH=$HOME/.config/ripgreprc
 # Allow us to autoload pls
 typeset -x AUTOPAIR_INHIBIT_INIT=1
 
-typeset -x SCCACHE_DIR="$XDG_CACHE_HOME/sccache"
+# typeset -x SCCACHE_DIR="$XDG_CACHE_HOME/sccache"
 #typeset -x SCCACHE_CACHE_SIZE="10G"
 
 # Sheldon (package manager) {{{
@@ -150,17 +150,17 @@ typeset -x SHELDON_DATA_DIR=$XDG_DATA_HOME/sheldon
 # }}}
 
 # Zoxide (cd) {{{
-typeset -x _ZO_DATA_DIR=$XDG_DATA_HOME/zoxide
+# typeset -x _ZO_DATA_DIR=$XDG_DATA_HOME/zoxide
 # Print Fixed Path
-typeset -x _ZO_ECHO=1
+# typeset -x _ZO_ECHO=1
 #typeset -x _ZO_EXCLUDE_DIRS="$HOME/.cache,"
-typeset -x _ZO_RESOLVE_SYMLINKS=1
+# typeset -x _ZO_RESOLVE_SYMLINKS=1
 # }}}
 
 # Cargo {{{
 # Registry Index Cache
 typeset -x CARGO_HOME="$XDG_DATA_HOME/cargo"
-source "$CARGO_HOME/env"
+# source "$CARGO_HOME/env"
 # Generated Artifacts (Compiler Output)
 #typeset -x CARGO_TARGET_DIR="$CARGO_HOME/out"
 # Cache Compiler Info
@@ -173,7 +173,8 @@ path=( $CARGO_INSTALL_ROOT/bin $path )
 typeset -x CARGO_NET_RETRY=6
 
 # Use sccache
-typeset -x RUSTC_WRAPPER=$(whence sccache)
+#  --> Taken care of with symlink 'ccache -> /usr/local/bin/rustc'
+# typeset -x RUSTC_WRAPPER=$(whence ccache)
 # }}}
 
 # FZF {{{
@@ -201,9 +202,9 @@ typeset -x FZF_DEFAULT_OPTS="--height=60% -m --border --margin=1,2,2,3 --padding
 #  Dots $DOTFILES_HOME
 #)
 
-for NICKNAME DIRNAME in ${(kv)NAMED_DIRS}; do
-  hash -d $NICKNAME=$DIRNAME
-done
+# for NICKNAME DIRNAME in ${(kv)NAMED_DIRS}; do
+#   hash -d $NICKNAME=$DIRNAME
+# done
 
 # }}}
 

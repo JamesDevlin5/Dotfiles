@@ -45,7 +45,7 @@ set -o ignoreeof
 
 # source /home/james/.config/broot/launcher/bash/br
 
-. "/Users/james/.local/share/cargo/env"
+#. "/Users/james/.local/share/cargo/env"
 export PS1="\033[32m ${USER}\033[0m > "
 
-source /home/james/.config/broot/launcher/bash/br
+#source /home/james/.config/broot/launcher/bash/br

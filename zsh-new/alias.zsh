@@ -35,7 +35,7 @@ alias ppy='python -i'
 
 #alias li='lua -i -e "_PROMPT"=" lua:-> "'
 alias luafmt='stylua --config-path "$XDG_CONFIG_HOME"/stylua/config.toml'
-alias lua='lua5.3'
+alias lua='lua5.4'
 
 alias shlint='shellcheck --enable=all --severity=style'
 
@@ -69,6 +69,8 @@ alias ~='cd ~'
 # cd to git root directory
 alias cdg='cd $(git root)'
 
+alias g='gitui'
+
 alias ef='$EDITOR $(fzf)'
 alias cdf='cd "$(fd -HgLtd --base-directory=${PWD} | fzf --preview="exa -TFadL1 --color=always --icons {}")"'
 
@@ -92,7 +94,8 @@ alias mkdir='mkdir -p -v'
 alias mv='mv -v -i'
 alias cp='cp -v -i'
 alias ln='ln -v -i'
-alias rm='rm -v -i'
+alias rm='rm -v'
+alias rmi='rm -v -i'
 alias rsync='rsync --verbose --mkpath --copy-unsafe-links --stats --progress'
 
 alias wh='whence -mv'
@@ -140,9 +143,6 @@ alias fig='figlet -f banner3 -c -w100'
 
 # Maintenance
 alias update='vim +PlugUpdate +q; rustup update;'
-
-alias gcc='sccache gcc'
-alias clang='sccache clang'
 
 # }}}
 

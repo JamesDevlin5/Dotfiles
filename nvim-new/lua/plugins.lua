@@ -61,8 +61,12 @@ require("packer").startup {
         require("nvim-treesitter.configs").setup {
           ensure_installed = {
             "bash",
+            "cpp",
             "comment",
+            "dart",
+            "dot",
             "html",
+            "java",
             "json",
             "latex",
             "lua",
@@ -71,7 +75,7 @@ require("packer").startup {
             "rust",
             "toml",
             -- "verilog",
-            -- "yaml",
+            "yaml",
           },
           highlight = {
             enable = true,
@@ -86,26 +90,11 @@ require("packer").startup {
       end,
     }
 
-    -- Replace Dialogue
-    use { "windwp/nvim-spectre", requires = "nvim-lua/plenary.nvim" }
-
-    -- Telescope Finder w/ FZF Native
+    -- Icons
     use {
-      "nvim-telescope/telescope.nvim",
-      requires = {
-        "nvim-lua/plenary.nvim",
-        { "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
-        "kyazdani42/nvim-web-devicons",
-      },
-      config = function()
-        require "telescope_init"
-      end,
-    }
-
-    use {
-      "benfowler/telescope-luasnip.nvim",
-      requires = { "nvim-telescope/telescope.nvim", "L3MON4D3/LuaSnip" },
-      -- module = "telescope._extensions.luasnip",
+      'yamatsum/nvim-nonicons',
+      -- if use nvim-web-devicons
+      requires = {'kyazdani42/nvim-web-devicons'}
     }
 
     use {
@@ -130,8 +119,8 @@ require("packer").startup {
       requires = "kyazdani42/nvim-web-devicons",
       config = function()
         require("nvim-tree").setup {
-          auto_close = true,
-          open_on_tab = false,
+          auto_close = false,
+          open_on_tab = true,
           hijack_cursor = true,
           update_cwd = true,
           diagnostics = { enable = true },
@@ -192,7 +181,7 @@ require("packer").startup {
             "bash",
             "shell",
             "FTerm",
-            "TelescopePrompt",
+            "lua",
           },
           buftype_exclude = { "terminal" },
           -- context_char_list = { "┃", "║", "|" },
@@ -203,6 +192,98 @@ require("packer").startup {
 
     -- Keybinds
     use { "LionC/nest.nvim" }
+
+    use {
+      "folke/which-key.nvim",
+      config = function()
+        local wk = require"which-key"
+        wk.setup {
+          plugins = {
+            marks = true, -- shows a list of your marks on ' and `
+            registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
+            spelling = {
+              enabled = false, -- enabling this will show WhichKey when pressing z= to select spelling suggestions
+              suggestions = 20, -- how many suggestions should be shown in the list?
+            },
+            -- the presets plugin, adds help for a bunch of default keybindings in Neovim
+            -- No actual key bindings are created
+            presets = {
+              operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+              motions = true, -- adds help for motions
+              text_objects = true, -- help for text objects triggered after entering an operator
+              windows = true, -- default bindings on <c-w>
+              nav = true, -- misc bindings to work with windows
+              z = true, -- bindings for folds, spelling and others prefixed with z
+              g = true, -- bindings for prefixed with g
+            },
+          },
+          -- add operators that will trigger motion and text object completion
+          -- to enable all native operators, set the preset / operators plugin above
+          operators = { gc = "Comments" },
+          key_labels = {
+            -- override the label used to display some keys. It doesn't effect WK in any other way.
+            -- For example:
+            -- ["<space>"] = "SPC",
+            -- ["<cr>"] = "RET",
+            -- ["<tab>"] = "TAB",
+          },
+          icons = {
+            breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
+            separator = "➜", -- symbol used between a key and it's label
+            group = "+", -- symbol prepended to a group
+          },
+          popup_mappings = {
+            scroll_down = '<c-j>', -- binding to scroll down inside the popup
+            scroll_up = '<c-k>', -- binding to scroll up inside the popup
+          },
+          window = {
+            border = "single", -- none, single, double, shadow
+            position = "bottom", -- bottom, top
+            margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
+            padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
+            winblend = 0
+          },
+          layout = {
+            height = { min = 4, max = 25 }, -- min and max height of the columns
+            width = { min = 20, max = 50 }, -- min and max width of the columns
+            spacing = 3, -- spacing between columns
+            align = "left", -- align columns left, center or right
+          },
+          ignore_missing = false, -- enable this to hide mappings for which you didn't specify a label
+          hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ "}, -- hide mapping boilerplate
+          show_help = true, -- show help message on the command line when the popup is visible
+          triggers = "auto", -- automatically setup triggers
+          -- triggers = {"<leader>"} -- or specify a list manually
+          triggers_blacklist = {
+            -- list of mode / prefixes that should never be hooked by WhichKey
+            -- this is mostly relevant for key maps that start with a native binding
+            -- most people should not need to change this
+            i = { "j", "k" },
+            v = { "j", "k" },
+          },
+        }
+      end,
+    }
+
+    -- Symbol Renamer
+    use {
+      'filipdutescu/renamer.nvim',
+      branch = 'master',
+      requires = { {'nvim-lua/plenary.nvim'} },
+      config = function()
+        require"renamer".setup {
+          padding = {
+            top = 1,
+            bottom = 1,
+            left = 0,
+            right = 0,
+          },
+          mappings = {
+            ['<C-c>'] = function() vim.api.nvim_input('<Esc>') end,
+          }
+        }
+      end,
+    }
 
     use {
       "luukvbaal/stabilize.nvim",
@@ -253,7 +334,7 @@ require("packer").startup {
           RRGGBBAA = false, -- #RRGGBBAA hex codes
           rgb_fn = true, -- CSS rgb() and rgba() functions
           hsl_fn = false, -- CSS hsl() and hsla() functions
-          css = false, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
+          css = true, -- Enable all CSS features: rgb_fn, hsl_fn, names, RGB, RRGGBB
           css_fn = false, -- Enable all CSS *functions*: rgb_fn, hsl_fn
           -- Available modes: foreground, background
           mode = "background", -- Set the display mode.
@@ -281,6 +362,14 @@ require("packer").startup {
     }
 
     use { "rcarriga/nvim-notify" }
+    use {
+      "hood/popui.nvim",
+      requires = "https://github.com/RishabhRD/popfix",
+      config = function()
+        vim.g.popui_border_style = "rounded"
+        vim.ui.select = require "popui.ui-overrider"
+      end,
+    }
 
     use {
       "neovim/nvim-lspconfig",
@@ -293,10 +382,10 @@ require("packer").startup {
           -- hint_sign = '',
           -- infor_sign = '',
           dianostic_header_icon = "[ ]",
-          code_action_icon = "",
+          code_action_icon = " ",
           code_action_prompt = {
             enable = false,
-            sign = true,
+            sign = false,
             sign_priority = 20,
             virtual_text = false,
           },
@@ -355,8 +444,8 @@ require("packer").startup {
       config = function()
         require("lualine").setup {
           options = {
-            -- theme = "tokyonight",
-            theme = "codedark",
+            theme = "tokyonight",
+            -- theme = "codedark",
             --theme = "evil_lualine",
             -- component_separators = { left = '>', right = '<', },
             -- section_separators = { left = '}', right = '{', },
@@ -385,7 +474,7 @@ require("packer").startup {
                 -- 'nvim_lsp', 'nvim', 'coc', 'ale', 'vim_lsp'
                 -- Or a function that returns a table like
                 --   {error=error_cnt, warn=warn_cnt, info=info_cnt, hint=hint_cnt}
-                sources = { "nvim_lsp", "nvim", "vim_lsp" },
+                sources = { "nvim_diagnostic", "nvim_diagnostic" },
                 -- displays diagnostics from defined severity
                 sections = { "error", "warn", "info", "hint" },
                 diagnostics_color = {
@@ -423,7 +512,7 @@ require("packer").startup {
       end,
     }
 
-    use { "simrat39/symbols-outline.nvim" }
+    -- use { "simrat39/symbols-outline.nvim" }
 
     --[[
 

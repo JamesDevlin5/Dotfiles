@@ -81,6 +81,7 @@ opt.cdpath:append(os.getenv "HOME")
 opt.modelines = 4
 opt.formatoptions = "tcn1j"
 opt.completeopt = { "menu", "menuone", "noinsert" }
+opt.inccommand = "split"
 
 -- Undo
 opt.undofile = true
@@ -247,18 +248,6 @@ command! Wc call Wordcount(expand("%"))
 let g:is_bash = 1
 let g:sh_fold_enabled = 3
 
-]]
-
-vim.cmd [[
-noremap <silent> n <Cmd>execute('normal! ' . v:count1 . 'n')<CR>
-            \<Cmd>lua require('hlslens').start()<CR>
-noremap <silent> N <Cmd>execute('normal! ' . v:count1 . 'N')<CR>
-            \<Cmd>lua require('hlslens').start()<CR>
-noremap * *<Cmd>lua require('hlslens').start()<CR>
-noremap # #<Cmd>lua require('hlslens').start()<CR>
-noremap g* g*<Cmd>lua require('hlslens').start()<CR>
-noremap g# g#<Cmd>lua require('hlslens').start()<CR>
-nnoremap <silent> <nowait> <Leader><Esc> :noh<CR>
 ]]
 
 -- h:skeleton

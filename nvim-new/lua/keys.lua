@@ -2,56 +2,10 @@ return require("nest").applyKeymaps {
   {
     "<Leader>",
     {
-      -- Telescope Finder
-      {
-        "f",
-        {
-          { "m", require("telescope.builtin").marks },
-          { "c", require("telescope.builtin").commands },
-          { "f", require("telescope.builtin").find_files },
-          { "l", require("telescope.builtin").live_grep },
-          { "b", require("telescope.builtin").buffers },
-          { "h", require("telescope.builtin").help_tags },
-          { "s", require("telescope").extensions.luasnip.luasnip },
-          {
-            "g",
-            {
-              { "f", require("telescope.builtin").git_files },
-              { "b", require("telescope.builtin").git_branches },
-              { "c", require("telescope.builtin").git_commits },
-              { "s", require("telescope.builtin").git_status },
-            },
-          },
-        },
-      },
-      {
-        "<C-",
-        {
-          { "s>", require("telescope.builtin").grep_string },
-          { "r>", require("telescope.builtin").command_history },
-          { "b>", require("telescope.builtin").buffers },
-          { "g>", require("telescope.builtin").git_files },
-        },
-      },
-      {
-        "q",
-        {
-          { "f", require("telescope.builtin").quickfix },
-          { "g", require("gitsigns").setqflist },
-        },
-      },
       { "b", ":BufferLinePick<CR>" },
       { "B", ":BufferLinePickClose<CR>" },
+      { "G", require("gitsigns").setqflist },
       --[[
-      {
-        "c",
-        {
-          { "a", require("lspsaga.codeaction").code_action, mode = "n" },
-          { "a", require("lspsaga.codeaction").range_code_action, mode = "v" },
-          { "d", require("lspsaga.diagnostic").show_line_diagnostics },
-          { "c", require("lspsaga.diagnostic").show_cursor_diagnostics },
-        },
-      },
       { "qq", ":LLToggle!<CR>" },
       { "qo", ":LLOpen<CR>" },
       { "oq", ":copen<CR>" },
@@ -59,32 +13,27 @@ return require("nest").applyKeymaps {
       --]]
       { "c", ":close<CR>" },
       { "x", ":bwipeout<CR>" },
-      { "w", ":write!<CR>" },
       { "t", require("nvim-tree").toggle },
-      { "e", require("telescope.builtin").file_browser },
-      { "S", require("spectre").open },
+      { "r", require("renamer").rename },
       {
-        "s",
+        mode = "nv",
         {
-          { "s", require("spectre").open },
-          {
-            "w",
-            function()
-              require("spectre").open_visual { select_word = true }
-            end,
+          { "w", ":write!<CR>" },
+          { "n", require("notify").dismiss },
+          { "s",
+            {
+              { "h", ":split<CR>" },
+              { "v", ":vsplit<CR>" }
+            },
           },
-          { "v", require("spectre").open_visual },
         },
       },
-      { "v", "<C-w>v" },
-      { "h", "<C-w>s" },
-      { "N", require("notify").dismiss },
     },
   },
   {
     "<M-",
     {
-      { "t>", require("FTerm").toggle },
+      { "t>", require("FTerm").toggle, mode = "nvi" },
       -- Older pos in jump list
       { "Left>", "<C-o>" },
       -- Newer pos in jump list
@@ -119,50 +68,26 @@ return require("nest").applyKeymaps {
           { "j>", "<Down>" },
           { "k>", "<Left>" },
           { "l>", "<Right>" },
+          { "r>", require("renamer").rename },
         },
       },
-    },
-  },
-  {
-    mode = "v",
-    {
-      { "<Leader>s", require("spectre").open_file_search },
     },
   },
   { "j", "gj" },
   { "k", "gk" },
   -- Center view on each search jump
-  { "n", "nzzzv"},
-  { "N", "Nzzzv"},
-  -- { "K", require("lspsaga.hover").render_hover_doc },
-  -- { "gr", require("lspsaga.rename").rename },
-  -- { "gd", require("lspsaga.provider").preview_definition },
+  { "n", "nzzzv" },
+  { "N", "Nzzzv" },
+  { "<C-f>", "<C-f>zz" },
+  { "<C-d>", "<C-d>zz" },
+  { "<C-u>", "<C-u>zz" },
+  { "<C-b>", "<C-b>zz" },
   { "H", "^", mode = "nv" },
   { "L", "$", mode = "nv" },
-  { "Y", "y$", mode = "nv" },
+  { "Y", "y$" },
   { "<Space>", "<Nop>", mode = "nv" },
   { "<Tab>", "<C-w>w" },
   { "<S-Tab>", "<C-w>W" },
-  --[[
-  {
-    "<C-",
-    {
-      {
-        "f>",
-        function()
-          require("lspsaga.action").smart_scroll_with_saga(1)
-        end,
-      },
-      {
-        "b>",
-        function()
-          require("lspsaga.action").smart_scroll_with_saga(-1)
-        end,
-      },
-      { "s>", require("lspsaga.signaturehelp").signature_help },
-    },
-  },
-  --]]
   -- Redo
   { "U", "<C-r>" },
   -- Paste, Then Fix Indentation

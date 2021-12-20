@@ -6,17 +6,21 @@
 
 # :completion:<function>:<completer>:<command>:<argument>:<tag>
 
+
+autoload -Uz local-directories
+autoload -Uz directory-stack
+
 # >> The completer, `_complete_help`, will display information describing the completion system's current context.
 # >> May be call with `<C-x>h` by default
 
 zstyle ':completion:*' verbose yes
-zstyle ':completion:*' completer _expand_alias _complete _approximate
+zstyle ':completion:*' completer _complete _approximate _correct _extensions
 zstyle ':completion:*:correct:::' max-errors 3 not-numeric
 zstyle ':completion:*:approximate:::' max-errors 5 numeric
 zstyle ':completion:*' squeeze-slashes true
 # Ambiguous case matching and -/_ interchangability
 # Don't *need* to hit shift when inputting a symbol? And vice-versa.
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}' 'm:{1234567890!@#$%^&*()}={!@#$%^&*()1234567890}'
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z-_}={A-Za-z_-}'
 
 # Sudo Completions
 zstyle ':completion::complete:*' gain-privileges 1
@@ -64,9 +68,6 @@ zstyle ':completion:*:mv::argument-2' avoid-completer '_correct'
 
 #zstyle ':completion:*:cd::' completer _
 
-autoload -Uz local-directories
-autoload -Uz directory-stack
-
 # zstyle ':completion:*:*:cd:*:' completer _local_directories _directory_stack
 zstyle ':completion:*:*:cd:directory-stack:' insert-ids=menu
 
@@ -87,7 +88,7 @@ zstyle ':completion:*:*:-command-:*' group-order alias builtins functions comman
 zstyle ':completion:*' group-name ''
 
 # Menu {{{
-zstyle ':completion:*' menu select=2 search
+zstyle ':completion:*' menu select=2
 zstyle ':completion:*' show-ambiguity true
 # }}}
 
