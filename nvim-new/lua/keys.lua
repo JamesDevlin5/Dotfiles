@@ -33,7 +33,8 @@ return require("nest").applyKeymaps {
   {
     "<M-",
     {
-      { "t>", require("FTerm").toggle, mode = "nvi" },
+      { "t>", require("FTerm").toggle, mode = "nvit" },
+      { "c>", require"FTerm".close, mode = "t"},
       -- Older pos in jump list
       { "Left>", "<C-o>" },
       -- Newer pos in jump list
@@ -47,9 +48,6 @@ return require("nest").applyKeymaps {
   {
     mode = "t",
     {
-      { "<M-t>", require("FTerm").toggle },
-      { "<Esc>", require("FTerm").close },
-      { "<M-c>", require("FTerm").close },
       -- <C-@> === Ctrl+Space
       -- For (vim)grep
       { "<C-@>", ".*" },
@@ -78,14 +76,9 @@ return require("nest").applyKeymaps {
   -- Center view on each search jump
   { "n", "nzzzv" },
   { "N", "Nzzzv" },
-  { "<C-f>", "<C-f>zz" },
-  { "<C-d>", "<C-d>zz" },
-  { "<C-u>", "<C-u>zz" },
-  { "<C-b>", "<C-b>zz" },
-  { "H", "^", mode = "nv" },
-  { "L", "$", mode = "nv" },
+  { "<C-", {{"f>", "<C-f>zz"}, {"d>", "<C-d>zz"}, {"u>", "<C-u>zz"}, {"b>", "<C-b>zz"}}},
+  { mode = "nv", {{"H", "^"}, {"L", "$"}, {"<Space>", "<Nop>"}}},
   { "Y", "y$" },
-  { "<Space>", "<Nop>", mode = "nv" },
   { "<Tab>", "<C-w>w" },
   { "<S-Tab>", "<C-w>W" },
   -- Redo

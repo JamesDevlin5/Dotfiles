@@ -1,6 +1,8 @@
 
 # ZSH Aliases
 
+alias sshccs="ssh 'devlin1@login.khoury.northeastern.edu'"
+
 # Global aliases {{{
 alias -g G='| rg'
 alias -g P="| ${PAGER}"

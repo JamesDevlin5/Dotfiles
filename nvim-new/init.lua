@@ -79,7 +79,7 @@ opt.belloff = "all"
 opt.joinspaces = false
 opt.cdpath:append(os.getenv "HOME")
 opt.modelines = 4
-opt.formatoptions = "tcn1j"
+opt.formatoptions = "rqn1jp"
 opt.completeopt = { "menu", "menuone", "noinsert" }
 opt.inccommand = "split"
 

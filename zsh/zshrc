@@ -1,7 +1,6 @@
 # ----------# ZSH Config #----------
 # ----------+============+----------
 
-
 #eval "$(starship init zsh)"
 #source ~/dotfiles/zsh/p2.zsh
 eval "$(sheldon source)"

@@ -44,7 +44,7 @@ focused-fg = ${self.alternate}
 
 [bar/mainbar]
 ; Put the bar at the bottom of the screen
-bottom = false
+bottom = true
 
 ; Prefer fixed center position for the `modules-center` block. 
 ; The center block will stay in the middle of the bar whenever
