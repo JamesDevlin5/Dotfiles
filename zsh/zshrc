@@ -1,0 +1,300 @@
+zmodload -i zsh/complist
+autoload -U compinit && compinit
+autoload -U colors   && colors
+
+autoload -Uz expand-absolute-path && zle -N expand-absolute-path
+autoload -Uz edit-command-line && zle -N edit-command-line
+
+bindkey -v
+export KEYTIMEOUT=1
+
+typeset -U path
+typeset -U fpath
+
+path+=( "$HOME/bin" "$HOME/.cargo/bin" "$HOME/.local/bin" "/usr/local/go/bin")
+
+export PAGER="bat"
+export EDITOR="nvim"
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+export DIRSTACKSIZE=16
+
+export LS_COLORS="$(vivid generate one-dark)"
+export fignore=( o pyc class ~ __ )
+
+export RIPGREP_CONFIG_PATH="${HOME}/.config/ripgreprc"
+export FCEDIT="nvim -c 'set ft=zsh'"
+
+export HISTSIZE=1500
+export SAVEHIST=1500
+export HISTFILE="${HOME}/.local/share/zsh/history"
+
+setopt auto_cd
+setopt auto_pushd
+setopt chase_links
+setopt pushd_ignore_dups
+setopt auto_param_keys
+setopt auto_remove_slash
+setopt nobeep
+setopt list_rows_first
+setopt list_types
+setopt glob_dots
+setopt glob_star_short
+setopt mark_dirs
+setopt append_history
+setopt hist_ignore_all_dups
+setopt hist_no_functions
+# setopt hist_no_store
+setopt hist_reduce_blanks
+setopt correct_all
+setopt prompt_subst
+setopt transient_rprompt
+
+
+alias ls='exa --classify --sort=name --ignore-glob=".cm|.git|.idea|.venv|*.iml|*.vscode|target|__pycache__"'
+alias la='ls --all'
+alias ll='ls --long --icons --header --modified --no-user --extended'
+alias lla='ll --all'
+alias tree='ls --tree --level=2'
+alias treel='ll --tree --level=2'
+alias trel='treel'
+alias trea='tree --all'
+alias treal='trel --all'
+alias tred='tree --only-dirs'
+alias treda='tred --all'
+
+alias apt='sudo apt-get'
+alias fd='fdfind'
+alias f='fdfind'
+alias vi='nvim'
+alias vim='nvim'
+
+md() {
+    BASE="${1%.*}"
+    pandoc --from=markdown --to=html --standalone=true --table-of-contents=true --number-sections=false "${1}" --output="${BASE}.html" --metadata title="${BASE}"
+}
+
+# SCHOOL STUFF
+alias -g school='/home/james/School/Analysis'
+alias -g notes='/home/james/School/Analysis/notes'
+alias -g labs='/home/james/School/Analysis/labs'
+
+alias pword='pgen -s -c 12 | tee >(tail -n +2 | xclip -r -selection clipboard)'
+
+alias mkdir='mkdir -pv'
+alias mv='mv -v'
+alias cp='cp -v'
+alias rm='rm -v'
+alias ln='ln -v'
+
+alias envg='env | rg'
+alias cax='chmod u+x'
+alias cux='chmod u-x'
+
+#alias copyfile='xclip -sel c <'
+alias copyfile='gpaste-client <'
+alias cpf='copyfile'
+alias zshrc="${EDITOR} ~/.zshrc"
+#alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-bat; update-lazygit;'
+alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit;'
+
+alias clang-format='clang-format-15 -i'
+alias gofmt='gofmt -w'
+
+alias wh='whence -v'
+
+alias g='git'
+
+#function man() {
+#	env \
+#		LESS_TERMCAP_md=$(tput bold; tput setaf 4) \
+#		LESS_TERMCAP_me=$(tput sgr0) \
+#		LESS_TERMCAP_mb=$(tput blink) \
+#		LESS_TERMCAP_us=$(tput setaf 2) \
+#		LESS_TERMCAP_ue=$(tput sgr0) \
+#		LESS_TERMCAP_so=$(tput smso) \
+#		LESS_TERMCAP_se=$(tput rmso) \
+#		PAGER="${commands[less]:-$PAGER}" \
+#		man "$@"
+#}
+
+mcd () {
+	mkdir -pv -- "$1" &&
+		cd -P -- "$1"
+}
+
+freq() {
+    cut -f1 -d" " "${HISTFILE}" | sort | uniq -c | sort -nr | head -n 30
+}
+
+tre() {
+    broot -c :pt "$@"
+}
+
+# Markdown View {{{
+
+mdview() {
+    infile="$1"
+    tmpfile="$(mktemp)"
+    mv "$tmpfile" "$tmpfile.html"
+    pandoc -i "$infile" -o "$tmpfile.html" -t html -s --toc --quiet
+    # xdg-open "$tmpfile.html" &
+    firefox --new-tab "$tmpfile.html"
+}
+
+zstyle ':completion:*:complete:mdview:*' file-patterns '
+  *(D-/):local-directories:"local directory"
+  *.md(D-^/):md-file:"markdown file"
+'
+
+# }}}
+
+
+alias ..='cd ..'
+alias -g ...='../..'
+alias -g ....='../../..'
+
+alias -g P="| ${PAGER}"
+alias -g E="| ${EDITOR}"
+alias -g G="| rg"
+alias -g _="/dev/null"
+
+zstyle ':completion:*' completer _complete _match _list _ignored _correct _approximate _prefix
+zstyle ':completion:*' matcher-list 'm:{-_}={_-}' '+m:{a-z}={A-Z}'
+
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path ~/.local/share/zsh/zcompcache
+zstyle ':completion:*' squeeze-slashes true
+zstyle ':completion:*:(ls|exa|cd|rmdir):*' list-dirs-first true
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*:correct:*' max-errors 4 not-numeric
+zstyle ':completion:*:correct:*' max-errors 3 numeric
+zstyle ':completion:*' menu select=2
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*:default' select-prompt %SScrolling active: current selection at %p%s
+zstyle -e ':completion:*:default' list-colors "reply=("${PREFIX:+=(#bi)($PREFIX:t)(?)*==34=34}:${(s.:.)LS_COLORS}")"
+zstyle ':completion:*:descriptions' format "[%F{green} %d %f]"
+zstyle ':completion:*:corrections' format "%F{yellow} ~ %d (errors: %F{red}%e%F{yellow}) ~%f"
+zstyle ':completion:*:messages' format "%F{blue} +  %d  +%f"
+zstyle ':completion:*:warnings' format "%F{red} --  No Matches For: %d  --%f"
+zstyle ':completion:*:manuals' separate-sections true
+zstyle ':completion:*:*:*:hosts' ignored-patterns \
+    localhost loopback ip6-localhost ip6-loopback localhost6 localhost6.localdomain6 localhost.localdomain
+zstyle ':completion:*:*:(cd|nvim|ls):*:*' ignored-patterns '.idea|.git|__pycache__'
+zstyle ':completion:*:*:kill:*' menu yes select
+zstyle ':completion:*:*:kill:*' force-list always
+zstyle ':completion:*:(rm|kill|diff|cp):*' ignore-line yes
+zstyle ':completion:*:functions' ignored-patterns '_*'
+
+zstyle ':completion:*:*:(cp|bat):*' file-sort modification reverse
+zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*:bat:*' tag-order files subcommands
+zstyle ':completion:complete:*:options' sort false
+
+compdef _dirs exa fd
+
+zstyle ':completion:*:complete:flex:*' file-patterns '
+*(D-/):local-directories:"local directory"
+*.(l|lex|flex):lex-file:"lex file"
+'
+zstyle ':completion:*:complete:(yacc|bison):*' file-patterns '
+*(D-/):local-directories:"local directory"
+*.(y|yacc):grammar-file:"grammar file"
+'
+zstyle ':completion:*:complete:shellcheck:*' file-patterns '
+*(D-/):local-directories:"local directory"
+*.(sh|bash):shell-file:"shell file"
+'
+
+zle-keymap-select () {
+    if [ $KEYMAP = vicmd ]; then
+        printf "\033[2 q"
+    else
+        printf "\033[6 q"
+    fi
+}
+zle-line-init() {
+    zle -K viins
+    printf "\033[6 q"
+}
+zle -N zle-keymap-select
+zle -N zle-line-init
+
+bindkey '^r' history-incremental-search-backward
+bindkey '^u' kill-whole-line
+bindkey '^e' edit-command-line
+bindkey '^p' expand-absolute-path
+bindkey '^I' expand-or-complete-prefix
+
+# Menu {{{
+
+bindkey -M menuselect '^h' vi-backward-char
+bindkey -M menuselect '^k' vi-up-line-or-history
+bindkey -M menuselect '^j' vi-down-line-or-history
+bindkey -M menuselect '^l' vi-forward-char
+
+bindkey -M menuselect '^[[Z' reverse-menu-complete
+bindkey -M menuselect '^a' send-break
+bindkey -M menuselect '^g' clear-screen
+bindkey -M menuselect '^e' edit-command-line
+bindkey -M menuselect "+" accept-and-menu-complete
+# }}}
+
+if ! (( $chpwd_functions[(I)chpwd_cdls] )); then
+    # `I` flag == case sensitive
+    chpwd_functions+=(chpwd_cdls)
+fi
+
+function chpwd_cdls {
+    if [[ -o interactive ]]; then
+        emulate -L zsh
+        ls
+    fi
+}
+
+# Auto Notify Config {{{
+
+# Set threshold to 20seconds
+export AUTO_NOTIFY_THRESHOLD=30
+
+# Set notification expiry to 6 seconds
+export AUTO_NOTIFY_EXPIRE_TIME=6000
+
+# List of ignored commands
+AUTO_NOTIFY_IGNORE+=("docker" "nvim" "zsh" "bash" "lazygit" "man" "sleep" "python" "bat")
+
+
+#    %command - the command that the user executed
+#    %elapsed - number of seconds that elapsed
+#    %exit_code - the exit code of the command that was executed
+#export AUTO_NOTIFY_TITLE="Hey! %command has just finished"
+#export AUTO_NOTIFY_BODY="It completed in %elapsed seconds with exit code %exit_code"
+
+#export AUTO_NOTIFY_ICON_SUCCESS=/path/to/success/icon.png
+#export AUTO_NOTIFY_ICON_FAILURE=/path/to/failure/icon.png
+
+# }}}
+
+#source /home/james/.config/broot/launcher/bash/br
+
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
+
+eval "$(sheldon source)"
+eval "$(starship init zsh)"
+#eval "$(fzf --zsh)"
+eval "$(direnv hook zsh)"
+
+. "${HOME}/.zshenv"
+
+# opam configuration {{{
+#[[ ! -r /home/james/.opam/opam-init/init.zsh ]] || source /home/james/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+# }}}
+
+# vim:fdm=marker
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
