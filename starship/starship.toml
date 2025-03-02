@@ -166,6 +166,10 @@ repeat_offset = 1
 threshold = 2
 
 [sudo]
+format = '[\(sudo\)$symbol ]($style)'
+symbol = ''
+#'🧙 '
+style = 'bold blue'
 disabled = false
 
 [username]
