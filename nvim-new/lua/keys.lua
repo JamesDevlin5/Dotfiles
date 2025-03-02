@@ -1,5 +1,6 @@
 
 vim.cmd([[inoreabbrev #!! #!/usr/bin/env]])
+vim.cmd([[cnoreabbrev Rg grep]])
 
 --vim.cmd([[nnoremap <silent> j gj]])
 --vim.cmd([[nnoremap <silent> k gk]])

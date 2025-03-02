@@ -37,6 +37,7 @@ vim.diagnostic.config {
     underline = true,
     float = {
         border = "rounded",
+        style = "minimal",
         --source = "always",
         header = "",
         prefix = "",
@@ -52,7 +53,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] =
     })
 
 vim.lsp.handlers["textDocument/hover"] =
-    vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+    vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded", max_width = 250 })
 
 vim.lsp.handlers["textDocument/signatureHelp"] =
     vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
