@@ -98,7 +98,13 @@
 # $character"""
 format = """
 $username\
+$sudo\
 $directory\
+$git_branch\
+$git_commit\
+$git_status\
+$git_state\
+$shlvl\
 $character """
 
 # Inserts a blank line between shell prompts
@@ -117,7 +123,7 @@ vimcmd_visual_symbol = '[❮](yellow)'
 truncation_length = 3
 truncate_to_repo = true
 format = '[$path]($style)[$read_only]($read_only_style) '
-style = 'underline cyan'
+style = 'bold underline cyan'
 read_only = '🔒'
 read_only_style = 'red'
 truncation_symbol = '' # Could be '.../'
@@ -132,12 +138,24 @@ use_os_path_sep = true
 #'src/com/long/java/path' = 'mypath'
 
 [git_branch]
+format = 'on [$symbol$branch(:$remote_branch)]($style) '
+symbol = ' '
+style = 'purple'
+only_attached = true
 
 [git_commit]
+commit_hash_length = 7
+format = '[\($hash(@ $tag)\)]($style) '
+style = 'green'
+only_detached = true
+tag_disabled = false
+tag_symbol = ' 🏷 '
 
 [git_state]
 
 [git_status]
+style = 'red'
+ignore_submodules = true
 
 [shlvl]
 disabled = false
@@ -148,6 +166,7 @@ repeat_offset = 1
 threshold = 2
 
 [sudo]
+disabled = false
 
 [username]
 
