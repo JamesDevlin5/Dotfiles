@@ -55,5 +55,4 @@ function lsp_attach_keys(ev)
     vim.keymap.set("n", "<space>f", function()
         vim.lsp.buf.format { async = true }
     end, opts)
-    vim.cmd([[autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })]])
 end
