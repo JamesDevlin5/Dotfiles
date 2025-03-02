@@ -134,6 +134,9 @@ opt.fillchars = {
 
 opt.pyxversion = 3
 
+opt.grepprg = "rg --vimgrep --smart-case --hidden --glob '!.git'"
+vim.opt.grepformat = "%f:%l:%c:%m"
+
 -- }}}
 
 set_g("python3_host_prog", "/usr/bin/python3")

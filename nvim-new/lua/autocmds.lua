@@ -1,18 +1,18 @@
-vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("UserLspConfig", {}),
-    callback = function(ev)
-        require('keys').lsp_attach_keys(ev)
+-- vim.api.nvim_create_autocmd("LspAttach", {
+--     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+--     callback = function(ev)
+--         require('keys').lsp_attach_keys(ev)
 
-        vim.api.nvim_create_autocmd("CursorHold", {
-            callback = function()
-                vim.diagnostic.open_float(nil, {
-                    focusable = false
-                })
-            end
-        })
-        --vim.cmd([[autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })]])
-    end,
-})
+--         vim.api.nvim_create_autocmd("CursorHold", {
+--             callback = function()
+--                 vim.diagnostic.open_float(nil, {
+--                     focusable = false
+--                 })
+--             end
+--         })
+--         --vim.cmd([[autocmd CursorHold * lua vim.diagnostic.open_float(nil, { focusable = false })]])
+--     end,
+-- })
 
 -- Restore cursor to file position in previous editing session
 vim.api.nvim_create_autocmd("BufReadPost", {
@@ -97,28 +97,34 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 -- Auto resize splits when the terminal's window is resized
 vim.api.nvim_create_autocmd("VimResized", {
     command = "wincmd =",
+    desc = "Auto-resizes splits when the terminal window is resized"
 })
 
-vim.cmd[[
-"autocmd("FileType", {
-"    pattern = "help",
-"	desc = "Automatically Split help Buffers to the right",
-"	pattern = "help",
-"	command = "wincmd L",
-"})
+vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('SplitHelpBufRight', {clear = true}),
+    pattern = { "help" },
+    desc = "Automatically split help buffers to the right",
+    command = "wincmd L"
+})
 
-" autocmd("BufWritePre", {
-" 	desc = "Autocreate a dir when saving a file",
-" 	group = augroup("auto_create_dir", { clear = true }),
-" 	callback = function(event)
-" 		if event.match:match("^%w%w+:[\\/][\\/]") then
-" 			return
-" 		end
-" 		local file = vim.uv.fs_realpath(event.match) or event.match
-" 		fn.mkdir(fn.fnamemodify(file, ":p:h"), "p")
-" 	end,
-" })
-]]
+vim.api.nvim_create_autocmd('FileType', {
+    group = vim.api.nvim_create_augroup('QAutoQuitWindows', {clear = true}),
+    pattern = { "help", "qf", "telescope" },
+    desc = "Auto-close the window with `q`",
+    command = "nnoremap <buffer> <silent> q :close<CR>"
+})
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+    group = vim.api.nvim_create_augroup('AutoCreateDirOnSave', {clear = true}),
+    desc = "Auto-create directory when saving a file",
+    callback = function(event)
+        if event.match:match("^%w%w+:[\\/][\\/]") then
+            return
+        end
+        local file = vim.uv.fs_realpath(event.match) or event.match
+        vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
+    end
+})
 
 -- Set nowrap if window is left than textwidth
 vim.api.nvim_create_autocmd('WinResized', {
@@ -182,3 +188,25 @@ local ns = vim.api.nvim_create_namespace("visual_line")
             end
         end
     })
+
+-- always open quickfix window automatically.
+-- this uses cwindows which will open it only if there are entries.
+vim.api.nvim_create_autocmd("QuickFixCmdPost", {
+	group = vim.api.nvim_create_augroup("AutoOpenQuickfix", { clear = true }),
+	pattern = { "[^l]*" },
+	command = "cwindow"
+})
+
+-- COMMIT_EDITMSG is the filename that Git uses for commit messages when you run
+-- commands like `git commit` without `-m`. The commit message is temporarily
+-- stored in a file named .git/COMMIT_EDITMSG. Once you save and close the file,
+-- Git reads its contents as the commit message. This approach avoids issue with
+-- using `FileType` which is an event that editorconfig overrides.
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
+	pattern = "COMMIT_EDITMSG",
+	callback = function()
+		vim.schedule(function()
+			vim.opt_local.textwidth = 80
+		end)
+	end,
+})
