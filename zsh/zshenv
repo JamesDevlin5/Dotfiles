@@ -1,1 +1,4 @@
-. "$HOME/.cargo/env"
+. "${HOME}/.cargo/env"
+
+# Disable nvim aliases from reporting
+export YSU_IGNORED_ALIASES=("vim" "vi")
