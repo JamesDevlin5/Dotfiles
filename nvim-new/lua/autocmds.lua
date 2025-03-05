@@ -25,7 +25,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end,
 })
 
-
 -- removes trailing whitespace on save
 vim.api.nvim_create_autocmd("BufWritePre", {
     callback = function()
@@ -38,13 +37,12 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 -- highlights yanked text
 vim.api.nvim_create_autocmd("TextYankPost", {
     callback = function()
-        vim.highlight.on_yank({
+        vim.highlight.on_yank {
             higroup = "IncSearch",
             timeout = 100,
-        })
+        }
     end,
 })
-
 
 --[[
 -- Dim inactive windows
@@ -97,25 +95,25 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 -- Auto resize splits when the terminal's window is resized
 vim.api.nvim_create_autocmd("VimResized", {
     command = "wincmd =",
-    desc = "Auto-resizes splits when the terminal window is resized"
+    desc = "Auto-resizes splits when the terminal window is resized",
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-    group = vim.api.nvim_create_augroup('SplitHelpBufRight', {clear = true}),
+vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("SplitHelpBufRight", { clear = true }),
     pattern = { "help" },
     desc = "Automatically split help buffers to the right",
-    command = "wincmd L"
+    command = "wincmd L",
 })
 
-vim.api.nvim_create_autocmd('FileType', {
-    group = vim.api.nvim_create_augroup('QAutoQuitWindows', {clear = true}),
+vim.api.nvim_create_autocmd("FileType", {
+    group = vim.api.nvim_create_augroup("QAutoQuitWindows", { clear = true }),
     pattern = { "help", "qf", "telescope" },
     desc = "Auto-close the window with `q`",
-    command = "nnoremap <buffer> <silent> q :close<CR>"
+    command = "nnoremap <buffer> <silent> q :close<CR>",
 })
 
-vim.api.nvim_create_autocmd('BufWritePre', {
-    group = vim.api.nvim_create_augroup('AutoCreateDirOnSave', {clear = true}),
+vim.api.nvim_create_autocmd("BufWritePre", {
+    group = vim.api.nvim_create_augroup("AutoCreateDirOnSave", { clear = true }),
     desc = "Auto-create directory when saving a file",
     callback = function(event)
         if event.match:match("^%w%w+:[\\/][\\/]") then
@@ -123,18 +121,18 @@ vim.api.nvim_create_autocmd('BufWritePre', {
         end
         local file = vim.uv.fs_realpath(event.match) or event.match
         vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
-    end
+    end,
 })
 
 -- Set nowrap if window is left than textwidth
-vim.api.nvim_create_autocmd('WinResized', {
-  pattern = '*',
-  callback = function()
-    local win_width = vim.api.nvim_win_get_width(0)
-    local text_width = vim.opt.textwidth._value
-    local wide_enough = win_width < text_width + 1
-    vim.api.nvim_set_option_value('wrap', wide_enough, {})
-  end,
+vim.api.nvim_create_autocmd("WinResized", {
+    pattern = "*",
+    callback = function()
+        local win_width = vim.api.nvim_win_get_width(0)
+        local text_width = vim.opt.textwidth._value
+        local wide_enough = win_width < text_width + 1
+        vim.api.nvim_set_option_value("wrap", wide_enough, {})
+    end,
 })
 
 -- Set local settings for terminal buffers
@@ -154,47 +152,47 @@ vim.api.nvim_create_autocmd("TermOpen", {
 })
 
 -- Set nowrap if window is left than textwidth
-vim.api.nvim_create_autocmd('WinResized', {
-  pattern = '*',
-  callback = function()
-    local win_width = vim.api.nvim_win_get_width(0)
-    local text_width = vim.opt.textwidth._value
-    local wide_enough = win_width < text_width + 1
-    vim.api.nvim_set_option_value('wrap', wide_enough, {})
-  end,
+vim.api.nvim_create_autocmd("WinResized", {
+    pattern = "*",
+    callback = function()
+        local win_width = vim.api.nvim_win_get_width(0)
+        local text_width = vim.opt.textwidth._value
+        local wide_enough = win_width < text_width + 1
+        vim.api.nvim_set_option_value("wrap", wide_enough, {})
+    end,
 })
 
 -- Highlight visually-selected lines (via the line number)
 local ns = vim.api.nvim_create_namespace("visual_line")
-    vim.api.nvim_create_autocmd({ "ModeChanged", "CursorMoved" }, {
-        callback = function(args)
-              local mode = vim.fn.mode()
-            if args.event == "ModeChanged" and args.match:match("[vV]:.*") then
-                -- track when visual mode is canceled and clear the namespace
-                vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
-            elseif args.event == "CursorMoved" and mode == 'v' or mode == 'V' or mode == "" then
-                -- clear namespace and re-highlight the range
-                vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
-                local start_line = vim.fn.line("v")
-                local end_line = vim.fn.line(".")
-                if start_line > end_line then
-                    start_line, end_line = end_line, start_line
-                end
-                vim.api.nvim_buf_set_extmark(0, ns, start_line - 1, 0, {
-                    end_line = end_line - 1,
-                    -- number_hl_group = "CursorLineNr",
-                    number_hl_group = "Question",
-                })
+vim.api.nvim_create_autocmd({ "ModeChanged", "CursorMoved" }, {
+    callback = function(args)
+        local mode = vim.fn.mode()
+        if args.event == "ModeChanged" and args.match:match("[vV]:.*") then
+            -- track when visual mode is canceled and clear the namespace
+            vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+        elseif args.event == "CursorMoved" and mode == "v" or mode == "V" or mode == "" then
+            -- clear namespace and re-highlight the range
+            vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+            local start_line = vim.fn.line("v")
+            local end_line = vim.fn.line(".")
+            if start_line > end_line then
+                start_line, end_line = end_line, start_line
             end
+            vim.api.nvim_buf_set_extmark(0, ns, start_line - 1, 0, {
+                end_line = end_line - 1,
+                -- number_hl_group = "CursorLineNr",
+                number_hl_group = "Question",
+            })
         end
-    })
+    end,
+})
 
 -- always open quickfix window automatically.
 -- this uses cwindows which will open it only if there are entries.
 vim.api.nvim_create_autocmd("QuickFixCmdPost", {
-	group = vim.api.nvim_create_augroup("AutoOpenQuickfix", { clear = true }),
-	pattern = { "[^l]*" },
-	command = "cwindow"
+    group = vim.api.nvim_create_augroup("AutoOpenQuickfix", { clear = true }),
+    pattern = { "[^l]*" },
+    command = "cwindow",
 })
 
 -- COMMIT_EDITMSG is the filename that Git uses for commit messages when you run
@@ -203,10 +201,10 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
 -- Git reads its contents as the commit message. This approach avoids issue with
 -- using `FileType` which is an event that editorconfig overrides.
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
-	pattern = "COMMIT_EDITMSG",
-	callback = function()
-		vim.schedule(function()
-			vim.opt_local.textwidth = 80
-		end)
-	end,
+    pattern = "COMMIT_EDITMSG",
+    callback = function()
+        vim.schedule(function()
+            vim.opt_local.textwidth = 80
+        end)
+    end,
 })

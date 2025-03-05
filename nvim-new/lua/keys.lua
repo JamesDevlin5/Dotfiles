@@ -1,4 +1,3 @@
-
 vim.cmd([[inoreabbrev #!! #!/usr/bin/env]])
 vim.cmd([[cnoreabbrev Rg grep]])
 

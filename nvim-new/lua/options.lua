@@ -159,4 +159,3 @@ vim.filetype.add {
         ["~/.config/kitty/*.conf"] = "kitty",
     },
 }
-
