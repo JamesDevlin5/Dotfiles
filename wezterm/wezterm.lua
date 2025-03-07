@@ -65,6 +65,28 @@ config.tab_bar_style = {
 
 config.term = "wezterm"
 
+local act = wezterm.action
+
+config.keys = {
+    { key = "w", mods = "ALT", action = act.CloseCurrentPane { confirm = false } },
+
+    { key = "h", mods = "ALT", action = act.ActivatePaneDirection("Left") },
+    { key = "l", mods = "ALT", action = act.ActivatePaneDirection("Right") },
+    { key = "j", mods = "ALT", action = act.ActivatePaneDirection("Down") },
+    { key = "k", mods = "ALT", action = act.ActivatePaneDirection("Up") },
+
+    { key = "h", mods = "SHIFT|ALT", action = act.AdjustPaneSize { "Left", 4 } },
+    { key = "l", mods = "SHIFT|ALT", action = act.AdjustPaneSize { "Right", 4 } },
+    { key = "j", mods = "SHIFT|ALT", action = act.AdjustPaneSize { "Down", 4 } },
+    { key = "k", mods = "SHIFT|ALT", action = act.AdjustPaneSize { "Up", 4 } },
+
+    { key = "v", mods = "ALT", action = act.SplitVertical },
+    { key = "s", mods = "ALT", action = act.SplitHorizontal },
+
+    { key = "[", mods = "ALT", action = act.ActivateTabRelative(-1) },
+    { key = "]", mods = "ALT", action = act.ActivateTabRelative(1) },
+}
+
 local mux = wezterm.mux
 wezterm.on("gui-startup", function(cmd)
     local tab, pane, window = mux.spawn_window(cmd or {})
