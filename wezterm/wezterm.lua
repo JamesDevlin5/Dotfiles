@@ -1,32 +1,32 @@
 -- Pull in the wezterm API
-local wezterm = require 'wezterm'
+local wezterm = require("wezterm")
 
 -- This will hold the configuration.
 local config = wezterm.config_builder()
 
-config.audible_bell = 'Disabled'
+config.audible_bell = "Disabled"
 
 -- ms blink rate, set to 0 to disable blinking
 config.cursor_blink_rate = 800
 
 config.visual_bell = {
-  fade_in_function = 'EaseIn',
-  fade_in_duration_ms = 150,
-  fade_out_function = 'EaseOut',
-  fade_out_duration_ms = 150,
+    fade_in_function = "EaseIn",
+    fade_in_duration_ms = 150,
+    fade_out_function = "EaseOut",
+    fade_out_duration_ms = 150,
 }
 
 config.colors = {
-  visual_bell = '#202020',
+    visual_bell = "#202020",
 }
 
-config.default_cursor_style = 'BlinkingBar'
+config.default_cursor_style = "BlinkingBar"
 
 --config.font = 'FiraCode Nerd Font'
 config.font_size = 10.5
 
 -- For example, changing the color scheme:
-config.color_scheme = 'OneHalfDark'
+config.color_scheme = "OneHalfDark"
 
 config.hide_tab_bar_if_only_one_tab = true
 
@@ -63,7 +63,7 @@ config.tab_bar_style = {
 }
 --]]
 
-config.term = 'wezterm'
+config.term = "wezterm"
 
 local mux = wezterm.mux
 wezterm.on("gui-startup", function(cmd)
