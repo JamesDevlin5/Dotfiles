@@ -78,6 +78,7 @@ md() {
 alias -g school='/home/james/School/Analysis'
 alias -g notes='/home/james/School/Analysis/notes'
 alias -g labs='/home/james/School/Analysis/labs'
+alias -g dotfiles='/home/james/.dotfiles'
 
 alias pword='pgen -s -c 12 | tee >(tail -n +2 | xclip -r -selection clipboard)'
 
