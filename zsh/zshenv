@@ -2,3 +2,12 @@
 
 # Disable nvim aliases from reporting
 export YSU_IGNORED_ALIASES=("vim" "vi")
+
+# XDG Dirs {{{
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+# }}}
+
+# vim:fdm=marker
