@@ -105,6 +105,8 @@ alias wh='whence -v'
 
 alias g='git'
 
+alias clang-format='clang-format --style="~/.config/clang-format/config"'
+
 #function man() {
 #	env \
 #		LESS_TERMCAP_md=$(tput bold; tput setaf 4) \

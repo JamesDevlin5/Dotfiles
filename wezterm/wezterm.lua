@@ -23,7 +23,7 @@ config.colors = {
 config.default_cursor_style = 'BlinkingBar'
 
 --config.font = 'FiraCode Nerd Font'
-config.font_size = 12.0
+config.font_size = 10.5
 
 -- For example, changing the color scheme:
 config.color_scheme = 'OneHalfDark'
@@ -64,6 +64,12 @@ config.tab_bar_style = {
 --]]
 
 config.term = 'wezterm'
+
+local mux = wezterm.mux
+wezterm.on("gui-startup", function(cmd)
+    local tab, pane, window = mux.spawn_window(cmd or {})
+    window:gui_window():maximize()
+end)
 
 -- and finally, return the configuration to wezterm
 return config
