@@ -9,28 +9,28 @@ set_g("mapleader", " ")
 -- Disable unused stuff {{{
 -- :help provider.txt
 vim.tbl_map(function(p)
-    set_g("loaded_" .. p, vim.endswith(p, "provider") and 0 or 1)
-    -- vim.g["loaded_" .. p] = vim.endswith(p, "provider") and 0 or 1
+	set_g("loaded_" .. p, vim.endswith(p, "provider") and 0 or 1)
+	-- vim.g["loaded_" .. p] = vim.endswith(p, "provider") and 0 or 1
 end, {
-    "2html_plugin",
-    "gzip",
-    "matchit",
-    "matchparen",
-    "netrw",
-    "netrwPlugin",
-    "node_provider",
-    "perl_provider",
-    "python_provider",
-    "rplugin",
-    "ruby_provider",
-    "tar",
-    "tarPlugin",
-    "tohtml",
-    "tutor",
-    "vimball",
-    "vimballPlugin",
-    "zip",
-    "zipPlugin",
+	"2html_plugin",
+	"gzip",
+	"matchit",
+	"matchparen",
+	"netrw",
+	"netrwPlugin",
+	"node_provider",
+	"perl_provider",
+	"python_provider",
+	"rplugin",
+	"ruby_provider",
+	"tar",
+	"tarPlugin",
+	"tohtml",
+	"tutor",
+	"vimball",
+	"vimballPlugin",
+	"zip",
+	"zipPlugin",
 })
 -- }}}
 
@@ -120,16 +120,16 @@ opt.virtualedit = "block"
 opt.diffopt = "internal,filler,closeoff,algorithm:histogram,context:5,linematch:60"
 
 opt.listchars = {
-    tab = "‣ ",
-    trail = "·",
-    precedes = "«",
-    extends = "»",
-    eol = "¬",
+	tab = "‣ ",
+	trail = "·",
+	precedes = "«",
+	extends = "»",
+	eol = "¬",
 }
 
 opt.fillchars = {
-    foldopen = "▾",
-    foldclose = "›",
+	foldopen = "▾",
+	foldclose = "›",
 }
 
 opt.pyxversion = 3
@@ -144,18 +144,18 @@ set_g("is_bash", 1)
 set_g("sh_fold_enabled", 3)
 set_g("zsh_fold_enable", 1)
 
-vim.filetype.add {
-    extension = {
-        asm = "riscv",
-        s = "riscv",
-        h = "c", -- hpp is cpp
-    },
-    filename = {
-        [".zshrc"] = "zsh",
-        [".bashrc"] = "bash",
-    },
-    pattern = {
-        ["~/.zfunc/*"] = "zsh",
-        ["~/.config/kitty/*.conf"] = "kitty",
-    },
-}
+vim.filetype.add({
+	extension = {
+		asm = "riscv",
+		s = "riscv",
+		h = "c", -- hpp is cpp
+	},
+	filename = {
+		[".zshrc"] = "zsh",
+		[".bashrc"] = "bash",
+	},
+	pattern = {
+		["~/.zfunc/*"] = "zsh",
+		["~/.config/kitty/*.conf"] = "kitty",
+	},
+})
