@@ -22,8 +22,10 @@ config.colors = {
 
 config.default_cursor_style = "BlinkingBar"
 
---config.font = 'FiraCode Nerd Font'
-config.font_size = 10.5
+config.enable_scroll_bar = true
+
+config.font = wezterm.font 'VictorMono Nerd Font'
+config.font_size = 10
 
 -- For example, changing the color scheme:
 config.color_scheme = "OneHalfDark"
