@@ -1,9 +1,0 @@
-liblua5.4-dev
-lua5.4
-keepassx
-jq
-ffmpeg
-xclip
-pip
-nvm
-imagemagick
