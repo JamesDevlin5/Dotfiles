@@ -25,7 +25,15 @@ config.default_cursor_style = "BlinkingBar"
 config.enable_scroll_bar = true
 
 config.font = wezterm.font 'VictorMono Nerd Font'
-config.font_size = 10
+
+local hostname_handle = io.popen("hostname")
+local hostname_output = hostname_handle:read('*a')
+local laptop_hostname = 'james-Latitude-7490\n'
+if (hostname_output == laptop_hostname) then
+    config.font_size = 11.0
+else
+    config.font_size = 10.0
+end
 
 -- For example, changing the color scheme:
 config.color_scheme = "OneHalfDark"
