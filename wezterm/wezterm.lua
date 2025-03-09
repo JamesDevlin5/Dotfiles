@@ -23,7 +23,11 @@ config.colors = {
 config.default_cursor_style = "BlinkingBar"
 
 --config.font = 'FiraCode Nerd Font'
-config.font_size = 10.5
+-- if (system.exec("hostname") == 'james-Latitude-7490') then
+--     config.font_size = 11.0
+-- else
+    config.font_size = 10.5
+-- end
 
 -- For example, changing the color scheme:
 config.color_scheme = "OneHalfDark"
