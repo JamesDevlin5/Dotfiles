@@ -9,3 +9,6 @@ mkdir -p ~/.config/wezterm
 
 ln -s ~/.dotfiles/wezterm/wezterm.lua ~/.config/wezterm/wezterm.lua
 ln -s ~/.dotfiles/wezterm/stylua.toml ~/.config/wezterm/stylua.toml
+
+./install-terminfo
+./update-alternatives
