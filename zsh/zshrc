@@ -297,10 +297,22 @@ AUTO_NOTIFY_IGNORE+=("docker" "nvim" "zsh" "bash" "lazygit" "man" "sleep" "pytho
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 
-eval "$(sheldon source)"
-eval "$(starship init zsh)"
-#eval "$(fzf --zsh)"
-eval "$(direnv hook zsh)"
+if type "sheldon" > /dev/null; then
+    eval "$(sheldon source)"
+fi
+
+if type "starship" > /dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+if type "fzf" > /dev/null; then
+    source <(fzf --zsh)
+    #bash: eval "$(fzf --bash)"
+fi
+
+if type "direnv" > /dev/null; then
+    eval "$(direnv hook zsh)"
+fi
 
 . "${HOME}/.zshenv"
 

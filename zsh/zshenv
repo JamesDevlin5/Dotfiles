@@ -8,6 +8,61 @@ export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
+
+export XDG_DESKTOP_DIR="$HOME/Desktop"
+export XDG_DOCUMENTS_DIR="$HOME/Documents"
+export XDG_DOWNLOAD_DIR="$HOME/Downloads"
+export XDG_MUSIC_DIR="$HOME/Music"
+export XDG_PICTURES_DIR="$HOME/Pictures"
+export XDG_PUBLICSHARE_DIR="$HOME/Public"
+export XDG_TEMPLATES_DIR="$HOME/Templates"
+export XDG_VIDEOS_DIR="$HOME/Videos"
 # }}}
 
+# Fzf {{{
+export FZF_DEFAULT_COMMAND='fdfind --hidden --follow --exclude ".git" --type f --strip-cwd-prefix'
+export FZF_DEFAULT_OPTS="--layout=reverse --border --padding 1,2 --bind 'result:transform-list-label:
+        if [[ -z $FZF_QUERY ]]; then
+          echo \" $FZF_MATCH_COUNT items \"
+        else
+          echo \" $FZF_MATCH_COUNT matches for [$FZF_QUERY] \"
+        fi
+        '
+    --bind 'focus:transform-preview-label:[[ -n {} ]] && printf \" Previewing [%s] \" {}'
+    --bind 'focus:+transform-header:file --brief {} || echo \"No file selected\"'
+    --bind 'enter:become(nvim {})'
+    --bind 'ctrl-y:execute-silent(echo {} | gpaste-client)+abort'
+    --color 'border:#aaaaaa,label:#cccccc'
+    --color 'preview-border:#9999cc,preview-label:#ccccff'
+    --color 'list-border:#669966,list-label:#99cc99'
+    --color 'input-border:#996666,input-label:#ffcccc'
+    --color 'header-border:#6699cc,header-label:#99ccff'
+    --preview 'fzf-preview.sh {}'"
+    #--bind 'ctrl-r:change-list-label( Reloading the list )+reload(sleep 2; git ls-files)'
+
+    _fzf_comprun() {
+        local command=$1
+        shift
+
+        case "$command" in
+            cd)           fzf --preview 'tree {} | head -200'   "$@" ;;
+            export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+            ssh)          fzf --preview 'dig {}'                   "$@" ;;
+            *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+        esac
+    }
+
+    # Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+    # - The first argument to the function ($1) is the base path to start traversal
+    # - See the source code (completion.{bash,zsh}) for the details.
+    _fzf_compgen_path() {
+        fd --hidden --follow --exclude ".git" . "$1"
+    }
+
+    # Use fd to generate the list for directory completion
+    _fzf_compgen_dir() {
+        fd --type d --hidden --follow --exclude ".git" . "$1"
+    }
+
+# }}}
 # vim:fdm=marker
