@@ -25,6 +25,8 @@ vim.keymap.set("n", "<Space>e", vim.diagnostic.open_float)
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<Space>d", vim.diagnostic.setloclist)
+-- Search by word
+--vim.cmd[[nnoremap <Leader>/ \/\\<\\><Left><Left>]]
 -- vim.keymap.set("n", "/", "/\\v")
 -- vim.keymap.set("c", "s/", "s/\\v")
 vim.cmd([[nnoremap <silent> <Leader>t :ToggleTerm size=40 direction=float<CR>]])
