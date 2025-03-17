@@ -5,6 +5,10 @@ if [ $# -eq 1 ] && [ "$1" = "clean" ]; then
     return
 fi
 
+if ! [ -d ~/.config/nvim ]; then
+    mkdir ~/.config/nvim
+fi
+
 ln -s ~/.dotfiles/nvim/init.lua ~/.config/nvim/init.lua
 ln -s ~/.dotfiles/nvim/ftplugin ~/.config/nvim/ftplugin
 ln -s ~/.dotfiles/nvim/after ~/.config/nvim/after
