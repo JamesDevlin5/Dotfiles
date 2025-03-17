@@ -214,7 +214,7 @@ require("lazy").setup({
 					comparators = {
 						cmp.config.compare.sort_text,
 						cmp.config.compare.recently_used,
-						require("clangd_extensions.cmp_scores"),
+						-- require("clangd_extensions.cmp_scores"),
 						cmp.config.compare.locality,
 						cmp.config.compare.offset,
 						cmp.config.compare.exact,
@@ -486,9 +486,9 @@ require("lazy").setup({
 		"p00f/clangd_extensions.nvim",
 		ft = { "c", "cpp" },
 		opts = {
-			inlay_hints = {
-				inline = true,
-			},
+			-- inlay_hints = {
+			-- 	inline = true,
+			-- },
 			ast = {
 				--These require codicons (https://github.com/microsoft/vscode-codicons)
 				role_icons = {
@@ -510,6 +510,7 @@ require("lazy").setup({
 				},
 			},
 		},
+        enable = false
 	},
 	{
 		"mrcjkb/rustaceanvim",
