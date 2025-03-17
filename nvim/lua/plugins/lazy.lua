@@ -238,10 +238,11 @@ require("lazy").setup({
 					["<C-k>"] = cmp.mapping.scroll_docs(-4),
 					["<C-j>"] = cmp.mapping.scroll_docs(4),
 					["<C-e>"] = cmp.mapping.abort(),
-					["<C-Space"] = cmp.mapping.confirm({
-						behavior = cmp.ConfirmBehavior.Insert,
-						select = true,
-					}),
+					["<C-Space"] = cmp.mapping(function(cmp)
+                        cmp.show{
+                            providers = { "lsp" }
+                        }
+                    end, {"i", "s"}),
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if luasnip.expand_or_jumpable() then
 							luasnip.expand_or_jump()
