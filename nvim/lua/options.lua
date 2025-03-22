@@ -6,7 +6,7 @@ local set_g = vim.api.nvim_set_var
 
 set_g("mapleader", " ")
 
-vim.diagnostic.config { virtual_lines = true }
+vim.diagnostic.config { virtual_lines = true, severity_sort = true, float = { border = "single"}}
 
 -- Disable unused stuff {{{
 -- :help provider.txt
