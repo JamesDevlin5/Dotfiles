@@ -63,6 +63,9 @@ require("lazy").setup({
 			sections = {
 				lualine_c = {
 					"filename",
+                    function()
+                        return require'lsp-progress'.progress()
+                    end
 				},
 				lualine_x = {
 					{
@@ -121,11 +124,6 @@ require("lazy").setup({
 		end,
 	},
 	{
-		"AckslD/nvim-neoclip.lua",
-		opts = {},
-		enabled = false,
-	},
-	{
 		"windwp/nvim-autopairs",
 		event = "InsertEnter",
 		config = function()
@@ -144,7 +142,6 @@ require("lazy").setup({
 			-- ignore empty lines
 			ignore = "^$",
 		},
-		lazy = false,
 	},
 	{
 		"kylechui/nvim-surround",
@@ -185,8 +182,7 @@ require("lazy").setup({
 				unpack = unpack or table.unpack
 				local line, col = unpack(vim.api.nvim_win_get_cursor(0))
 				return col ~= 0
-					and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s")
-						== nil
+					and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
 			end
 			local cmp = require("cmp")
 			local luasnip = require("luasnip")
@@ -239,10 +235,10 @@ require("lazy").setup({
 					["<C-j>"] = cmp.mapping.scroll_docs(4),
 					["<C-e>"] = cmp.mapping.abort(),
 					["<C-Space"] = cmp.mapping(function(cmp)
-                        cmp.show{
-                            providers = { "lsp" }
-                        }
-                    end, {"i", "s"}),
+						cmp.show({
+							providers = { "lsp" },
+						})
+					end, { "i", "s" }),
 					["<Tab>"] = cmp.mapping(function(fallback)
 						if luasnip.expand_or_jumpable() then
 							luasnip.expand_or_jump()
@@ -337,6 +333,11 @@ require("lazy").setup({
 					extended_mode = true,
 					max_file_lines = nil,
 				},
+                matchup = {
+                    enable = true,
+                    disable = {},
+                    include_match_words = true
+                }
 			})
 		end,
 	},
@@ -511,7 +512,7 @@ require("lazy").setup({
 				},
 			},
 		},
-        enable = false
+		enable = false,
 	},
 	{
 		"mrcjkb/rustaceanvim",
@@ -531,6 +532,25 @@ require("lazy").setup({
 							},
 						},
 					},
+                    on_attach = function (client, bufnr)
+                        vim.keymap.set(
+                            "n",
+                            "<leader>a",
+                            function()
+                                vim.cmd.RustLsp('codeAction') -- supports rust-analyzer's grouping
+                                -- or vim.lsp.buf.codeAction() if you don't want grouping.
+                            end,
+                            { silent = true, buffer = bufnr }
+                        )
+                        vim.keymap.set(
+                            "n",
+                            "K",  -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
+                            function()
+                                vim.cmd.RustLsp({'hover', 'actions'})
+                            end,
+                            { silent = true, buffer = bufnr }
+                        )
+                    end
 				},
 			}
 		end,
@@ -798,6 +818,207 @@ require("lazy").setup({
 			}
 		end,
 	},
+	{
+		"m-demare/hlargs.nvim",
+		opts = {
+			color = "#ef9062",
+			paint_catch_blocks = {
+				declarations = true,
+				usages = true,
+			},
+			excluded_argnames = {
+				declarations = {},
+				usages = {
+					python = { "self", "cls" },
+					lua = { "self" },
+				},
+			},
+		},
+	},
+	{
+		"filipdutescu/renamer.nvim",
+		main = "master",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		config = function()
+			local mappings_utils = require("renamer.mappings.utils")
+            opts = {
+				-- The popup title, shown if `border` is true
+				title = "Rename",
+				-- The padding around the popup content
+				padding = {
+					top = 0,
+					left = 2,
+					bottom = 0,
+					right = 2,
+				},
+				-- The minimum width of the popup
+				min_width = 15,
+				-- The maximum width of the popup
+				max_width = 45,
+				-- Whether or not to shown a border around the popup
+				border = true,
+				-- The characters which make up the border
+				border_chars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" },
+				-- Whether or not to highlight the current word references through LSP
+				show_refs = true,
+				-- Whether or not to add resulting changes to the quickfix list
+				with_qf_list = true,
+				-- Whether or not to enter the new name through the UI or Neovim's `input`
+				-- prompt
+				with_popup = true,
+				-- The keymaps available while in the `renamer` buffer. The example below
+				-- overrides the default values, but you can add others as well.
+				mappings = {
+					["<c-i>"] = mappings_utils.set_cursor_to_start,
+					["<c-a>"] = mappings_utils.set_cursor_to_end,
+					["<c-e>"] = mappings_utils.set_cursor_to_word_end,
+					["<c-b>"] = mappings_utils.set_cursor_to_word_start,
+					["<c-c>"] = mappings_utils.clear_line,
+					["<c-u>"] = mappings_utils.undo,
+					["<c-r>"] = mappings_utils.redo,
+				},
+				-- Custom handler to be run after successfully renaming the word. Receives
+				-- the LSP 'textDocument/rename' raw response as its parameter.
+				handler = nil,
+			}
+		end,
+	},
+	{
+		"folke/todo-comments.nvim",
+		dependencies = { "nvim-lua/plenary.nvim" },
+		opts = {
+			signs = true, -- show icons in the signs column
+			sign_priority = 8, -- sign priority
+			-- keywords recognized as todo comments
+			keywords = {
+				FIX = {
+					icon = " ", -- icon used for the sign, and in search results
+					color = "error", -- can be a hex color, or a named color (see below)
+					alt = { "FIXME", "BUG", "FIXIT", "ISSUE" }, -- a set of other keywords that all map to this FIX keywords
+					-- signs = false, -- configure signs for some keywords individually
+				},
+				TODO = { icon = " ", color = "info" },
+				HACK = { icon = " ", color = "warning" },
+				WARN = { icon = " ", color = "warning", alt = { "WARNING", "XXX" } },
+				PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+				NOTE = { icon = " ", color = "hint", alt = { "INFO" } },
+				TEST = { icon = "⏲ ", color = "test", alt = { "TESTING", "PASSED", "FAILED" } },
+			},
+			gui_style = {
+				fg = "NONE", -- The gui style to use for the fg highlight group.
+				bg = "BOLD", -- The gui style to use for the bg highlight group.
+			},
+			merge_keywords = true, -- when true, custom keywords will be merged with the defaults
+			-- highlighting of the line containing the todo comment
+			-- * before: highlights before the keyword (typically comment characters)
+			-- * keyword: highlights of the keyword
+			-- * after: highlights after the keyword (todo text)
+			highlight = {
+				multiline = true, -- enable multine todo comments
+				multiline_pattern = "^.", -- lua pattern to match the next multiline from the start of the matched keyword
+				multiline_context = 10, -- extra lines that will be re-evaluated when changing a line
+				before = "", -- "fg" or "bg" or empty
+				keyword = "wide", -- "fg", "bg", "wide", "wide_bg", "wide_fg" or empty. (wide and wide_bg is the same as bg, but will also highlight surrounding characters, wide_fg acts accordingly but with fg)
+				after = "fg", -- "fg" or "bg" or empty
+				pattern = [[.*<(KEYWORDS)\s*:]], -- pattern or table of patterns, used for highlighting (vim regex)
+				comments_only = true, -- uses treesitter to match keywords in comments only
+				max_line_len = 400, -- ignore lines longer than this
+				exclude = {}, -- list of file types to exclude highlighting
+			},
+			-- list of named colors where we try to extract the guifg from the
+			-- list of highlight groups or use the hex color if hl not found as a fallback
+			colors = {
+				error = { "DiagnosticError", "ErrorMsg", "#DC2626" },
+				warning = { "DiagnosticWarn", "WarningMsg", "#FBBF24" },
+				info = { "DiagnosticInfo", "#2563EB" },
+				hint = { "DiagnosticHint", "#10B981" },
+				default = { "Identifier", "#7C3AED" },
+				test = { "Identifier", "#FF00FF" },
+			},
+			search = {
+				command = "rg",
+				args = {
+					"--color=never",
+					"--no-heading",
+					"--with-filename",
+					"--line-number",
+					"--column",
+				},
+				-- regex that will be used to match keywords.
+				-- don't replace the (KEYWORDS) placeholder
+				pattern = [[\b(KEYWORDS):]], -- ripgrep regex
+				-- pattern = [[\b(KEYWORDS)\b]], -- match without the extra colon. You'll likely get false positives
+			},
+		},
+	},
+    {
+       'linrongbin16/lsp-progress.nvim',
+       config = function()
+           require'lsp-progress'.setup{}
+           -- listen lsp-progress event and refresh lualine
+           vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+           vim.api.nvim_create_autocmd("User", {
+               group = "lualine_augroup",
+               pattern = "LspProgressStatusUpdated",
+               callback = require("lualine").refresh,
+           })
+       end,
+    },
+    {
+        'andymass/vim-matchup',
+        config = function()
+            vim.g.matchup_matchparen_offscreen = { method = "popup" }
+            -- To enable the delete surrounding (ds%) and change surrounding (cs%) maps,
+            vim.g.matchup_surround_enabled = 1
+
+            -- Set the MatchParen highlight at startup (colorscheme may already be set when this is loaded)
+            local function set_matchup_colo()
+                    vim.cmd[[hi MatchParen guibg=#5a5a5a]]
+            end
+            set_matchup_colo()
+
+            -- Update MatchParen highlight on colorscheme change
+            vim.api.nvim_create_augroup("vim_matchup_augroup", {clear = true})
+            vim.api.nvim_create_autocmd("ColorScheme", {
+                group = "vim_matchup_augroup",
+                pattern = "ColorScheme",
+                callback = set_matchup_colo,
+            })
+
+        end
+    },
+    {
+        "aidancz/buvvers.nvim",
+        opts = {
+            -- Take focus when window opens
+            buvvers_win_enter = true,
+            buffer_handle_list_to_buffer_name_list = function(handle_l)
+                local name_l
+
+                local default_function = require("buvvers.buffer_handle_list_to_buffer_name_list")
+                name_l = default_function(handle_l)
+
+                for n, name in ipairs(name_l) do
+                    local is_modified = vim.api.nvim_get_option_value("modified", {buf = handle_l[n]})
+                    local prefix
+                    if is_modified then
+                        prefix = "[+]"
+                    else
+                        prefix = "[ ]"
+                    end
+                    name_l[n] = {
+                        prefix,
+                        " ",
+                        name,
+                    }
+                end
+
+                return name_l
+            end,
+        }
+    }
 })
 
 -- }}}
+
+-- vim:fdm=marker

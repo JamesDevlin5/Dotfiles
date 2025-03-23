@@ -34,7 +34,7 @@ vim.cmd([[nnoremap <silent> <Leader>t :ToggleTerm size=40 direction=float<CR>]])
 vim.cmd([[nnoremap <Leader>f :FzfLua lines<CR>]])
 vim.cmd([[nnoremap <Leader>F :FzfLua blines<CR>]])
 vim.cmd([[nnoremap <Leader>o :FzfLua files<CR>]])
-vim.cmd([[nnoremap <Leader>y :lua require"neoclip.fzf"()<CR>]])
+-- vim.cmd([[nnoremap <Leader>y :lua require"neoclip.fzf"()<CR>]])
 
 -- Moving text
 --vim.cmd([[vnoremap J :m '>+1<CR>gv=gv]])
@@ -58,3 +58,40 @@ function lsp_attach_keys(ev)
 		vim.lsp.buf.format({ async = true })
 	end, opts)
 end
+
+vim.keymap.set("n", "]t", function()
+  require("todo-comments").jump_next()
+end, { desc = "Next todo comment" })
+
+vim.keymap.set("n", "[t", function()
+  require("todo-comments").jump_prev()
+end, { desc = "Previous todo comment" })
+
+vim.keymap.set("n", "<Leader>T", function()
+    vim.cmd[[:TodoQuickFix<CR>]]
+end, { desc = "Send TODOs to QuickFix list" })
+
+-- vim.keymap.set("n", "<Leader>tf", function()
+--     vim.cmd[[:TodoFzfLua<CR>]]
+-- end, { desc = "Send TODOs to Fzf" })
+
+-- You can also specify a list of valid jump keywords
+
+-- vim.keymap.set("n", "]t", function()
+--   require("todo-comments").jump_next({keywords = { "ERROR", "WARNING" }})
+-- end, { desc = "Next error/warning todo comment" })
+
+vim.api.nvim_set_keymap(
+    "n",
+    "<leader>rn",
+    '<cmd>lua require("renamer").rename()<cr>',
+    { noremap = true, silent = true }
+)
+vim.api.nvim_set_keymap(
+    "v",
+    "<leader>rn",
+    '<cmd>lua require("renamer").rename()<cr>',
+    { noremap = true, silent = true }
+)
+
+vim.keymap.set("n", "<Leader>B", require'buvvers'.toggle, { desc = "Toggle buvvers window"})

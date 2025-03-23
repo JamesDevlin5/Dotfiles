@@ -106,11 +106,19 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("QAutoQuitWindows", { clear = true }),
+	group = vim.api.nvim_create_augroup("QAutoQuitWindows_ft", { clear = true }),
 	pattern = { "help", "qf", "telescope" },
 	desc = "Auto-close the window with `q`",
 	command = "nnoremap <buffer> <silent> q :close<CR>",
 })
+
+-- TODO: Fix this
+--[[ vim.api.nvim_create_autocmd("BufRead", {
+    group = vim.api.nvim_create_augroup("QAutoQuitWindows_bufname", {clear = true}),
+    pattern = { "buvvers"},
+	desc = "Auto-close the window with `q`",
+	command = "nnoremap <buffer> <silent> q :close<CR>",
+}) ]]
 
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = vim.api.nvim_create_augroup("AutoCreateDirOnSave", { clear = true }),
