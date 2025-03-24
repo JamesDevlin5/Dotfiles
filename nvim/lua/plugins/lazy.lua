@@ -63,9 +63,9 @@ require("lazy").setup({
 			sections = {
 				lualine_c = {
 					"filename",
-                    function()
-                        return require'lsp-progress'.progress()
-                    end
+					function()
+						return require("lsp-progress").progress()
+					end,
 				},
 				lualine_x = {
 					{
@@ -333,11 +333,11 @@ require("lazy").setup({
 					extended_mode = true,
 					max_file_lines = nil,
 				},
-                matchup = {
-                    enable = true,
-                    disable = {},
-                    include_match_words = true
-                }
+				matchup = {
+					enable = true,
+					disable = {},
+					include_match_words = true,
+				},
 			})
 		end,
 	},
@@ -532,25 +532,20 @@ require("lazy").setup({
 							},
 						},
 					},
-                    on_attach = function (client, bufnr)
-                        vim.keymap.set(
-                            "n",
-                            "<leader>a",
-                            function()
-                                vim.cmd.RustLsp('codeAction') -- supports rust-analyzer's grouping
-                                -- or vim.lsp.buf.codeAction() if you don't want grouping.
-                            end,
-                            { silent = true, buffer = bufnr }
-                        )
-                        vim.keymap.set(
-                            "n",
-                            "K",  -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
-                            function()
-                                vim.cmd.RustLsp({'hover', 'actions'})
-                            end,
-                            { silent = true, buffer = bufnr }
-                        )
-                    end
+					on_attach = function(client, bufnr)
+						vim.keymap.set("n", "<leader>a", function()
+							vim.cmd.RustLsp("codeAction") -- supports rust-analyzer's grouping
+							-- or vim.lsp.buf.codeAction() if you don't want grouping.
+						end, { silent = true, buffer = bufnr })
+						vim.keymap.set(
+							"n",
+							"K", -- Override Neovim's built-in hover keymap with rustaceanvim's hover actions
+							function()
+								vim.cmd.RustLsp({ "hover", "actions" })
+							end,
+							{ silent = true, buffer = bufnr }
+						)
+					end,
 				},
 			}
 		end,
@@ -841,7 +836,7 @@ require("lazy").setup({
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = function()
 			local mappings_utils = require("renamer.mappings.utils")
-            opts = {
+			opts = {
 				-- The popup title, shown if `border` is true
 				title = "Rename",
 				-- The padding around the popup content
@@ -951,72 +946,75 @@ require("lazy").setup({
 			},
 		},
 	},
-    {
-       'linrongbin16/lsp-progress.nvim',
-       config = function()
-           require'lsp-progress'.setup{}
-           -- listen lsp-progress event and refresh lualine
-           vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
-           vim.api.nvim_create_autocmd("User", {
-               group = "lualine_augroup",
-               pattern = "LspProgressStatusUpdated",
-               callback = require("lualine").refresh,
-           })
-       end,
-    },
-    {
-        'andymass/vim-matchup',
-        config = function()
-            vim.g.matchup_matchparen_offscreen = { method = "popup" }
-            -- To enable the delete surrounding (ds%) and change surrounding (cs%) maps,
-            vim.g.matchup_surround_enabled = 1
+	{
+		"linrongbin16/lsp-progress.nvim",
+		config = function()
+			require("lsp-progress").setup({})
+			-- listen lsp-progress event and refresh lualine
+			vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+			vim.api.nvim_create_autocmd("User", {
+				group = "lualine_augroup",
+				pattern = "LspProgressStatusUpdated",
+				callback = require("lualine").refresh,
+			})
+		end,
+	},
+	{
+		"andymass/vim-matchup",
+		config = function()
+			vim.g.matchup_matchparen_offscreen = { method = "popup" }
+			-- To enable the delete surrounding (ds%) and change surrounding (cs%) maps,
+			vim.g.matchup_surround_enabled = 1
 
-            -- Set the MatchParen highlight at startup (colorscheme may already be set when this is loaded)
-            local function set_matchup_colo()
-                    vim.cmd[[hi MatchParen guibg=#5a5a5a]]
-            end
-            set_matchup_colo()
+			-- Set the MatchParen highlight at startup (colorscheme may already be set when this is loaded)
+			local function set_matchup_colo()
+				vim.cmd([[hi MatchParen guibg=#5a5a5a]])
+			end
+			set_matchup_colo()
 
-            -- Update MatchParen highlight on colorscheme change
-            vim.api.nvim_create_augroup("vim_matchup_augroup", {clear = true})
-            vim.api.nvim_create_autocmd("ColorScheme", {
-                group = "vim_matchup_augroup",
-                pattern = "ColorScheme",
-                callback = set_matchup_colo,
-            })
+			-- Update MatchParen highlight on colorscheme change
+			vim.api.nvim_create_augroup("vim_matchup_augroup", { clear = true })
+			vim.api.nvim_create_autocmd("ColorScheme", {
+				group = "vim_matchup_augroup",
+				pattern = "ColorScheme",
+				callback = set_matchup_colo,
+			})
+		end,
+	},
+	{
+		"aidancz/buvvers.nvim",
+		opts = {
+			-- Take focus when window opens
+			buvvers_win_enter = true,
+			-- set filetype
+			buvvers_buf_opt = {
+				filetype = "buvvers",
+			},
+			buffer_handle_list_to_buffer_name_list = function(handle_l)
+				local name_l
 
-        end
-    },
-    {
-        "aidancz/buvvers.nvim",
-        opts = {
-            -- Take focus when window opens
-            buvvers_win_enter = true,
-            buffer_handle_list_to_buffer_name_list = function(handle_l)
-                local name_l
+				local default_function = require("buvvers.buffer_handle_list_to_buffer_name_list")
+				name_l = default_function(handle_l)
 
-                local default_function = require("buvvers.buffer_handle_list_to_buffer_name_list")
-                name_l = default_function(handle_l)
+				for n, name in ipairs(name_l) do
+					local is_modified = vim.api.nvim_get_option_value("modified", { buf = handle_l[n] })
+					local prefix
+					if is_modified then
+						prefix = "[+]"
+					else
+						prefix = "[ ]"
+					end
+					name_l[n] = {
+						prefix,
+						" ",
+						name,
+					}
+				end
 
-                for n, name in ipairs(name_l) do
-                    local is_modified = vim.api.nvim_get_option_value("modified", {buf = handle_l[n]})
-                    local prefix
-                    if is_modified then
-                        prefix = "[+]"
-                    else
-                        prefix = "[ ]"
-                    end
-                    name_l[n] = {
-                        prefix,
-                        " ",
-                        name,
-                    }
-                end
-
-                return name_l
-            end,
-        }
-    }
+				return name_l
+			end,
+		},
+	},
 })
 
 -- }}}

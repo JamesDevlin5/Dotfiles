@@ -60,15 +60,15 @@ function lsp_attach_keys(ev)
 end
 
 vim.keymap.set("n", "]t", function()
-  require("todo-comments").jump_next()
+	require("todo-comments").jump_next()
 end, { desc = "Next todo comment" })
 
 vim.keymap.set("n", "[t", function()
-  require("todo-comments").jump_prev()
+	require("todo-comments").jump_prev()
 end, { desc = "Previous todo comment" })
 
 vim.keymap.set("n", "<Leader>T", function()
-    vim.cmd[[:TodoQuickFix<CR>]]
+	vim.cmd([[:TodoQuickFix<CR>]])
 end, { desc = "Send TODOs to QuickFix list" })
 
 -- vim.keymap.set("n", "<Leader>tf", function()
@@ -82,16 +82,16 @@ end, { desc = "Send TODOs to QuickFix list" })
 -- end, { desc = "Next error/warning todo comment" })
 
 vim.api.nvim_set_keymap(
-    "n",
-    "<leader>rn",
-    '<cmd>lua require("renamer").rename()<cr>',
-    { noremap = true, silent = true }
+	"n",
+	"<leader>rn",
+	'<cmd>lua require("renamer").rename()<cr>',
+	{ noremap = true, silent = true }
 )
 vim.api.nvim_set_keymap(
-    "v",
-    "<leader>rn",
-    '<cmd>lua require("renamer").rename()<cr>',
-    { noremap = true, silent = true }
+	"v",
+	"<leader>rn",
+	'<cmd>lua require("renamer").rename()<cr>',
+	{ noremap = true, silent = true }
 )
 
-vim.keymap.set("n", "<Leader>B", require'buvvers'.toggle, { desc = "Toggle buvvers window"})
+vim.keymap.set("n", "<Leader>B", require("buvvers").toggle, { desc = "Toggle buvvers window" })
