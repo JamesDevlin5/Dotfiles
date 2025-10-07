@@ -2,4 +2,5 @@
 
 ln -s ~/.dotfiles/zsh/zshrc ~/.zshrc
 ln -s ~/.dotfiles/zsh/zshenv ~/.zshenv
+ln -s ~/.dotfiles/zsh/zcomplete ~/.zcomplete
 

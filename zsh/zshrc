@@ -11,7 +11,8 @@ export KEYTIMEOUT=1
 typeset -U path
 typeset -U fpath
 
-path+=( "$HOME/bin" "$HOME/.cargo/bin" "$HOME/.local/bin" "/usr/local/go/bin")
+path+=( "$HOME/bin" "$HOME/.cargo/bin" "$HOME/.local/bin" "/usr/local/go/bin" )
+fpath+=( "$HOME/.zcomplete" )
 
 export PAGER="bat"
 export EDITOR="nvim"
@@ -75,9 +76,9 @@ md() {
 }
 
 # SCHOOL STUFF
-#alias -g school='/home/james/School/Analysis'
-#alias -g notes='/home/james/School/Analysis/notes'
-#alias -g labs='/home/james/School/Analysis/labs'
+alias -g school='/home/james/School/OperatingSystems'
+alias -g notes='/home/james/School/OperatingSystems/notes'
+alias -g labs='/home/james/School/OperatingSystems/labs'
 alias -g dotfiles='/home/james/.dotfiles'
 
 alias pword='pgen -s -c 12 | tee >(tail -n +2 | xclip -r -selection clipboard)'
@@ -97,7 +98,7 @@ alias copyfile='gpaste-client <'
 alias cpf='copyfile'
 alias zshrc="${EDITOR} ~/.zshrc"
 #alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-bat; update-lazygit;'
-alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit;'
+alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm;'
 
 alias clang-format='clang-format-15 -i'
 alias gofmt='gofmt -w'
@@ -306,7 +307,7 @@ if type "starship" > /dev/null; then
 fi
 
 if type "fzf" > /dev/null; then
-    source <(fzf --zsh)
+    #source <(fzf --zsh)
     #bash: eval "$(fzf --bash)"
 fi
 

@@ -59,6 +59,8 @@ function lsp_attach_keys(ev)
 	end, opts)
 end
 
+vim.cmd[[:command CodeAction lua vim.lsp.buf.code_action()]]
+
 vim.keymap.set("n", "]t", function()
 	require("todo-comments").jump_next()
 end, { desc = "Next todo comment" })

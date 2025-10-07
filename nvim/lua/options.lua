@@ -57,23 +57,23 @@ local hostname_handle = io.popen("hostname")
 local hostname_output = hostname_handle:read('*a')
 local laptop_hostname = 'james-Latitude-7490\n'
 
-if (hostname_output == laptop_hostname) then
-else
-vim.cmd([[
-    let g:clipboard = {
-    \    'name': 'gpaste',
-    \    'copy': {
-    \       '+': ['gpaste-client', '-'],
-    \       '*': ['gpaste-client', '-'],
-    \    },
-    \    'paste': {
-    \       '+': ['gpaste-client', 'get', '0'],
-    \       '*': ['gpaste-client', 'get', '0'],
-    \    },
-    \    'cache_enabled': 1,
-    \}
-    ]])
-end
+-- if (hostname_output == laptop_hostname) then
+-- else
+-- vim.cmd([[
+--     let g:clipboard = {
+--     \    'name': 'gpaste',
+--     \    'copy': {
+--     \       '+': ['gpaste-client', '-'],
+--     \       '*': ['gpaste-client', '-'],
+--     \    },
+--     \    'paste': {
+--     \       '+': ['gpaste-client', 'get', '0'],
+--     \       '*': ['gpaste-client', 'get', '0'],
+--     \    },
+--     \    'cache_enabled': 1,
+--     \}
+--     ]])
+-- end
 
 -- opt.cursorline = true
 opt.cursorline = false
