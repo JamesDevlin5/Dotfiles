@@ -73,6 +73,17 @@ require("lazy").setup({
 						maxcount = 999,
 						timeout = 500,
 					},
+                    {
+                        function()
+                            local starts = vim.fn.line("v")
+                            local ends = vim.fn.line(".")
+                            local count = starts <= ends and ends - starts + 1 or starts - ends + 1
+                            return count .. " Lines Selected"
+                        end,
+                        cond = function()
+                            return vim.fn.mode():find("[Vv]") ~= nil
+                        end,
+                    },
 					"filetype",
 				},
 			},

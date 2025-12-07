@@ -78,7 +78,8 @@ md() {
 # SCHOOL STUFF
 alias -g school='/home/james/School/OperatingSystems'
 alias -g notes='/home/james/School/OperatingSystems/notes'
-alias -g labs='/home/james/School/OperatingSystems/labs'
+#alias -g labs='/home/james/School/OperatingSystems/labs'
+alias -g prj='/home/james/School/OperatingSystems/labs/project4'
 alias -g dotfiles='/home/james/.dotfiles'
 
 alias pword='pgen -s -c 12 | tee >(tail -n +2 | xclip -r -selection clipboard)'
@@ -98,7 +99,8 @@ alias copyfile='gpaste-client <'
 alias cpf='copyfile'
 alias zshrc="${EDITOR} ~/.zshrc"
 #alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-bat; update-lazygit;'
-alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm;'
+#alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm;'
+alias update='apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm;'
 
 alias clang-format='clang-format-15 -i'
 alias gofmt='gofmt -w'
