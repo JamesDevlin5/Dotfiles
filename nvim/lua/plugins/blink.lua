@@ -25,6 +25,7 @@ return {
 				})
 			end,
 		},
+        { "nvim-tree/nvim-web-devicons", opts = {} },
 	},
 
 	-- use a release tag to download pre-built binaries
