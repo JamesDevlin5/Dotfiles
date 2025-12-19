@@ -6,6 +6,8 @@ local set_g = vim.api.nvim_set_var
 
 set_g("mapleader", " ")
 
+set_g("have_nerd_font", true)
+
 vim.diagnostic.config({ virtual_lines = true, severity_sort = true, float = { border = "single" } })
 
 -- Disable unused stuff {{{
@@ -51,27 +53,40 @@ opt.number = true
 opt.numberwidth = 3
 opt.signcolumn = "yes:1"
 opt.statuscolumn = "%l%s"
-opt.clipboard = "unnamedplus"
 
-local hostname_handle = io.popen("hostname")
-local hostname_output = hostname_handle:read('*a')
-local laptop_hostname = 'james-Latitude-7490\n'
+opt.path:append({ "**" })
+opt.wildignore:append({
+	"*.o",
+	"*.obj",
+	"*.dll",
+	"*.exe",
+	"*.pyc",
+	"*.class",
+	"*.swp",
+	"*.swo",
+	"*.DS_Store",
+	"*/node_modules/*",
+	"*/target/*",
+	"*/build/*",
+	"*/dist/*",
+	"*/.git/*",
+	"*/.svn/*",
+	"*/.venv/*",
+	"*/venv/*",
+})
+
+-- Sync clipboard between OS and Neovim
+vim.schedule(function()
+	vim.o.clipboard = "unnamedplus"
+end)
+
+--local hostname_handle = io.popen("hostname")
+--local hostname_output = hostname_handle:read('*a')
+--local laptop_hostname = 'james-Latitude-7490\n'
 
 -- if (hostname_output == laptop_hostname) then
 -- else
 -- vim.cmd([[
---     let g:clipboard = {
---     \    'name': 'gpaste',
---     \    'copy': {
---     \       '+': ['gpaste-client', '-'],
---     \       '*': ['gpaste-client', '-'],
---     \    },
---     \    'paste': {
---     \       '+': ['gpaste-client', 'get', '0'],
---     \       '*': ['gpaste-client', 'get', '0'],
---     \    },
---     \    'cache_enabled': 1,
---     \}
 --     ]])
 -- end
 
@@ -92,8 +107,8 @@ opt.undofile = true
 opt.infercase = true
 opt.showmatch = true
 opt.matchtime = 5
-opt.timeoutlen = 450
-opt.updatetime = 550
+opt.timeoutlen = 400
+opt.updatetime = 300
 
 opt.spelloptions = "camel,noplainbuffer"
 opt.spelllang = { "en_us" }
@@ -135,6 +150,7 @@ opt.listchars = {
 	precedes = "«",
 	extends = "»",
 	eol = "¬",
+	nbsp = "␣",
 }
 
 opt.fillchars = {
@@ -142,10 +158,16 @@ opt.fillchars = {
 	foldclose = "›",
 }
 
+vim.o.inccommand = "split"
+
 opt.pyxversion = 3
 
 opt.grepprg = "rg --vimgrep --smart-case --hidden --glob '!.git'"
 vim.opt.grepformat = "%f:%l:%c:%m"
+
+-- Partial title rewriting
+vim.o.titlestring = "%<%F - nvim"
+vim.o.title = true
 
 -- }}}
 

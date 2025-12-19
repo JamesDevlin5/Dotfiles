@@ -1,8 +1,6 @@
-
 require("options")
-require("plugins.lazy")
-require("lsp")
+require("keys")
 require("autocmds")
 require("funcs")
-require("keys")
-
+require("plugins.lazy")
+require("lsp")

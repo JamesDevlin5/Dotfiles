@@ -1,3 +1,10 @@
+--Create an autocommand group with automatic clearing
+---@param name string
+---@return integer
+local function augroup(name)
+	return vim.api.nvim_create_augroup("my_" .. name, { clear = true })
+end
+
 -- vim.api.nvim_create_autocmd("LspAttach", {
 --     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
 --     callback = function(ev)
@@ -206,5 +213,83 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile" }, {
 		vim.schedule(function()
 			vim.opt_local.textwidth = 80
 		end)
+	end,
+})
+
+-- Markdown-specific settings
+vim.api.nvim_create_autocmd("FileType", {
+	group = augroup("markdown"),
+	pattern = "markdown",
+	desc = "Set markdown textwidth/wrap/spell",
+	callback = function()
+		vim.bo.textwidth = 80
+		vim.opt_local.wrap = true
+		vim.opt_local.spell = true
+	end,
+})
+
+-- Git commit message settings
+vim.api.nvim_create_autocmd("FileType", {
+	group = augroup("gitcommit"),
+	pattern = "gitcommit",
+	desc = "Set gitcommit formatting",
+	callback = function()
+		vim.bo.textwidth = 72
+		vim.wo.colorcolumn = "50,73"
+		vim.schedule(function()
+			vim.wo.spell = true
+			vim.wo.wrap = true
+		end)
+	end,
+})
+
+-- Clean old undo files (older than 14 days) with delayed startup
+vim.api.nvim_create_autocmd("VimEnter", {
+	group = augroup("undo_cleanup"),
+	desc = "Clean old undo files after delay",
+	callback = function()
+		vim.defer_fn(function()
+			local undodir = vim.fn.expand(vim.o.undodir)
+
+			-- Safety: only proceed if undodir looks like a valid undo directory
+			if not undodir:match("undo") then
+				return
+			end
+			if vim.fn.isdirectory(undodir) == 0 then
+				return
+			end
+
+			local max_age_days = 14
+			local max_age_seconds = max_age_days * 24 * 60 * 60
+			local now = os.time()
+			local deleted = 0
+
+			local handle = vim.uv.fs_scandir(undodir)
+			if not handle then
+				return
+			end
+
+			while true do
+				local name, type = vim.uv.fs_scandir_next(handle)
+				if not name then
+					break
+				end
+
+				-- Safety: only delete files that look like undo files (path-encoded with %)
+				if type == "file" and name:match("%%") then
+					local filepath = vim.fs.joinpath(undodir, name)
+					local stat = vim.uv.fs_stat(filepath)
+					if stat and (now - stat.mtime.sec) > max_age_seconds then
+						if vim.uv.fs_unlink(filepath) then
+							deleted = deleted + 1
+						end
+					end
+				end
+			end
+
+			if deleted > 0 then
+				vim.notify(string.format("Cleaned %d old undo file(s)", deleted), vim.log.levels.INFO)
+			end
+		end, 5000) -- 5 second delay after startup
 	end,
 })
