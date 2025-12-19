@@ -25,7 +25,7 @@ return {
 				})
 			end,
 		},
-        { "nvim-tree/nvim-web-devicons", opts = {} },
+		{ "nvim-tree/nvim-web-devicons", opts = {} },
 	},
 
 	-- use a release tag to download pre-built binaries
@@ -190,4 +190,5 @@ return {
 		fuzzy = { implementation = "prefer_rust_with_warning" },
 	},
 	opts_extend = { "sources.default" },
+	enabled = require("utils").is_vscode(),
 }
