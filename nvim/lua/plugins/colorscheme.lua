@@ -6,6 +6,7 @@ function onedark()
 		config = function()
 			require("onedark").load()
 		end,
+		enabled = require("utils").is_vscode(),
 	}
 end
 
@@ -29,6 +30,7 @@ function lvim()
 				light = {},
 			},
 		},
+		enabled = require("utils").is_vscode(),
 	}
 end
 
