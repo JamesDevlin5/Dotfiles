@@ -29,6 +29,7 @@ require("lazy").setup({
 	require("plugins.rainbow-delims"),
 	require("plugins.todo-comments"),
     require("plugins.statuscol"),
+    require("plugins.lsp"),
     require("plugins.harpoon"),
 	--	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 	--  {{{
@@ -409,7 +410,6 @@ require("lazy").setup({
 	--		-- },
 	--	},
 	--	}}}
-	--	{ "folke/neodev.nvim", opts = {}, ft = { "lua" }, enabled = false },
 	--	{{{
 	--	{
 	--		"lewis6991/gitsigns.nvim",
@@ -665,21 +665,6 @@ require("lazy").setup({
 	--				-- the LSP 'textDocument/rename' raw response as its parameter.
 	--				handler = nil,
 	--			}
-	--		end,
-	--	},
-	--	}}}
-	--	{{{
-	--	{
-	--		"linrongbin16/lsp-progress.nvim",
-	--		config = function()
-	--			require("lsp-progress").setup({})
-	--			-- listen lsp-progress event and refresh lualine
-	--			vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
-	--			vim.api.nvim_create_autocmd("User", {
-	--				group = "lualine_augroup",
-	--				pattern = "LspProgressStatusUpdated",
-	--				callback = require("lualine").refresh,
-	--			})
 	--		end,
 	--	},
 	--	}}}

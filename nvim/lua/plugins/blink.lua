@@ -150,7 +150,7 @@ return {
 					name = "LazyDev",
 					module = "lazydev.integrations.blink",
 					-- Make lazydev completions top priority (see `:h blink.cmp`)
-					score_offset = 1000,
+					score_offset = 100,
 				},
 				lsp = {
 					min_keyword_length = 2,
@@ -170,7 +170,7 @@ return {
 				},
 				buffer = {
 					min_keyword_length = 3,
-					max_items = 5,
+					max_items = 12,
 					opts = {
 						get_bufnrs = function()
 							return vim.tbl_filter(function(bufnr)
