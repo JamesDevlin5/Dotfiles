@@ -29,6 +29,7 @@ require("lazy").setup({
 	require("plugins.rainbow-delims"),
 	require("plugins.todo-comments"),
     require("plugins.statuscol"),
+    require("plugins.harpoon"),
 	--	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 	--  {{{
 	--	{
