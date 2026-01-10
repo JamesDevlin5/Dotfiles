@@ -11,7 +11,6 @@ return {
 
         local language_servers = {
             "bashls",
-            "black",
             "clangd",
             "jsonls",
             "lua_ls",
@@ -19,8 +18,8 @@ return {
             "pyright",
             "rust_analyzer",
             "ts_ls",
-            "shellcheck",
-            "commitlint"
+            -- "shellcheck",
+            -- "commitlint"
         }
 
 		-- Setup Mason first
