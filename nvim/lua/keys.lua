@@ -42,6 +42,7 @@ vim.keymap.set("v", ">", ">gv", { silent = true, desc = "Re-select indented text
 vim.keymap.set("n", "J", ":m .+1<CR>==", { silent = true, desc = "Move text down" })
 vim.keymap.set("v", "K", "'<-2<CR>gv=gv", { silent = true, desc = "Move text up" })
 vim.keymap.set("n", "K", ":m .-2<CR>==", { silent = true, desc = "Move text up" })
+vim.keymap.set("n", "Q", "@q", {silent = true, desc = "Execute q macro"})
 
 function lsp_attach_keys(ev)
 	-- Buffer local mappings.

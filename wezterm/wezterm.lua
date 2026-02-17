@@ -142,6 +142,10 @@ config.keys = {
     { key = "j", mods = "SHIFT|ALT", action = act.AdjustPaneSize { "Down", 4 } },
     { key = "k", mods = "SHIFT|ALT", action = act.AdjustPaneSize { "Up", 4 } },
 
+    -- ctrl-shift-vim keys to move between tabs
+    { key = "h", mods = "CTRL|SHIFT|ALT", action = wezterm.action.ActivateTabRelative(-1) },
+    { key = "l", mods = "CTRL|SHIFT|ALT", action = wezterm.action.ActivateTabRelative(1) },
+
     -- splitting
     { key = "v", mods = "ALT", action = act.SplitVertical },
     { key = "s", mods = "ALT", action = act.SplitHorizontal },

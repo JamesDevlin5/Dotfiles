@@ -76,10 +76,11 @@ md() {
 }
 
 # SCHOOL STUFF
-alias -g school='/home/james/School/OperatingSystems'
-alias -g notes='/home/james/School/OperatingSystems/notes'
-#alias -g labs='/home/james/School/OperatingSystems/labs'
-alias -g prj='/home/james/School/OperatingSystems/labs/project4'
+CURRENT_CLASS="Embedded\ Systems"
+alias -g school="/home/james/School/${CURRENT_CLASS}/"
+alias -g notes="/home/james/School/${CURRENT_CLASS}/notes"
+#alias -g labs="/home/james/School/${CURRENT_CLASS}/labs"
+alias -g prj="/home/james/School/${CURRENT_CLASS}/projects/projects/project1"
 alias -g dotfiles='/home/james/.dotfiles'
 
 alias pword='pgen -s -c 12 | tee >(tail -n +2 | xclip -r -selection clipboard)'
