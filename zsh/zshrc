@@ -99,9 +99,7 @@ alias cux='chmod u-x'
 alias copyfile='gpaste-client <'
 alias cpf='copyfile'
 alias zshrc="${EDITOR} ~/.zshrc"
-#alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-bat; update-lazygit;'
-#alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm;'
-alias update='apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm;'
+alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm;'
 
 alias clang-format='clang-format-15 -i'
 alias gofmt='gofmt -w'

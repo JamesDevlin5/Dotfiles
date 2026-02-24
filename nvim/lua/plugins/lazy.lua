@@ -31,6 +31,7 @@ require("lazy").setup({
     require("plugins.statuscol"),
     require("plugins.lsp"),
     require("plugins.harpoon"),
+    require("plugins.mini"),
 	--	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 	--  {{{
 	--	{

@@ -22,6 +22,8 @@ vim.keymap.set({ "n", "o" }, "L", "$", { silent = true, desc = "Move to end of l
 vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { silent = true, desc = "Stop highlighting" })
 vim.keymap.set("n", "<BS>", "<C-o>", { silent = true, desc = "Go to previous position" })
 vim.keymap.set("v", "<C-c>", '"+y', { silent = true, desc = "Copy selection" })
+vim.keymap.set("n", "p", "]p", { silent = true, desc = "Paste and indent" })
+vim.keymap.set("n", "P", "]P", { silent = true, desc = "Paste and indent" })
 
 vim.keymap.set("v", "<", "<gv", { silent = true, desc = "Re-select indented text" })
 vim.keymap.set("v", ">", ">gv", { silent = true, desc = "Re-select indented text" })
@@ -42,7 +44,6 @@ vim.keymap.set("v", ">", ">gv", { silent = true, desc = "Re-select indented text
 vim.keymap.set("n", "J", ":m .+1<CR>==", { silent = true, desc = "Move text down" })
 vim.keymap.set("v", "K", "'<-2<CR>gv=gv", { silent = true, desc = "Move text up" })
 vim.keymap.set("n", "K", ":m .-2<CR>==", { silent = true, desc = "Move text up" })
-vim.keymap.set("n", "Q", "@q", {silent = true, desc = "Execute q macro"})
 
 function lsp_attach_keys(ev)
 	-- Buffer local mappings.
@@ -56,7 +57,7 @@ function lsp_attach_keys(ev)
 	vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
 	vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
 	vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-	vim.keymap.set("n", "<space>f", function()
+	vim.keymap.set("n", "<space>F", function()
 		vim.lsp.buf.format({ async = true })
 	end, opts)
 
