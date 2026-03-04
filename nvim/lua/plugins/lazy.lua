@@ -32,6 +32,7 @@ require("lazy").setup({
     require("plugins.lsp"),
     require("plugins.harpoon"),
     require("plugins.mini"),
+    require("plugins.terminal"),
 	--	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 	--  {{{
 	--	{

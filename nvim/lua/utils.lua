@@ -2,7 +2,7 @@
 local utils = {}
 
 function utils.is_vscode()
-    return vim.fn.exists('g:vscode')
+    return vim.fn.exists('g:vscode') == 1
 end
 
 -- Gets the text currently selected in visual selection mode

@@ -1,4 +1,7 @@
-function onedark()
+---@diagnostic disable: unused-function
+---@diagnostic disable: unused-local
+
+local function onedark()
 	return {
 		"navarasu/onedark.nvim",
 		lazy = false,
@@ -6,11 +9,11 @@ function onedark()
 		config = function()
 			require("onedark").load()
 		end,
-		enabled = require("utils").is_vscode(),
+		enabled = not require("utils").is_vscode(),
 	}
 end
 
-function lvim()
+local function lvim()
 	return {
 		"lvim-tech/lvim-colorscheme",
 		lazy = false,
@@ -30,7 +33,7 @@ function lvim()
 				light = {},
 			},
 		},
-		enabled = require("utils").is_vscode(),
+		enabled = not require("utils").is_vscode(),
 	}
 end
 

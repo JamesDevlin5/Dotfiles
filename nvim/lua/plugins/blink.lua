@@ -52,11 +52,35 @@ return {
 		-- See :h blink-cmp-config-keymap for defining your own keymap
 		keymap = {
 			preset = "enter",
-			["<Tab>"] = { "show", "snippet_forward", "select_next", "fallback" },
+			["<Tab>"] = {
+				function()
+					local col = vim.fn.col(".") - 1
+					local before_cursor = vim.fn.getline("."):sub(1, col)
+					if before_cursor:match("^%s*$") then
+						vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Tab>", true, false, true), "n", false)
+						return true
+					end
+				end,
+				"show",
+				"snippet_forward",
+				"select_next",
+				"fallback",
+			},
 			["<S-Tab>"] = { "snippet_backward", "select_prev", "fallback" },
 			["<C-j>"] = { "scroll_documentation_down", "select_next", "fallback" },
 			["<C-k>"] = { "scroll_documentation_up", "select_prev", "fallback" },
-			["<Esc>"] = { "hide_documentation", "hide_signature", "hide", "fallback" },
+			["<Esc>"] = {
+				function()
+					local cmp = require("blink.cmp")
+					if cmp.is_documentation_visible() or cmp.is_signature_visible() then
+						cmp.hide_documentation()
+						cmp.hide_signature()
+						return true -- handled, stop the chain
+					end
+				end,
+				"hide",
+				"fallback",
+			},
 			["<C-h>"] = { "show_documentation" },
 			["<C-s>"] = { "show_signature" },
 		},
@@ -73,7 +97,7 @@ return {
 			ghost_text = { enabled = false },
 			documentation = {
 				auto_show = true,
-				auto_show_delay_ms = 200,
+				auto_show_delay_ms = 2000,
 				window = { border = "rounded" },
 			},
 			list = {
@@ -89,7 +113,7 @@ return {
 				border = "rounded",
 				draw = {
 					columns = {
-						{ "label", "label_description", gap = 1 },
+						{ "label", "label_description", gap = 3 },
 						{ "kind_icon", "kind" },
 					},
 					treesitter = { "lsp" },
@@ -190,5 +214,5 @@ return {
 		fuzzy = { implementation = "prefer_rust_with_warning" },
 	},
 	opts_extend = { "sources.default" },
-	enabled = require("utils").is_vscode(),
+	enabled = not require("utils").is_vscode(),
 }
