@@ -18,7 +18,6 @@ return {
             "pyright",
             "rust_analyzer",
             "ts_ls",
-            -- "shellcheck",
             -- "commitlint"
         }
 
