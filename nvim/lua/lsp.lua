@@ -28,12 +28,12 @@ end
 vim.diagnostic.config({
 	severity_sort = true, --[[ signs = { severity = vim.diagnostic.severity.WARN } ]]
 	-- virtual_text = false
-	virtual_text = {
-		severity = vim.diagnostic.severity.WARN,
-		source = "if_many",
-		spacing = 3,
-		prefix = " ",
-	},
+	-- virtual_text = {
+	-- 	severity = vim.diagnostic.severity.WARN,
+	-- 	source = "if_many",
+	-- 	spacing = 3,
+	-- 	prefix = " ",
+	-- },
 	underline = true,
 	float = {
 		border = "rounded",

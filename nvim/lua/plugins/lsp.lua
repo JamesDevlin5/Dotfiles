@@ -38,5 +38,9 @@ return {
             vim.lsp.config(language_server, { capabilities = capabilities })
         end
 
+        vim.lsp.config('clangd', {
+            cmd = { 'clangd', '--query-driver=/usr/bin/g++,/usr/bin/gcc,/usr/bin/clang++' }
+        })
+
 	end,
 }
