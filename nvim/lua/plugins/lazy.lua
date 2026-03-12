@@ -28,11 +28,11 @@ require("lazy").setup({
 	require("plugins.matchup"),
 	require("plugins.rainbow-delims"),
 	require("plugins.todo-comments"),
-    require("plugins.statuscol"),
-    require("plugins.lsp"),
-    require("plugins.harpoon"),
-    require("plugins.mini"),
-    require("plugins.terminal"),
+	require("plugins.statuscol"),
+	require("plugins.lsp"),
+	require("plugins.harpoon"),
+	require("plugins.mini"),
+	require("plugins.terminal"),
 	--	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 	--  {{{
 	--	{
