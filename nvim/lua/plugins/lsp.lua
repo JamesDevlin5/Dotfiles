@@ -41,5 +41,13 @@ return {
             cmd = { 'clangd', '--query-driver=/usr/bin/g++,/usr/bin/gcc,/usr/bin/clang++' }
         })
 
+        vim.lsp.config('pyright', {
+            settings = {
+                python = {
+                    pythonPath = ".venv/bin/python"
+                }
+            }
+        })
+
 	end,
 }

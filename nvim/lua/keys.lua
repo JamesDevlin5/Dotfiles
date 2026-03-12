@@ -45,6 +45,8 @@ vim.keymap.set("n", "J", ":m .+1<CR>==", { silent = true, desc = "Move text down
 vim.keymap.set("v", "K", "'<-2<CR>gv=gv", { silent = true, desc = "Move text up" })
 vim.keymap.set("n", "K", ":m .-2<CR>==", { silent = true, desc = "Move text up" })
 
+vim.keymap.set({"n", "v"}, "<Leader>s", "z=", { silent = true, desc = "Spell Suggest"})
+
 function lsp_attach_keys(ev)
 	-- Buffer local mappings.
 	local opts = { buffer = ev.buf }
