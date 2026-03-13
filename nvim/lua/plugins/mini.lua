@@ -42,12 +42,13 @@ return {
 					items = suggestions,
 					name = "Spell Suggestions: " .. word,
 					choose = function(item)
+						local keys
 						if mode == "v" then
-							-- Replace the visual selection
-							vim.cmd('noau normal! gv"_c' .. item)
+							keys = vim.api.nvim_replace_termcodes('gv"_c' .. item .. "<Esc>", true, false, true)
 						else
-							vim.cmd("normal! ciw" .. item)
+							keys = vim.api.nvim_replace_termcodes("ciw" .. item .. "<Esc>", true, false, true)
 						end
+						vim.api.nvim_feedkeys(keys, "n", false)
 					end,
 				},
 			})
