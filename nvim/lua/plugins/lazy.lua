@@ -19,7 +19,6 @@ require("lazy").setup({
 	require("plugins.colorscheme"),
 	require("plugins.lualine"),
 	require("plugins.notify"),
-	require("plugins.autopairs"),
 	require("plugins.surround"),
 	require("plugins.blink"),
 	require("plugins.treesitter"),

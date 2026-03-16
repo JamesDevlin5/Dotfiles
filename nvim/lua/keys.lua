@@ -50,6 +50,25 @@ vim.keymap.set("n", "K", ":m .-2<CR>==", { silent = true, desc = "Move text up" 
 vim.keymap.set("n", "p", "p=`]", { silent = true, desc = "Paste and format" })
 vim.keymap.set("n", "P", "P=`[", { silent = true, desc = "Paste before and format" })
 
+vim.keymap.set("i", "<C-S-V>", function()
+	local clipboard = vim.fn.getreg("+")
+	local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+
+	-- Insert the clipboard content at cursor position
+	local lines = vim.split(clipboard, "\n")
+	vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, lines)
+
+	-- Move cursor to end of pasted content
+	local new_row = row - 1 + #lines - 1
+	local new_col = #lines > 1 and #lines[#lines] or col + #lines[1]
+	vim.api.nvim_win_set_cursor(0, { new_row + 1, new_col })
+
+	-- Format the pasted range
+	vim.api.nvim_buf_set_mark(0, "[", row, col, {})
+	vim.api.nvim_buf_set_mark(0, "]", new_row + 1, new_col, {})
+	vim.cmd("normal! `[=`]")
+end, { desc = "Paste clipboard and format" })
+
 function lsp_attach_keys(ev)
 	-- Buffer local mappings.
 	local opts = { buffer = ev.buf }
