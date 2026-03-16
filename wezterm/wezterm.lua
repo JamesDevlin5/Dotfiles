@@ -35,6 +35,8 @@ else
     config.font_size = 10.0
 end
 
+config.enable_kitty_keyboard = true
+
 -- For example, changing the color scheme:
 config.color_scheme = "OneHalfDark"
 

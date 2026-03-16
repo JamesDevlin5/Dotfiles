@@ -122,3 +122,5 @@ source /home/james/.config/broot/launcher/bash/br
 eval "$(sheldon source)"
 eval "$(starship init bash)"
 
+
+. "$HOME/.local/share/../bin/env"

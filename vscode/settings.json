@@ -30,5 +30,6 @@
             "after": [":nohl<CR>"]
         }
     ],
-    "vim.leader": "<Space>"
+    "vim.leader": "<Space>",
+    "python.analysis.typeCheckingMode": "standard"
 }
