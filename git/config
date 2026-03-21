@@ -1,14 +1,12 @@
 [user]
     name = James Devlin
-    # email = jamesdevlin@gatech.edu
     email = jamesdev3@gmail.com
 [github]
-    #user = jdevlin32
     user = JamesDevlin5
-#[url "ssh://git@github.com/"]
-#    insteadOf = https://github.com/
-#[url "ssh://git@github.gatech.edu/"]
-#    insteadOf = https://github.gatech.edu/
+[url "ssh://git@github.com/"]
+    insteadOf = https://github.com/
+[includeIf "gitdir:~/School/"]
+    path = ~/.config/git/gitconfig-gatech
 [core]
     excludesfile = ~/.config/git/ignore
     abbrev = auto
