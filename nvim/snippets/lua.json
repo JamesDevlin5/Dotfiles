@@ -1,0 +1,7 @@
+{
+  "Anonymous function": {
+    "prefix": "function",
+    "body": ["function(${1:args})", "\t${0}", "end"],
+    "description": "Anonymous function"
+  }
+}

@@ -19,7 +19,10 @@ vim.keymap.set("i", "<C-l>", "<Right>", { silent = true, desc = "Move right (ins
 vim.keymap.set({ "n", "o" }, "H", "^", { silent = true, desc = "Move to start of line" })
 vim.keymap.set({ "n", "o" }, "L", "$", { silent = true, desc = "Move to end of line" })
 
-vim.keymap.set("n", "<Esc>", ":nohlsearch<CR>", { silent = true, desc = "Stop highlighting" })
+vim.keymap.set("n", "<Esc>", function()
+    vim.cmd("nohlsearch")
+    require("notify").dismiss { pending = false, silent = true }
+end, { silent = true, desc = "Clear highlights and notifications" })
 vim.keymap.set("n", "<BS>", "<C-o>", { silent = true, desc = "Go to previous position" })
 vim.keymap.set("v", "<C-c>", '"+y', { silent = true, desc = "Copy selection" })
 vim.keymap.set("n", "p", "]p", { silent = true, desc = "Paste and indent" })
@@ -51,49 +54,64 @@ vim.keymap.set("n", "p", "p=`]", { silent = true, desc = "Paste and format" })
 vim.keymap.set("n", "P", "P=`[", { silent = true, desc = "Paste before and format" })
 
 vim.keymap.set("i", "<C-S-V>", function()
-	local clipboard = vim.fn.getreg("+")
-	local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+    local clipboard = vim.fn.getreg("+")
+    local row, col = unpack(vim.api.nvim_win_get_cursor(0))
 
-	-- Insert the clipboard content at cursor position
-	local lines = vim.split(clipboard, "\n")
-	vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, lines)
+    -- Insert the clipboard content at cursor position
+    local lines = vim.split(clipboard, "\n")
+    vim.api.nvim_buf_set_text(0, row - 1, col, row - 1, col, lines)
 
-	-- Move cursor to end of pasted content
-	local new_row = row - 1 + #lines - 1
-	local new_col = #lines > 1 and #lines[#lines] or col + #lines[1]
-	vim.api.nvim_win_set_cursor(0, { new_row + 1, new_col })
+    -- Move cursor to end of pasted content
+    local new_row = row - 1 + #lines - 1
+    local new_col = #lines > 1 and #lines[#lines] or col + #lines[1]
+    vim.api.nvim_win_set_cursor(0, { new_row + 1, new_col })
 
-	-- Format the pasted range
-	vim.api.nvim_buf_set_mark(0, "[", row, col, {})
-	vim.api.nvim_buf_set_mark(0, "]", new_row + 1, new_col, {})
-	vim.cmd("normal! `[=`]")
+    -- Format the pasted range
+    vim.api.nvim_buf_set_mark(0, "[", row, col, {})
+    vim.api.nvim_buf_set_mark(0, "]", new_row + 1, new_col, {})
+    vim.cmd("normal! `[=`]")
 end, { desc = "Paste clipboard and format" })
 
 function lsp_attach_keys(ev)
-	-- Buffer local mappings.
-	local opts = { buffer = ev.buf }
-	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-	vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-	vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-	vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
-	vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
-	vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
-	vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
-	vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-	vim.keymap.set("n", "<space>F", function()
-		vim.lsp.buf.format({ async = true })
-	end, opts)
+    -- Buffer local mappings.
+    local opts = { buffer = ev.buf }
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+    vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+    vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts)
+    vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, opts)
+    vim.keymap.set("n", "<space>rn", vim.lsp.buf.rename, opts)
+    vim.keymap.set({ "n", "v" }, "<space>ca", vim.lsp.buf.code_action, opts)
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+    vim.keymap.set("n", "<space>F", function()
+        vim.lsp.buf.format { async = true }
+    end, opts)
 
-	vim.keymap.set("n", "<Space>e", vim.diagnostic.open_float, { silent = true, desc = "Open diagnostic float" })
-	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { silent = true, desc = "GoTo previous diagnostic item" })
-	vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { silent = true, desc = "GoTo next diagnostic item" })
-	vim.keymap.set(
-		"n",
-		"<Space>d",
-		vim.diagnostic.setloclist,
-		{ silent = true, desc = "Send diagnostics to location list" }
-	)
+    vim.keymap.set(
+        "n",
+        "<Space>e",
+        vim.diagnostic.open_float,
+        { silent = true, desc = "Open diagnostic float" }
+    )
+    vim.keymap.set(
+        "n",
+        "[d",
+        vim.diagnostic.goto_prev,
+        { silent = true, desc = "GoTo previous diagnostic item" }
+    )
+    vim.keymap.set(
+        "n",
+        "]d",
+        vim.diagnostic.goto_next,
+        { silent = true, desc = "GoTo next diagnostic item" }
+    )
+    vim.keymap.set(
+        "n",
+        "<Space>d",
+        vim.diagnostic.setloclist,
+        { silent = true, desc = "Send diagnostics to location list" }
+    )
 end
 
 vim.cmd([[:command CodeAction lua vim.lsp.buf.code_action()]])
@@ -135,55 +153,75 @@ vim.cmd([[:command CodeAction lua vim.lsp.buf.code_action()]])
 --
 
 vim.keymap.set("n", "gd", function()
-	local clients = vim.lsp.get_clients({ bufnr = 0 })
-	if #clients == 0 then
-		vim.notify("No LSP active for this buffer", vim.log.levels.WARN)
-		return
-	end
+    local clients = vim.lsp.get_clients { bufnr = 0 }
+    if #clients == 0 then
+        vim.notify("No LSP active for this buffer", vim.log.levels.WARN)
+        return
+    end
 
-	-- Returns true if any active client supports the given capability
-	local function supports(capability)
-		for _, client in ipairs(clients) do
-			if client.server_capabilities[capability] then
-				return true
-			end
-		end
-		return false
-	end
+    -- Returns true if any active client supports the given capability
+    local function supports(capability)
+        for _, client in ipairs(clients) do
+            if client.server_capabilities[capability] then
+                return true
+            end
+        end
+        return false
+    end
 
-	local all_options = {
-		{ label = "Go to Definition", capability = "definitionProvider", action = vim.lsp.buf.definition },
-		{ label = "Go to Declaration", capability = "declarationProvider", action = vim.lsp.buf.declaration },
-		{
-			label = "Go to Type Definition",
-			capability = "typeDefinitionProvider",
-			action = vim.lsp.buf.type_definition,
-		},
-		{ label = "Go to Implementation", capability = "implementationProvider", action = vim.lsp.buf.implementation },
-		{ label = "Go to References", capability = "referencesProvider", action = vim.lsp.buf.references },
-		{ label = "Peek Definition", capability = "hoverProvider", action = vim.lsp.buf.hover },
-		{ label = "Code Actions", capability = "codeActionProvider", action = vim.lsp.buf.code_action },
-	}
+    local all_options = {
+        {
+            label = "Go to Definition",
+            capability = "definitionProvider",
+            action = vim.lsp.buf.definition,
+        },
+        {
+            label = "Go to Declaration",
+            capability = "declarationProvider",
+            action = vim.lsp.buf.declaration,
+        },
+        {
+            label = "Go to Type Definition",
+            capability = "typeDefinitionProvider",
+            action = vim.lsp.buf.type_definition,
+        },
+        {
+            label = "Go to Implementation",
+            capability = "implementationProvider",
+            action = vim.lsp.buf.implementation,
+        },
+        {
+            label = "Go to References",
+            capability = "referencesProvider",
+            action = vim.lsp.buf.references,
+        },
+        { label = "Peek Definition", capability = "hoverProvider", action = vim.lsp.buf.hover },
+        {
+            label = "Code Actions",
+            capability = "codeActionProvider",
+            action = vim.lsp.buf.code_action,
+        },
+    }
 
-	local options = vim.tbl_filter(function(opt)
-		return supports(opt.capability)
-	end, all_options)
+    local options = vim.tbl_filter(function(opt)
+        return supports(opt.capability)
+    end, all_options)
 
-	if #options == 0 then
-		vim.notify("LSP is active but supports none of these methods", vim.log.levels.WARN)
-		return
-	end
+    if #options == 0 then
+        vim.notify("LSP is active but supports none of these methods", vim.log.levels.WARN)
+        return
+    end
 
-	vim.ui.select(options, {
-		prompt = "LSP Actions",
-		format_item = function(item)
-			return item.label
-		end,
-	}, function(choice)
-		if choice then
-			choice.action()
-		end
-	end)
+    vim.ui.select(options, {
+        prompt = "LSP Actions",
+        format_item = function(item)
+            return item.label
+        end,
+    }, function(choice)
+        if choice then
+            choice.action()
+        end
+    end)
 end, { desc = "LSP picker", noremap = true, silent = true })
 
 --vim.keymap.set("n", "<Leader>B", require("buvvers").toggle, { desc = "Toggle buvvers window" })

@@ -1,43 +1,15 @@
 ---@module "lazy"
 ---@type LazySpec
 return {
-	"ThePrimeagen/harpoon",
-	branch = "harpoon2",
-	dependencies = { "nvim-lua/plenary.nvim" },
-	config = function()
-		local harpoon = require("harpoon")
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+        local harpoon = require("harpoon")
 
-		harpoon:setup()
+        harpoon:setup()
 
-		vim.keymap.set("n", "<leader>a", function()
-			harpoon:list():add()
-		end)
-		vim.keymap.set("n", "<C-e>", function()
-			harpoon.ui:toggle_quick_menu(harpoon:list())
-		end)
-
-		vim.keymap.set("n", "<C-h>", function()
-			harpoon:list():select(1)
-		end)
-		vim.keymap.set("n", "<C-t>", function()
-			harpoon:list():select(2)
-		end)
-		vim.keymap.set("n", "<C-n>", function()
-			harpoon:list():select(3)
-		end)
-		vim.keymap.set("n", "<C-s>", function()
-			harpoon:list():select(4)
-		end)
-
-		-- Toggle previous & next buffers stored within Harpoon list
-		vim.keymap.set("n", "<C-S-P>", function()
-			harpoon:list():prev()
-		end)
-		vim.keymap.set("n", "<C-S-N>", function()
-			harpoon:list():next()
-		end)
-
-		--[[ Telescope Usage:
+        --[[ Telescope Usage:
         local harpoon = require('harpoon')
         harpoon:setup({})
 
@@ -62,5 +34,64 @@ return {
         vim.keymap.set("n", "<C-e>", function() toggle_telescope(harpoon:list()) end,
             { desc = "Open harpoon window" })
         ---]]
-	end,
+    end,
+    keys = {
+        {
+            "<Leader>a",
+            function()
+                require("harpoon"):list():add()
+            end,
+            desc = "Add to harpoon list",
+        },
+        {
+            "<C-e>",
+            function()
+                require("harpoon").ui:toggle_quick_menu(require("harpoon"):list())
+            end,
+            desc = "Show harpoon list",
+        },
+        {
+            "<C-h>",
+            function()
+                require("harpoon"):list():select(1)
+            end,
+            desc = "GoTo ... harpoon tag",
+        },
+        {
+            "<C-t>",
+            function()
+                require("harpoon"):list():select(2)
+            end,
+            desc = "GoTo ... harpoon tag",
+        },
+        {
+            "<C-n>",
+            function()
+                require("harpoon"):list():select(3)
+            end,
+            desc = "GoTo ... harpoon tag",
+        },
+        {
+            "<C-s>",
+            function()
+                require("harpoon"):list():select(4)
+            end,
+            desc = "GoTo ... harpoon tag",
+        },
+        -- Toggle previous & next buffers stored within Harpoon list
+        {
+            "<C-S-P>",
+            function()
+                require("harpoon"):list():prev()
+            end,
+            desc = "GoTo previous harpoon tag",
+        },
+        {
+            "<C-S-N>",
+            function()
+                require("harpoon"):list():next()
+            end,
+            desc = "GoTo next harpoon tag",
+        },
+    },
 }

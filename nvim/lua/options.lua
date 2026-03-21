@@ -8,33 +8,33 @@ set_g("mapleader", " ")
 
 set_g("have_nerd_font", true)
 
-vim.diagnostic.config({ virtual_lines = true, severity_sort = true, float = { border = "single" } })
+vim.diagnostic.config { virtual_lines = true, severity_sort = true, float = { border = "single" } }
 
 -- Disable unused stuff {{{
 -- :help provider.txt
 vim.tbl_map(function(p)
-	set_g("loaded_" .. p, vim.endswith(p, "provider") and 0 or 1)
-	-- vim.g["loaded_" .. p] = vim.endswith(p, "provider") and 0 or 1
+    set_g("loaded_" .. p, vim.endswith(p, "provider") and 0 or 1)
+    -- vim.g["loaded_" .. p] = vim.endswith(p, "provider") and 0 or 1
 end, {
-	"2html_plugin",
-	"gzip",
-	"matchit",
-	"matchparen",
-	"netrw",
-	"netrwPlugin",
-	"node_provider",
-	"perl_provider",
-	"python_provider",
-	"rplugin",
-	"ruby_provider",
-	"tar",
-	"tarPlugin",
-	"tohtml",
-	"tutor",
-	"vimball",
-	"vimballPlugin",
-	"zip",
-	"zipPlugin",
+    "2html_plugin",
+    "gzip",
+    "matchit",
+    "matchparen",
+    "netrw",
+    "netrwPlugin",
+    "node_provider",
+    "perl_provider",
+    "python_provider",
+    "rplugin",
+    "ruby_provider",
+    "tar",
+    "tarPlugin",
+    "tohtml",
+    "tutor",
+    "vimball",
+    "vimballPlugin",
+    "zip",
+    "zipPlugin",
 })
 -- }}}
 
@@ -54,30 +54,30 @@ opt.numberwidth = 3
 opt.signcolumn = "yes:1"
 opt.statuscolumn = "%l%s"
 
-opt.path:append({ "**" })
-opt.wildignore:append({
-	"*.o",
-	"*.obj",
-	"*.dll",
-	"*.exe",
-	"*.pyc",
-	"*.class",
-	"*.swp",
-	"*.swo",
-	"*.DS_Store",
-	"*/node_modules/*",
-	"*/target/*",
-	"*/build/*",
-	"*/dist/*",
-	"*/.git/*",
-	"*/.svn/*",
-	"*/.venv/*",
-	"*/venv/*",
-})
+opt.path:append { "**" }
+opt.wildignore:append {
+    "*.o",
+    "*.obj",
+    "*.dll",
+    "*.exe",
+    "*.pyc",
+    "*.class",
+    "*.swp",
+    "*.swo",
+    "*.DS_Store",
+    "*/node_modules/*",
+    "*/target/*",
+    "*/build/*",
+    "*/dist/*",
+    "*/.git/*",
+    "*/.svn/*",
+    "*/.venv/*",
+    "*/venv/*",
+}
 
 -- Sync clipboard between OS and Neovim
 vim.schedule(function()
-	vim.o.clipboard = "unnamedplus"
+    vim.o.clipboard = "unnamedplus"
 end)
 
 --local hostname_handle = io.popen("hostname")
@@ -145,17 +145,17 @@ opt.virtualedit = "block"
 opt.diffopt = "internal,filler,closeoff,algorithm:histogram,context:5,linematch:60"
 
 opt.listchars = {
-	tab = "‣ ",
-	trail = "·",
-	precedes = "«",
-	extends = "»",
-	eol = "¬",
-	nbsp = "␣",
+    tab = "‣ ",
+    trail = "·",
+    precedes = "«",
+    extends = "»",
+    eol = "¬",
+    nbsp = "␣",
 }
 
 opt.fillchars = {
-	foldopen = "▾",
-	foldclose = "›",
+    foldopen = "▾",
+    foldclose = "›",
 }
 
 vim.o.inccommand = "split"
@@ -176,18 +176,18 @@ set_g("is_bash", 1)
 set_g("sh_fold_enabled", 3)
 set_g("zsh_fold_enable", 1)
 
-vim.filetype.add({
-	extension = {
-		asm = "riscv",
-		s = "riscv",
-		h = "c", -- hpp is cpp
-	},
-	filename = {
-		[".zshrc"] = "zsh",
-		[".bashrc"] = "bash",
-	},
-	pattern = {
-		["~/.zfunc/*"] = "zsh",
-		["~/.config/kitty/*.conf"] = "kitty",
-	},
-})
+vim.filetype.add {
+    extension = {
+        asm = "riscv",
+        s = "riscv",
+        h = "c", -- hpp is cpp
+    },
+    filename = {
+        [".zshrc"] = "zsh",
+        [".bashrc"] = "bash",
+    },
+    pattern = {
+        ["~/.zfunc/*"] = "zsh",
+        ["~/.config/kitty/*.conf"] = "kitty",
+    },
+}

@@ -179,6 +179,23 @@ alias -g E="| ${EDITOR}"
 alias -g G="| rg"
 alias -g _="/dev/null"
 
+del-br() {
+    if ! git rev-parse --is-inside-work-tree &>/dev/null; then
+        echo "Not in a git repo..."
+        return 1
+    fi
+
+    NEW_BRANCH="${1:-main}"
+
+    CURRENT_BRANCH="$(git branch --show-current)"
+
+    git checkout "${NEW_BRANCH}"
+
+    git pull --ff-only origin "${NEW_BRANCH}"
+
+    git branch -D "${CURRENT_BRANCH}"
+}
+
 zstyle ':completion:*' completer _complete _match _list _ignored _correct _approximate _prefix
 zstyle ':completion:*' matcher-list 'm:{-_}={_-}' '+m:{a-z}={A-Z}'
 
@@ -319,6 +336,10 @@ if type "direnv" > /dev/null; then
     eval "$(direnv hook zsh)"
 fi
 
+if command -v gh >/dev/null 2>&1; then
+    eval "$(gh completion -s zsh)"
+fi
+
 # command-not-found handler for zsh
 if [ -x /usr/lib/command-not-found ]; then
     function command_not_found_handler {
@@ -333,8 +354,6 @@ fi
 #[[ ! -r /home/james/.opam/opam-init/init.zsh ]] || source /home/james/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
 # }}}
 
-# vim:fdm=marker
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
@@ -345,3 +364,5 @@ compinit
 # <<<<  Vagrant command completion (end)
 
 . "$HOME/.local/share/../bin/env"
+
+# vim:fdm=marker

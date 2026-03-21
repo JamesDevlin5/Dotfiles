@@ -1,6 +1,73 @@
-[rebase]
-    autoSquash = true
-    autoStash = true
-    rebaseMerges = true
-    updateRefs = true
-
+[user]
+    name = James Devlin
+    # email = jamesdevlin@gatech.edu
+    email = jamesdev3@gmail.com
+[github]
+    #user = jdevlin32
+    user = JamesDevlin5
+#[url "ssh://git@github.com/"]
+#    insteadOf = https://github.com/
+#[url "ssh://git@github.gatech.edu/"]
+#    insteadOf = https://github.gatech.edu/
+[core]
+    excludesfile = ~/.config/git/ignore
+    abbrev = auto
+    # pager = delta
+[commit]
+    verbose = true
+[diff]
+    colorMoved = default
+    algorithm = histogram
+[merge]
+    conflictstyle = diff3
+[init]
+    defaultBranch = main
+[help]
+    autocorrect = prompt
+    format = web
+[web]
+    browser = firefox
+[push]
+    default = current
+    autoSetupRemote = true
+[fetch]
+    prune = true
+[alias]
+    a = add
+    amend = commit --amend
+    ap = add --patch
+    b = branch
+    bD = branch -D
+    ba = branch --all
+    bd = branch --delete
+    c = commit
+    co = checkout
+    cob = checkout -b
+    d = diff
+    ds = diff --staged
+    ec = config --global --edit
+    f = fetch --all
+    l = log --graph
+    last = log -1 HEAD --stat
+    lg = log --graph
+    lo = log --oneline
+    p = push
+    pl = pull origin HEAD
+    pp = push origin HEAD
+    ps = push
+    pu = pull
+    r = remote
+    root = rev-parse --show-toplevel
+    rs = restore --staged
+    rv = remote -v
+    s = status
+    setup = remote add origin
+    shallow = clone --depth 1 --single-branch --shallow-submodules
+    ss = status --short
+    uncommit = reset --soft HEAD^
+    undo = reset HEAD~1 --mixed
+    unstage = reset HEAD --
+[credential]
+	helper = store
+[pull]
+	rebase = false
