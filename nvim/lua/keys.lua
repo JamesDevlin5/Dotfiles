@@ -133,4 +133,57 @@ vim.cmd([[:command CodeAction lua vim.lsp.buf.code_action()]])
 --	{ noremap = true, silent = true }
 --)
 --
+
+vim.keymap.set("n", "gd", function()
+	local clients = vim.lsp.get_clients({ bufnr = 0 })
+	if #clients == 0 then
+		vim.notify("No LSP active for this buffer", vim.log.levels.WARN)
+		return
+	end
+
+	-- Returns true if any active client supports the given capability
+	local function supports(capability)
+		for _, client in ipairs(clients) do
+			if client.server_capabilities[capability] then
+				return true
+			end
+		end
+		return false
+	end
+
+	local all_options = {
+		{ label = "Go to Definition", capability = "definitionProvider", action = vim.lsp.buf.definition },
+		{ label = "Go to Declaration", capability = "declarationProvider", action = vim.lsp.buf.declaration },
+		{
+			label = "Go to Type Definition",
+			capability = "typeDefinitionProvider",
+			action = vim.lsp.buf.type_definition,
+		},
+		{ label = "Go to Implementation", capability = "implementationProvider", action = vim.lsp.buf.implementation },
+		{ label = "Go to References", capability = "referencesProvider", action = vim.lsp.buf.references },
+		{ label = "Peek Definition", capability = "hoverProvider", action = vim.lsp.buf.hover },
+		{ label = "Code Actions", capability = "codeActionProvider", action = vim.lsp.buf.code_action },
+	}
+
+	local options = vim.tbl_filter(function(opt)
+		return supports(opt.capability)
+	end, all_options)
+
+	if #options == 0 then
+		vim.notify("LSP is active but supports none of these methods", vim.log.levels.WARN)
+		return
+	end
+
+	vim.ui.select(options, {
+		prompt = "LSP Actions",
+		format_item = function(item)
+			return item.label
+		end,
+	}, function(choice)
+		if choice then
+			choice.action()
+		end
+	end)
+end, { desc = "LSP picker", noremap = true, silent = true })
+
 --vim.keymap.set("n", "<Leader>B", require("buvvers").toggle, { desc = "Toggle buvvers window" })
