@@ -35,6 +35,7 @@ require("lazy").setup {
     require("plugins.terminal"),
     require("plugins.todo-comments"),
     require("plugins.treesitter"),
+    require("plugins.treesitter-context"),
     {
         dir = "/home/james/workspace/makefile-targets.nvim",
         dependencies = { "nvim-telescope/telescope.nvim", "echasnovski/mini.pick" },
