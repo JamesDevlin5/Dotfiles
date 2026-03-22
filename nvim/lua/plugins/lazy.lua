@@ -36,11 +36,40 @@ require("lazy").setup {
     require("plugins.markdown"),
     {
         dir = "/home/james/workspace/makefile-targets.nvim",
-        dependencies = { "nvim-telescope/telescope.nvim" },
+        dependencies = { "nvim-telescope/telescope.nvim", "echasnovski/mini.pick" },
         ---@type MakefileTargetsOpts
         opts = {
-            mini_keymap = "<Leader>mm",
-            telescope_keymap = "<leader>mt",
+            make_args = "-j4",
+        },
+        keys = {
+            {
+                "<Leader>m",
+                function()
+                    require("makefile-targets.core").pick_target()
+                end,
+                desc = "Make: pick target",
+            },
+            {
+                "<Leader>M",
+                function()
+                    require("makefile-targets.core").pick_target { make_args = "-n" }
+                end,
+                desc = "Make: pick target (dry run)",
+            },
+            {
+                "<Leader>mt",
+                function()
+                    require("makefile-targets.telescope").pick_target()
+                end,
+                desc = "Make: pick target (Telescope)",
+            },
+            {
+                "<Leader>mm",
+                function()
+                    require("makefile-targets.mini").pick_target()
+                end,
+                desc = "Make: pick target (Mini.pick)",
+            },
         },
     },
     --	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
