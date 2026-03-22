@@ -5,6 +5,7 @@ return {
     dependencies = {
         { "williamboman/mason.nvim", opts = {} },
         { "williamboman/mason-lspconfig.nvim", opts = {} },
+        { "WhoIsSethDaniel/mason-tool-installer.nvim" },
         { "saghen/blink.cmp" },
     },
     config = function()
@@ -15,9 +16,17 @@ return {
             "lua_ls",
             "marksman",
             "pyright",
+            "taplo",
             "rust_analyzer",
             "ts_ls",
             -- "commitlint"
+        }
+
+        local tools = {
+            "yamlfmt",
+            "shfmt",
+            "commitlint",
+            "taplo",
         }
 
         -- Setup Mason first
@@ -27,6 +36,10 @@ return {
         require("mason-lspconfig").setup {
             ensure_installed = language_servers, -- auto-install these
             automatic_enable = true,
+        }
+
+        require("mason-tool-installer").setup {
+            ensure_installed = tools,
         }
 
         -- Finally setup your language servers

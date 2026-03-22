@@ -34,5 +34,35 @@ return {
         auto_install = false,
         highlight = { enable = true, additional_vim_regex_highlighting = false },
         indent = { enable = true },
+        textobjects = {
+            select = {
+                enable = true,
+                keymaps = {
+                    ["af"] = "@function.outer",
+                    ["if"] = "@function.inner",
+                    ["ac"] = "@class.outer",
+                    ["ic"] = "@class.inner",
+                    ["aa"] = "@parameter.outer",  -- great for swapping args
+                    ["ia"] = "@parameter.inner",
+                    ["ab"] = "@block.outer",
+                },
+            },
+            move = {
+                enable = true,
+                goto_next_start = {
+                    ["]f"] = "@function.outer",
+                    ["]c"] = "@class.outer",
+                },
+                goto_previous_start = {
+                    ["[f"] = "@function.outer",
+                    ["[c"] = "@class.outer",
+                },
+            },
+            swap = {
+                enable = true,
+                swap_next = { ["<leader>a"] = "@parameter.inner" },
+                swap_previous = { ["<leader>A"] = "@parameter.inner" },
+            },
+        },
     },
 }

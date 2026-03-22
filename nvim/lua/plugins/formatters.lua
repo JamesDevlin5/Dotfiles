@@ -1,26 +1,33 @@
+local formatters = {
+    bash = { "shfmt" },
+    c = { "clang-format" },
+    cpp = { "clang-format" },
+    json = { "jq" },
+    lua = { "stylua" },
+    python = { "isort", "black" },
+    sh = { "shfmt" },
+    toml = { "taplo" },
+    yaml = { "yamlfmt" },
+}
+
 ---@module "lazy"
 ---@type LazySpec
 return {
     "stevearc/conform.nvim",
-    ft = {
-        "css",
-        "html",
-        "javascript",
-        "json",
-        "lua",
-        "markdown",
-        "python",
-        "sh",
-        "toml",
-        "typescript",
-        "xml",
-        "yaml",
-    },
+    ft = vim.tbl_keys(formatters),
     keys = {
         {
             "<leader>cf",
             function()
-                require("conform").format { async = true }
+                require("conform").format({ async = true }, function(err, did_format)
+                    if err then
+                        vim.notify("Format error: " .. err, vim.log.levels.ERROR)
+                    elseif did_format then
+                        vim.notify("Formatted", vim.log.levels.INFO)
+                    else
+                        vim.notify("Nothing to format", vim.log.levels.WARN)
+                    end
+                end)
             end,
             mode = { "n", "v" },
             desc = "Format buffer",
@@ -34,21 +41,13 @@ return {
         default_format_opts = {
             lsp_format = "fallback",
         },
-        formatters_by_ft = {
-            css = { "prettier" },
-            html = { "prettier" },
-            javascript = { "prettier" },
-            json = { "prettier" },
-            lua = { "stylua" },
-            markdown = { "prettier" },
-            python = { "black" },
-            sh = { "shfmt" },
-            toml = { "taplo" },
-            typescript = { "prettier" },
-            xml = { "xmlformatter" },
-            yaml = { "yamlfmt" },
-        },
+        formatters_by_ft = formatters,
         format_on_save = false,
         notify_on_error = true,
+    },
+    formatters = {
+        ["clang-format"] = {
+            prepend_args = { "--sort-includes", "--style=file:~/.config/clang-format/clang-format" },
+        },
     },
 }
