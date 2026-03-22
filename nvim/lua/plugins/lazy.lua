@@ -19,10 +19,13 @@ require("lazy").setup {
     require("plugins.blink"),
     require("plugins.colorscheme"),
     require("plugins.cursorline"),
+    require("plugins.formatters"),
+    require("plugins.gitsigns"),
     require("plugins.harpoon"),
     require("plugins.lazydev"),
     require("plugins.lsp"),
     require("plugins.lualine"),
+    require("plugins.markdown"),
     require("plugins.matchup"),
     require("plugins.mini"),
     require("plugins.notify"),
@@ -32,8 +35,6 @@ require("lazy").setup {
     require("plugins.terminal"),
     require("plugins.todo-comments"),
     require("plugins.treesitter"),
-    require("plugins.formatters"),
-    require("plugins.markdown"),
     {
         dir = "/home/james/workspace/makefile-targets.nvim",
         dependencies = { "nvim-telescope/telescope.nvim", "echasnovski/mini.pick" },
@@ -449,195 +450,6 @@ require("lazy").setup {
     --		--         },
     --		--     },
     --		-- },
-    --	},
-    --	}}}
-    --	{{{
-    --	{
-    --		"lewis6991/gitsigns.nvim",
-    --		opts = {
-    --			signs = {
-    --				add = { text = "│" },
-    --				change = { text = "│" },
-    --				delete = { text = "_" },
-    --				topdelete = { text = "‾" },
-    --				changedelete = { text = "~" },
-    --				untracked = { text = "┆" },
-    --			},
-    --			signcolumn = true, -- Toggle with `:Gitsigns toggle_signs`
-    --			numhl = false, -- Toggle with `:Gitsigns toggle_numhl`
-    --			linehl = false, -- Toggle with `:Gitsigns toggle_linehl`
-    --			word_diff = false, -- Toggle with `:Gitsigns toggle_word_diff`
-    --			watch_gitdir = {
-    --				follow_files = true,
-    --			},
-    --			attach_to_untracked = false,
-    --			current_line_blame = false, -- Toggle with `:Gitsigns toggle_current_line_blame`
-    --			current_line_blame_opts = {
-    --				virt_text = true,
-    --				virt_text_pos = "eol", -- 'eol' | 'overlay' | 'right_align'
-    --				delay = 1000,
-    --				ignore_whitespace = false,
-    --				virt_text_priority = 100,
-    --			},
-    --			current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>",
-    --			sign_priority = 6,
-    --			update_debounce = 100,
-    --			status_formatter = nil, -- Use default
-    --			max_file_length = 40000, -- Disable if file is longer than this (in lines)
-    --			preview_config = {
-    --				-- Options passed to nvim_open_win
-    --				border = "single",
-    --				style = "minimal",
-    --				relative = "cursor",
-    --				row = 0,
-    --				col = 1,
-    --			},
-    --			-- yadm = {
-    --			-- 	enable = false,
-    --			-- },
-    --			on_attach = function(client, bufnr)
-    --				local gs = package.loaded.gitsigns
-    --
-    --				local function map(mode, l, r, opts)
-    --					opts = opts or {}
-    --					opts.buffer = bufnr
-    --					vim.keymap.set(mode, l, r, opts)
-    --				end
-    --
-    --				-- Navigation
-    --				map("n", "]c", function()
-    --					if vim.wo.diff then
-    --						return "]c"
-    --					end
-    --					vim.schedule(function()
-    --						gs.next_hunk()
-    --					end)
-    --					return "<Ignore>"
-    --				end, { expr = true })
-    --
-    --				map("n", "[c", function()
-    --					if vim.wo.diff then
-    --						return "[c"
-    --					end
-    --					vim.schedule(function()
-    --						gs.prev_hunk()
-    --					end)
-    --					return "<Ignore>"
-    --				end, { expr = true })
-    --
-    --				-- Actions
-    --				map("n", "<leader>hs", gs.stage_hunk)
-    --				map("n", "<leader>hr", gs.reset_hunk)
-    --				map("v", "<leader>hs", function()
-    --					gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-    --				end)
-    --				map("v", "<leader>hr", function()
-    --					gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-    --				end)
-    --				map("n", "<leader>hS", gs.stage_buffer)
-    --				map("n", "<leader>hu", gs.undo_stage_hunk)
-    --				map("n", "<leader>hR", gs.reset_buffer)
-    --				map("n", "<leader>hp", gs.preview_hunk)
-    --				map("n", "<leader>hb", function()
-    --					gs.blame_line({ full = true })
-    --				end)
-    --				map("n", "<leader>tb", gs.toggle_current_line_blame)
-    --				map("n", "<leader>hd", gs.diffthis)
-    --				map("n", "<leader>hD", function()
-    --					gs.diffthis("~")
-    --				end)
-    --				map("n", "<leader>td", gs.toggle_deleted)
-    --
-    --				-- Text object
-    --				map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
-    --
-    --				-- format on save
-    --				if client.server_capabilities.documentFormattingProvider then
-    --					vim.api.nvim_create_autocmd("BufWritePre", {
-    --						group = vim.api.nvim_create_augroup("Format", { clear = true }),
-    --						buffer = bufnr,
-    --						callback = function()
-    --							vim.lsp.buf.formatting_seq_sync()
-    --						end,
-    --					})
-    --				end
-    --			end,
-    --		},
-    --	},
-    --	}}}
-    --	{{{
-    --	{
-    --		"akinsho/toggleterm.nvim",
-    --		version = "*",
-    --		opts = {
-    --			-- size can be a number or function which is passed the current terminal
-    --			size = 20, --[[| function(term)
-    --                if term.direction == "horizontal" then
-    --                    return 15
-    --                elseif term.direction == "vertical" then
-    --                    return vim.o.columns * 0.4
-    --                end
-    --            end]] --
-    --			open_mapping = [[<c-`>]], -- or { [[<c-\>]], [[<c-¥>]] } if you also use a Japanese keyboard.
-    --			-- on_create = fun(t: Terminal), -- function to run when the terminal is first created
-    --			-- on_open = fun(t: Terminal), -- function to run when the terminal opens
-    --			-- on_close = fun(t: Terminal), -- function to run when the terminal closes
-    --			-- on_stdout = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stdout
-    --			-- on_stderr = fun(t: Terminal, job: number, data: string[], name: string) -- callback for processing output on stderr
-    --			-- on_exit = fun(t: Terminal, job: number, exit_code: number, name: string) -- function to run when terminal process exits
-    --			hide_numbers = true, -- hide the number column in toggleterm buffers
-    --			-- shade_filetypes = {},
-    --			autochdir = true, -- when neovim changes it current directory the terminal will change it's own when next it's opened
-    --			-- highlights = {
-    --			--     -- highlights which map to a highlight group name and a table of it's values
-    --			--     -- NOTE: this is only a subset of values, any group placed here will be set for the terminal window split
-    --			--     Normal = {
-    --			--         guibg = "<VALUE-HERE>",
-    --			--     },
-    --			--     NormalFloat = {
-    --			--         link = 'Normal'
-    --			--     },
-    --			--     FloatBorder = {
-    --			--         guifg = "<VALUE-HERE>",
-    --			--         guibg = "<VALUE-HERE>",
-    --			--     },
-    --			-- },
-    --			shade_terminals = false, -- NOTE: this option takes priority over highlights specified so if you specify Normal highlights you should set this to false
-    --			shading_factor = "-20", -- the percentage by which to lighten dark terminal background, default: -30
-    --			-- shading_ratio = '<number>', -- the ratio of shading factor for light/dark terminal background, default: -3
-    --			start_in_insert = true,
-    --			insert_mappings = true, -- whether or not the open mapping applies in insert mode
-    --			terminal_mappings = true, -- whether or not the open mapping applies in the opened terminals
-    --			persist_size = true,
-    --			persist_mode = true, -- if set to true (default) the previous terminal mode will be remembered
-    --			direction = "horizontal", -- 'vertical' | 'horizontal' | 'tab' | 'float',
-    --			close_on_exit = true, -- close the terminal window when the process exits
-    --			-- Change the default shell. Can be a string or a function returning a string
-    --			shell = vim.o.shell,
-    --			auto_scroll = true, -- automatically scroll to the bottom on terminal output
-    --			-- This field is only relevant if direction is set to 'float'
-    --			float_opts = {
-    --				-- The border key is *almost* the same as 'nvim_open_win'
-    --				-- see :h nvim_open_win for details on borders however
-    --				-- the 'curved' border is a custom border type
-    --				-- not natively supported but implemented in this plugin.
-    --				border = "curved", -- 'single' | 'double' | 'shadow' | 'curved' | ... other options supported by win open
-    --				-- like `size`, width, height, row, and col can be a number or function which is passed the current terminal
-    --				-- width = <value>,
-    --				-- height = <value>,
-    --				-- row = <value>,
-    --				-- col = <value>,
-    --				-- winblend = 3,
-    --				-- zindex = <value>,
-    --				title_pos = "center", -- 'left' | 'center' | 'right', position of the title of the floating window
-    --			},
-    --			winbar = {
-    --				enabled = false,
-    --				name_formatter = function(term) --  term: Terminal
-    --					return term.name
-    --				end,
-    --			},
-    --		},
     --	},
     --	}}}
     --	{{{

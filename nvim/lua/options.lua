@@ -133,11 +133,17 @@ opt.foldlevelstart = 99
 opt.foldcolumn = "2"
 opt.foldopen:remove("hor")
 --[[TODO: move to when LSP has started
+--- LSP Folding
 opt.foldmethod = "expr"
 opt.foldexpr = "v:lua.vim.lsp.foldexpr()"
 --]]
-opt.foldmethod = "indent"
--- vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+--- Indent-based folding
+-- opt.foldmethod = "indent"
+--- Tree Sitter Folding
+opt.foldmethod = "expr"
+opt.foldexpr = "nvim_treesitter#foldexpr()"
+opt.foldenable = false -- open by default
+
 opt.signcolumn = "auto:2-4"
 opt.backupdir:remove(".")
 opt.conceallevel = 2
