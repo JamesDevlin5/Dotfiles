@@ -37,5 +37,31 @@ local function lvim()
     }
 end
 
-return onedark()
+local function astronvim()
+    return {
+        "AstroNvim/astrotheme",
+        lazy = false,
+        priority = 1000,
+        ---@type AstroThemeOpts
+        opts = {
+            style = {
+                italic_comments = false,
+            },
+            plugins = {
+                ["blink-cmp"] = true,
+                ["gitsigns"] = true,
+                ["lazy"] = true,
+                ["lualine"] = true,
+                ["mason"] = true,
+                ["mini"] = true,
+                ["nvim-notify"] = true,
+                ["rainbow-delimiters"] = true,
+                ["todo-comments"] = true,
+            }
+        }
+    }
+end
+
+-- return onedark()
 -- return lvim()
+return astronvim()

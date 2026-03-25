@@ -1,4 +1,4 @@
 ; extends
 
-((heredoc_body) @injection.content
-    (#inject-language-from-heredoc-marker))
+;((heredoc_body) @injection.content
+    ;(#inject-language-from-heredoc-marker))
