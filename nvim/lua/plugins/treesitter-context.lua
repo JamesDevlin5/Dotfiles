@@ -1,6 +1,6 @@
 return {
     "nvim-treesitter/nvim-treesitter-context",
-    opts ={
+    opts = {
         enable = true, -- Enable this plugin (Can be enabled/disabled later via commands)
         multiwindow = false, -- Enable multiwindow support.
         max_lines = 3, -- How many lines the window should span. Values <= 0 mean no limit.
@@ -19,5 +19,5 @@ return {
                 require("treesitter-context").go_to_context(vim.v.count1)
             end, { silent = true })
         end,
-    }
+    },
 }

@@ -4,8 +4,8 @@ return {
         options = {
             icons_enabled = true,
             -- Theme List: https://github.com/hoob3rt/lualine.nvim/blob/master/THEMES.md
-            -- theme = "onedark"
-            theme = "horizon",
+            theme = "onedark",
+            -- theme = "horizon",
             padding = 2,
             globalstatus = true,
             -- component_separators = { '', '' },
