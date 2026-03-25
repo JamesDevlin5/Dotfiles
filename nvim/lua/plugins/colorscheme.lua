@@ -42,23 +42,33 @@ local function astronvim()
         "AstroNvim/astrotheme",
         lazy = false,
         priority = 1000,
-        ---@type AstroThemeOpts
-        opts = {
-            style = {
-                italic_comments = false,
-            },
-            plugins = {
-                ["blink-cmp"] = true,
-                ["gitsigns"] = true,
-                ["lazy"] = true,
-                ["lualine"] = true,
-                ["mason"] = true,
-                ["mini"] = true,
-                ["nvim-notify"] = true,
-                ["rainbow-delimiters"] = true,
-                ["todo-comments"] = true,
-            }
-        }
+        config = function()
+            require("astrotheme").setup({
+                style = {
+                    italic_comments = false,
+                },
+                plugins = {
+                    ["blink-cmp"] = true,
+                    ["gitsigns"] = true,
+                    ["lazy"] = true,
+                    ["lualine"] = true,
+                    ["mason"] = true,
+                    ["mini"] = true,
+                    ["nvim-notify"] = true,
+                    ["rainbow-delimiters"] = true,
+                    ["todo-comments"] = true,
+                },
+                palette = "astrodark",
+                palettes = {
+                    astrodark = {
+                        ui = {
+                            base = "#252630",  -- your background color here
+                        },
+                    },
+                },
+            })
+            vim.cmd.colorscheme("astrodark")
+        end,
     }
 end
 
