@@ -16,8 +16,8 @@ vim.keymap.set("i", "<C-j>", "<Down>", { silent = true, desc = "Move down (inser
 vim.keymap.set("i", "<C-k>", "<Up>", { silent = true, desc = "Move up (insert mode)" })
 vim.keymap.set("i", "<C-l>", "<Right>", { silent = true, desc = "Move right (insert mode)" })
 
-vim.keymap.set({ "n", "o" }, "H", "^", { silent = true, desc = "Move to start of line" })
-vim.keymap.set({ "n", "o" }, "L", "$", { silent = true, desc = "Move to end of line" })
+vim.keymap.set({ "n", "o", "v" }, "H", "^", { silent = true, desc = "Move to start of line" })
+vim.keymap.set({ "n", "o", "v" }, "L", "$", { silent = true, desc = "Move to end of line" })
 
 vim.keymap.set("n", "<Esc>", function()
     vim.cmd("nohlsearch")

@@ -1,3 +1,35 @@
+-- Toggle LSP log level between "error" and "trace"
+local lsp_diag_silenced = false
+
+local function toggle_lsp_level()
+    if lsp_diag_silenced then
+        vim.diagnostic.config {
+            signs = true,
+            underline = true,
+            virtual_lines = true,
+        }
+        vim.notify("LSP diagnostics: ALL", vim.log.levels.INFO)
+    else
+        vim.diagnostic.config {
+            signs = { severity = { min = vim.diagnostic.severity.ERROR } },
+            underline = { severity = { min = vim.diagnostic.severity.ERROR } },
+            virtual_lines = { severity = { min = vim.diagnostic.severity.ERROR } },
+        }
+        vim.notify("LSP diagnostics: ERROR only", vim.log.levels.WARN)
+    end
+    lsp_diag_silenced = not lsp_diag_silenced
+end
+
+-- Keybinding
+vim.keymap.set("n", "<leader>ll", toggle_lsp_level, { desc = "Toggle LSP log level" })
+
+-- User command
+vim.api.nvim_create_user_command(
+    "LspToggleLog",
+    toggle_lsp_level,
+    { desc = "Toggle LSP log level" }
+)
+
 ---@module "lazy"
 ---@type LazySpec
 return {
