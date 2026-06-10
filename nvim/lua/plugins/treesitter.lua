@@ -2,9 +2,9 @@
 ---@type LazySpec
 return {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master",
     build = ":TSUpdate",
     main = "nvim-treesitter.configs",
-    branch = "master",
     opts = {
         ensure_installed = {
             "bash",
@@ -34,6 +34,7 @@ return {
         auto_install = false,
         highlight = { enable = true, additional_vim_regex_highlighting = false },
         indent = { enable = true },
+        folds = { enable = true },
         textobjects = {
             select = {
                 enable = true,
@@ -65,4 +66,28 @@ return {
             },
         },
     },
+    --[[
+    config = function(_, opts)
+        local TS = require("nvim-treesitter")
+        TS.setup(opts)
+
+        --[[
+        -- highlighting
+        if enabled("highlight", "highlights") then
+          pcall(vim.treesitter.start, ev.buf)
+        end
+
+        -- indents
+        if enabled("indent", "indents") then
+          LazyVim.set_default("indentexpr", "v:lua.LazyVim.treesitter.indentexpr()")
+        end
+
+        -- folds
+        if enabled("folds", "folds") then
+          if LazyVim.set_default("foldmethod", "expr") then
+            LazyVim.set_default("foldexpr", "v:lua.LazyVim.treesitter.foldexpr()")
+          end
+        end
+    end
+    --]]
 }

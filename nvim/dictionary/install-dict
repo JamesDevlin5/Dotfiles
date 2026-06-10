@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+curl -o "en.dict" "https://raw.githubusercontent.com/dwyl/english-words/refs/heads/master/words.txt"
+

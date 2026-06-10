@@ -26,6 +26,7 @@ return {
             end,
         },
         { "nvim-tree/nvim-web-devicons", opts = {} },
+        { "Kaiser-Yang/blink-cmp-dictionary", dependencies = { "nvim-lua/plenary.nvim" } },
     },
 
     -- use a release tag to download pre-built binaries
@@ -175,6 +176,9 @@ return {
                 "snippets",
                 "buffer",
             },
+            per_filetype = {
+                markdown = { "lsp", "path", "snippets", "buffer", "dictionary" }, -- adds dictionary
+            },
             providers = {
                 lazydev = {
                     name = "LazyDev",
@@ -213,6 +217,44 @@ return {
                                 return vim.bo[bufnr].buftype == ""
                             end, vim.api.nvim_list_bufs())
                         end,
+                    },
+                    -- keep case of first char
+                    transform_items = function(a, items)
+                        local keyword = a.get_keyword()
+                        local correct, case
+                        if keyword:match("^%l") then
+                            correct = "^%u%l+$"
+                            case = string.lower
+                        elseif keyword:match("^%u") then
+                            correct = "^%l+$"
+                            case = string.upper
+                        else
+                            return items
+                        end
+                        -- avoid duplicates from the corrections
+                        local seen = {}
+                        local out = {}
+                        for _, item in ipairs(items) do
+                            local raw = item.insertText or item.label
+                            if raw:match(correct) then
+                                local text = case(raw:sub(1, 1)) .. raw:sub(2)
+                                item.insertText = text
+                                item.label = text
+                            end
+                            if not seen[item.label] then
+                                seen[item.label] = true
+                                out[#out + 1] = item
+                            end
+                        end
+                        return out
+                    end,
+                },
+                dictionary = {
+                    name = "dictionary",
+                    module = "blink-cmp-dictionary",
+                    min_keyword_length = 3, -- don't trigger on 1-2 char words
+                    opts = {
+                        dictionary_files = { vim.fn.expand("~/.config/nvim/dictionary/en.dict") },
                     },
                 },
             },

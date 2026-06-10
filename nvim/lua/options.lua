@@ -191,6 +191,7 @@ vim.filetype.add {
     filename = {
         [".zshrc"] = "zsh",
         [".bashrc"] = "bash",
+        [vim.fn.expand("~/.config/i3blocks/config")] = "dosini",
     },
     pattern = {
         ["~/.zfunc/*"] = "zsh",
