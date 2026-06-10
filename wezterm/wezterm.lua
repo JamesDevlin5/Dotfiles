@@ -24,12 +24,12 @@ config.default_cursor_style = "BlinkingBar"
 
 config.enable_scroll_bar = true
 
-config.font = wezterm.font 'VictorMono Nerd Font'
+config.font = wezterm.font("VictorMono Nerd Font")
 
 local hostname_handle = io.popen("hostname")
-local hostname_output = hostname_handle:read('*a')
-local laptop_hostname = 'james-Latitude-7490\n'
-if (hostname_output == laptop_hostname) then
+local hostname_output = hostname_handle:read("*a")
+local laptop_hostname = "james-Latitude-7490\n"
+if hostname_output == laptop_hostname then
     config.font_size = 11.0
 else
     config.font_size = 10.0
@@ -81,53 +81,50 @@ local act = wezterm.action
 
 config.keys = {
     -- Make Page up/down work
-	{ key = 'PageUp', action = wezterm.action.ScrollByPage(-1) },
-	{ key = 'PageDown', action = wezterm.action.ScrollByPage(1) },
+    { key = "PageUp", action = wezterm.action.ScrollByPage(-1) },
+    { key = "PageDown", action = wezterm.action.ScrollByPage(1) },
 
     -- Jump word to the left
-	{
-		key = 'LeftArrow',
-		mods = 'CTRL',
-		action = wezterm.action.SendKey({ key = 'b', mods = 'ALT' }),
-	},
-	-- Jump word to the right
-	{
-		key = 'RightArrow',
-		mods = 'CTRL',
-		action = wezterm.action.SendKey({ key = 'f', mods = 'ALT' }),
-	},
+    {
+        key = "LeftArrow",
+        mods = "CTRL",
+        action = wezterm.action.SendKey { key = "b", mods = "ALT" },
+    },
+    -- Jump word to the right
+    {
+        key = "RightArrow",
+        mods = "CTRL",
+        action = wezterm.action.SendKey { key = "f", mods = "ALT" },
+    },
 
-	-- Go to beginning of line
-	{
-		key = 'LeftArrow',
-		mods = 'CTRL',
-		action = wezterm.action.SendKey({
-		key = 'a',
-		mods = 'CTRL|SHIFT',
-		}),
-	},
-	-- Go to end of line
-	{
-		key = 'RightArrow',
-		mods = 'CTRL|SHIFT',
-		action = wezterm.action.SendKey({ key = 'e', mods = 'CTRL' }),
-	},
+    -- Go to beginning of line
+    {
+        key = "LeftArrow",
+        mods = "CTRL",
+        action = wezterm.action.SendKey {
+            key = "a",
+            mods = "CTRL|SHIFT",
+        },
+    },
+    -- Go to end of line
+    {
+        key = "RightArrow",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action.SendKey { key = "e", mods = "CTRL" },
+    },
 
-	-- Go to beginning of line
-	{
-		key = 'h',
-		mods = 'CTRL',
-		action = wezterm.action.SendKey({
-		key = 'a',
-		mods = 'CTRL|SHIFT',
-		}),
-	},
-	-- Go to end of line
-	{
-		key = 'l',
-		mods = 'CTRL|SHIFT',
-		action = wezterm.action.SendKey({ key = 'e', mods = 'CTRL' }),
-	},
+    -- Go to beginning of line
+    {
+        key = "h",
+        mods = "CTRL",
+        action = wezterm.action.SendString("\x1b[99;5u"),
+    },
+    -- Go to end of line
+    {
+        key = "l",
+        mods = "CTRL|SHIFT",
+        action = wezterm.action.SendKey { key = "e", mods = "CTRL" },
+    },
 
     -- w closes pane
     { key = "w", mods = "ALT", action = act.CloseCurrentPane { confirm = false } },
@@ -157,40 +154,40 @@ config.keys = {
     { key = "]", mods = "ALT", action = act.ActivateTabRelative(1) },
 
     -- Rename tab title
-	{
-		key = 'R',
-		mods = 'ALT|SHIFT',
-		action = wezterm.action.PromptInputLine {
-			description = 'Enter new name for tab',
-			action = wezterm.action_callback(function(window, _, line)
-				-- line will be `nil` if they hit escape without entering anything
-				-- An empty string if they just hit enter
-				-- Or the actual line of text they wrote
-				if line then
-					window:active_tab():set_title(line)
-				end
-			end),
-		},
-	},
+    {
+        key = "R",
+        mods = "ALT|SHIFT",
+        action = wezterm.action.PromptInputLine {
+            description = "Enter new name for tab",
+            action = wezterm.action_callback(function(window, _, line)
+                -- line will be `nil` if they hit escape without entering anything
+                -- An empty string if they just hit enter
+                -- Or the actual line of text they wrote
+                if line then
+                    window:active_tab():set_title(line)
+                end
+            end),
+        },
+    },
 }
 
 -- Mouse
 config.mouse_bindings = {
-	-- Change the default click behavior so that it only selects
-	-- text and doesn't open hyperlinks
-	{
-		event = { Up = { streak = 1, button = 'Left' } },
-		mods = 'NONE',
-		action = wezterm.action.CompleteSelection('ClipboardAndPrimarySelection'),
-	},
+    -- Change the default click behavior so that it only selects
+    -- text and doesn't open hyperlinks
+    {
+        event = { Up = { streak = 1, button = "Left" } },
+        mods = "NONE",
+        action = wezterm.action.CompleteSelection("ClipboardAndPrimarySelection"),
+    },
 
-	-- Open links on Cmd+click
-	{
-		event = { Up = { streak = 1, button = 'Left' } },
-		mods = 'CTRL',
-		action = wezterm.action.OpenLinkAtMouseCursor,
-	},
-  }
+    -- Open links on Cmd+click
+    {
+        event = { Up = { streak = 1, button = "Left" } },
+        mods = "CTRL",
+        action = wezterm.action.OpenLinkAtMouseCursor,
+    },
+}
 
 local mux = wezterm.mux
 

@@ -1,6 +1,5 @@
 zmodload -i zsh/complist
-autoload -U compinit && compinit
-autoload -U colors   && colors
+autoload -Uz colors   && colors
 
 autoload -Uz expand-absolute-path && zle -N expand-absolute-path
 autoload -Uz edit-command-line && zle -N edit-command-line
@@ -12,7 +11,9 @@ typeset -U path
 typeset -U fpath
 
 path+=( "$HOME/bin" "$HOME/.cargo/bin" "$HOME/.local/bin" "/usr/local/go/bin" )
-fpath+=( "$HOME/.zcomplete" )
+fpath+=( /usr/share/rubygems-integration/all/gems/vagrant-2.2.19/contrib/zsh "$HOME/.zcomplete" )
+
+autoload -Uz compinit && compinit
 
 export PAGER="bat"
 export EDITOR="nvim"
@@ -75,14 +76,21 @@ md() {
     pandoc --from=markdown --to=html --standalone=true --table-of-contents=true --number-sections=false "${1}" --output="${BASE}.html" --metadata title="${BASE}"
 }
 
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+
+alias -g _='/dev/null'
+
 # SCHOOL STUFF
-CURRENT_CLASS="Embedded\ Systems"
+CURRENT_CLASS="Networks"
 CURRENT_CLASS_PATH="/home/james/School/${CURRENT_CLASS}"
 alias -g school="${CURRENT_CLASS_PATH}/"
 alias -g notes="${CURRENT_CLASS_PATH}/notes"
-alias -g hw="${CURRENT_CLASS_PATH}/projects/homeworks"
+alias -g hw="${CURRENT_CLASS_PATH}/homework"
 #alias -g labs="${CURRENT_CLASS_PATH}/labs"
-alias -g prj="${CURRENT_CLASS_PATH}/projects/projects/project1"
+alias -g prj="${CURRENT_CLASS_PATH}/projects/project2"
 
 alias -g dotfiles='/home/james/.dotfiles'
 
@@ -98,11 +106,12 @@ alias envg='env | rg'
 alias cax='chmod u+x'
 alias cux='chmod u-x'
 
-#alias copyfile='xclip -sel c <'
-alias copyfile='gpaste-client <'
+alias copyfile='xclip -sel c <'
+#alias copyfile='gpaste-client <'
 alias cpf='copyfile'
 alias zshrc="${EDITOR} ~/.zshrc"
-alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm; python3 $HOME/workspace/BinaryUpdater/update.py'
+#alias update='apt update -y; apt upgrade -y; apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm; python3 $HOME/workspace/BinaryUpdater/update.py'
+alias update='apt autoremove -y; rustup update; update-nvim; update-stylua; update-lazygit; update-wezterm; python3 $HOME/workspace/BinaryUpdater/update.py'
 
 alias clang-format='clang-format-15 -i'
 alias gofmt='gofmt -w'
@@ -170,14 +179,9 @@ zstyle ':completion:*:complete:mdview:*' file-patterns '
 # }}}
 
 
-alias ..='cd ..'
-alias -g ...='../..'
-alias -g ....='../../..'
-
 alias -g P="| ${PAGER}"
 alias -g E="| ${EDITOR}"
 alias -g G="| rg"
-alias -g _="/dev/null"
 
 del-br() {
     if ! git rev-parse --is-inside-work-tree &>/dev/null; then
@@ -197,8 +201,9 @@ del-br() {
 }
 
 zstyle ':completion:*' completer _complete _match _list _ignored _correct _approximate _prefix
-zstyle ':completion:*' matcher-list 'm:{-_}={_-}' '+m:{a-z}={A-Z}'
+zstyle ':completion:*' matcher-list 'm:{-_}={_-}' '+m:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*'
 
+zstyle ':completion:*' auto-description '- %d'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' verbose yes
 zstyle ':completion:*' use-cache on
@@ -268,7 +273,10 @@ bindkey '^I' expand-or-complete-prefix
 
 # Menu {{{
 
-bindkey -M menuselect '^h' vi-backward-char
+#bindkey -M menuselect '^A' backward-char
+#bindkey '^A' backward-char
+#bindkey -M viins '^A' backward-char
+bindkey -M menuselect $'\e[99;5u' backward-char
 bindkey -M menuselect '^k' vi-up-line-or-history
 bindkey -M menuselect '^j' vi-down-line-or-history
 bindkey -M menuselect '^l' vi-forward-char
@@ -301,7 +309,7 @@ export AUTO_NOTIFY_THRESHOLD=30
 export AUTO_NOTIFY_EXPIRE_TIME=6000
 
 # List of ignored commands
-AUTO_NOTIFY_IGNORE+=("docker" "nvim" "zsh" "bash" "lazygit" "man" "sleep" "python" "bat")
+AUTO_NOTIFY_IGNORE+=("docker" "nvim" "zsh" "bash" "lazygit" "man" "sleep" "python" "bat" "ssh")
 
 
 #    %command - the command that the user executed
@@ -358,10 +366,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# >>>> Vagrant command completion (start)
-fpath=(/usr/share/rubygems-integration/all/gems/vagrant-2.2.19/contrib/zsh $fpath)
-compinit
-# <<<<  Vagrant command completion (end)
 
 . "$HOME/.local/share/../bin/env"
 
