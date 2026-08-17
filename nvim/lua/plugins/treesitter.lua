@@ -2,9 +2,10 @@
 ---@type LazySpec
 return {
     "nvim-treesitter/nvim-treesitter",
-    branch = "master",
+    branch = "main",
     build = ":TSUpdate",
-    main = "nvim-treesitter.configs",
+    --main = "nvim-treesitter.configs",
+    lazy = false,
     opts = {
         ensure_installed = {
             "bash",

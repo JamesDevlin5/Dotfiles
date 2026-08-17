@@ -19,6 +19,12 @@ export XDG_TEMPLATES_DIR="$HOME/Templates"
 export XDG_VIDEOS_DIR="$HOME/Videos"
 # }}}
 
+if [[ -f /etc/profile.d/monitor-vars.sh ]]; then
+    source /etc/profile.d/monitor-vars.sh
+fi
+
+export TERM=xterm-256color
+
 # Fzf {{{
 export FZF_DEFAULT_COMMAND='fdfind --hidden --follow --exclude ".git" --type f --strip-cwd-prefix'
 export FZF_DEFAULT_OPTS="--layout=reverse --border --padding 1,2 --bind 'result:transform-list-label:

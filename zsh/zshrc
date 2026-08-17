@@ -90,7 +90,7 @@ alias -g school="${CURRENT_CLASS_PATH}/"
 alias -g notes="${CURRENT_CLASS_PATH}/notes"
 alias -g hw="${CURRENT_CLASS_PATH}/homework"
 #alias -g labs="${CURRENT_CLASS_PATH}/labs"
-alias -g prj="${CURRENT_CLASS_PATH}/projects/project2"
+alias -g prj="${CURRENT_CLASS_PATH}/projects/project4"
 
 alias -g dotfiles='/home/james/.dotfiles'
 
@@ -138,6 +138,15 @@ alias clang-format='clang-format --style="~/.config/clang-format/config"'
 mcd () {
 	mkdir -pv -- "$1" &&
 		cd -P -- "$1"
+}
+
+gr() {
+    local ROOT
+    ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || {
+        echo -e "\033[1;31mNot inside a Git Repository...\033[0m"
+        return 1
+    }
+    cd "${ROOT}" || return
 }
 
 freq() {
