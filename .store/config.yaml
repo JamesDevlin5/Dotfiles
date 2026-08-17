@@ -1,5 +1,0 @@
-stores:
-    nvim:
-        target: ~/.config/nvim
-    zsh:
-        target: ~

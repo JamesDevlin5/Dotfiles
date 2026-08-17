@@ -117,7 +117,7 @@ if ! shopt -oq posix; then
 fi
 . "$HOME/.cargo/env"
 
-source /home/james/.config/broot/launcher/bash/br
+source "${HOME}/.config/broot/launcher/bash/br"
 
 eval "$(sheldon source)"
 eval "$(starship init bash)"

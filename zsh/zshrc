@@ -85,14 +85,14 @@ alias -g _='/dev/null'
 
 # SCHOOL STUFF
 CURRENT_CLASS="Networks"
-CURRENT_CLASS_PATH="/home/james/School/${CURRENT_CLASS}"
+CURRENT_CLASS_PATH="${HOME}/School/${CURRENT_CLASS}"
 alias -g school="${CURRENT_CLASS_PATH}/"
 alias -g notes="${CURRENT_CLASS_PATH}/notes"
 alias -g hw="${CURRENT_CLASS_PATH}/homework"
 #alias -g labs="${CURRENT_CLASS_PATH}/labs"
 alias -g prj="${CURRENT_CLASS_PATH}/projects/project4"
 
-alias -g dotfiles='/home/james/.dotfiles'
+alias -g dotfiles="${HOME}/.dotfiles"
 
 alias pword='pgen -s -c 12 | tee >(tail -n +2 | xclip -r -selection clipboard)'
 
@@ -140,6 +140,7 @@ mcd () {
 		cd -P -- "$1"
 }
 
+# Go to Git repository root
 gr() {
     local ROOT
     ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || {
@@ -167,17 +168,6 @@ search() {
 
 esearch() {
     nvim "$(search)"
-}
-
-# Go to Git repository root
-gr() {
-    local ROOT
-    ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || {
-        echo -e "\033[1;31mNot inside a Git repository\033[0m"
-        return 1
-    }
-
-    cd "${ROOT}" || return
 }
 
 # Markdown View {{{
@@ -343,7 +333,7 @@ AUTO_NOTIFY_IGNORE+=("docker" "nvim" "zsh" "bash" "lazygit" "man" "sleep" "pytho
 
 # }}}
 
-#source /home/james/.config/broot/launcher/bash/br
+#source ${HOME}/.config/broot/launcher/bash/br
 
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern cursor)
 
@@ -355,10 +345,10 @@ if type "starship" > /dev/null; then
     eval "$(starship init zsh)"
 fi
 
-if type "fzf" > /dev/null; then
-    #source <(fzf --zsh)
-    #bash: eval "$(fzf --bash)"
-fi
+# if type "fzf" > /dev/null; then
+#     source <(fzf --zsh)
+#     bash: eval "$(fzf --bash)"
+# fi
 
 if type "direnv" > /dev/null; then
     eval "$(direnv hook zsh)"
@@ -376,10 +366,8 @@ if [ -x /usr/lib/command-not-found ]; then
     }
 fi
 
-. "${HOME}/.zshenv"
-
 # opam configuration {{{
-#[[ ! -r /home/james/.opam/opam-init/init.zsh ]] || source /home/james/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+#[[ ! -r ${HOME}/.opam/opam-init/init.zsh ]] || source ${HOME}/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
 # }}}
 
 export NVM_DIR="$HOME/.nvm"
